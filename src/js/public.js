@@ -1,4 +1,4 @@
-/*
+﻿/*
 * @Author: Administrator
 * @Date:   2017-05-24 13:45:39
 * @Last Modified by:   Administrator
@@ -7,11 +7,11 @@
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.109:8080";
+var getRoothPath = "";
 
 var pageSize = 10; //分页大小
 
-var clouddnImgStr = "http://oitvtdaml.bkt.clouddn.com"; //上传图片返回拼接域名
+var clouddnImgStr = ""; //上传图片返回拼接域名
 
 //设置全局ajax
 $.ajaxSetup({
