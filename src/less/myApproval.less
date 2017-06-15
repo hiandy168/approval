@@ -1,0 +1,108 @@
+@import url("public.less");
+
+.wrap{
+	width: 100%;
+	padding-top: 0.4rem;
+	>.inWrap{
+		width: 100%;
+		>li{
+			width: 100%;
+			height: 2rem;
+			margin-bottom: 1px;
+			background-color: @mainbgc;
+			padding: 0.4rem 0.3rem;
+			.boxSizing();
+			>.myContainer{
+				width: 100%;
+				>.my-row{
+					>.my-col{
+						padding: 0;
+						>.peopleName{
+							display: block;
+							width: 1.2rem;
+							height: 1.2rem;
+							background-color: @blue;
+							color: @mainbgc;
+							font-size: 0.24rem;
+							line-height: 1.2rem;
+							.broderRadius();
+						}
+						>.inTop{
+							margin: 0.08rem 0 0.15rem 0;
+							>.status{
+								font-size: 0.24rem;
+								font-weight: normal;
+								>.my-icon{
+									font-size: 0.32rem;
+									position: relative;
+									top: 0.08rem;
+								}
+							}
+						}
+						>.inBottom{
+							color: #999;
+							font-size: 0.24rem;
+							font-weight: normal;
+						}
+					}
+					>.backlog,>.unread{ 
+						position: relative;
+					}
+					>.backlog::after{ //待我审批样式
+						content: "待我审批";
+						font-size: 0.2rem;
+						font-weight: normal;
+						display: block;
+						padding: 0.02rem;
+						background-color: @danger;
+						color: @mainbgc;
+						text-align: center;
+						line-height: 0.4rem;
+						.broderRadius(0.04rem);
+						position: absolute;
+						z-index: 10000;
+						top: 0;
+						right: 0;
+						.boxSizing();
+					}
+					>.unread::before{
+						content: "";
+						display: block;
+						width: 0.16rem;
+						height: 0.16rem;
+						background-color: @danger;
+						.broderRadius();
+						position: absolute;
+						right: 0.5rem;
+						top: 0;
+					}
+				}
+			}		
+		}
+		>li.underReview{
+			.status{
+				color: @warn;
+			}
+		}
+		>li.passed{
+			.status{
+				color: @safe;
+				>.my-icon{
+					top: 0.02rem !important;
+				}
+			}
+		}
+		>li.refused{
+			.status{
+				color: @danger;
+				>.my-icon{
+					font-size: 0.38rem !important;
+					top: 0.02rem !important;
+				}
+			}
+		}
+	}
+	>.blank{
+		color: #999;
+	}
+}

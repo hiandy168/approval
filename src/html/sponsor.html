@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>发起审批</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">  
+        <link rel="stylesheet" type="text/css" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/base.css">
+        <link rel="stylesheet" type="text/css" href="../css/sponsor.css">
+        <script type="text/javascript" src="../js/fontSize.js"></script>
+    </head>
+    <body>
+    	<div class="messageInfo"></div>
+    	<nav id="menu" class="menu">
+		    <div class="content">
+		    	<div class="inContent">
+		    		<p id="closeBtn" class="closeBtn" title="取消">取消<!-- <i class="glyphicon glyphicon-remove"></i> --></p>
+		    		<p class="title">常用审批人</p>
+		    		<ul id="epUserWrap" class="commonUse responsiveBox clearfix">
+		    			<!-- <li class="nowrap text-center">张三鹅鹅鹅饿饿</li> -->
+		    		</ul>
+		    	</div>
+		    	<div class="inContent">
+		    		<!-- <p class="title">全部联系人</p> -->
+		    		<div class="group myContainer">
+		    			<!-- <div class="row my-row">
+		    				<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+		    					<span>董事会</span>
+		    				</div>
+		    				<div class="col-xs-8 col-sm-8 col-md-8 my-col text-right">
+		    					<p><i>333</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>	
+		    				</div>
+		    			</div> -->
+		 
+						<!-- <ul id="departmentWrap" class="list responsiveBox">
+							<li class="clearfix my-li">
+								<p class="pull-left">
+									<span class="glyphicon glyphicon-plus my-icon"></span>
+									<span>董事会</span>
+								</p>
+								<span class="pull-right showNum">
+									<i>333</i>&nbsp;
+									<span class="glyphicon glyphicon-menu-right my-icon" aria-hidden="true"></span>
+								</span>
+							</li>
+							<li class="clearfix my-li" style="margin-left:0.3rem">
+								<p class="pull-left">
+									<span class="glyphicon glyphicon-plus my-icon"></span>
+									<span>职能部门</span>
+								</p>
+								<span class="pull-right showNum">
+									<i>333</i>&nbsp;
+									<span class="glyphicon glyphicon-menu-right my-icon" aria-hidden="true"></span>
+								</span>	
+							</li>
+							<li class="clearfix my-li" style="margin-left:0.6rem">
+								<p class="pull-left">
+									<span class="glyphicon glyphicon-plus my-icon"></span>
+									<span>运营部</span>
+								</p>
+								<span class="pull-right showNum">
+									<i>333</i>&nbsp;
+									<span class="glyphicon glyphicon-menu-right my-icon" aria-hidden="true"></span>
+								</span>
+							</li>
+							<li class="clearfix my-li people" style="margin-left:0.3rem">
+								<p class="pull-left">小明</p>
+								<span class="pull-right showNum">
+									<i></i>&nbsp;
+									<span class="glyphicon glyphicon-ok my-icon hasselect" aria-hidden="true"></span>
+								</span>
+							</li>
+							<li class="clearfix my-li">
+								<span class="pull-left">职能部门</span>
+								<span class="pull-right showNum">
+									<i>333</i>&nbsp;
+									<span class="glyphicon glyphicon-menu-right my-icon" aria-hidden="true"></span>
+								</span>
+							</li>
+						</ul> -->
+						<div class="inWrap">
+							<div class="appendChild">
+								<!-- <p class="titleMessage">全部联系人</p> -->
+								<ol id="breadcrumb" class="breadcrumb my-breadcrumb responsiveBox">
+								  <li data-departmentID="0"><a href="javascript:;">全部联系人</a></li>
+								</ol>
+								<div id="departmentWrap" class="container-fluid myContainer inputFile">
+									<!-- <div class="row my-row">
+										<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+											<span>董事会</span>
+										</div>
+										<div class="col-xs-8 col-sm-8 col-md-8 my-col text-right">
+											<p><i>333</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>	
+										</div>
+									</div>
+									<div class="row my-row">
+										<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+											<span>马云</span>
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div>
+		    		</div>
+		    	</div>
+		    </div>
+    	</nav>
+    	<main id="panel">
+    		<!-- <header class="panel-header">
+    		  <button class="btn-hamburger js-slideout-toggle"></button>
+    		  <h1 class="title">Slideout.js</h1>
+    		</header> -->
+	    	<div class="wrap">
+				<section>
+				<!-- 添加报销开始 -->	
+				<div id="inWrap" class="inWrap">
+					<div id="appendChild" class="appendChild" data-index="0">
+						<p class="titleMessage">报销一</p>
+						<div class="container-fluid myContainer inputFile">
+							<div class="row my-row">
+								<div class="col-xs-3 col-sm-3 col-md-3 my-col">
+									<span>报销类型</span>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-9 my-col">
+									<input type="text" class="product" data-productid="" readonly="readonly" data-toggle="modal" data-target="#myModal" placeholder="请输入">
+								</div>
+								<!-- modal start -->
+								<div class="modal fade bs-example-modal-sm container mymodalbgc" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								    <div class="modal-dialog modal-sm modal-center">
+								        <div class="modal-content">
+								            <div class="modal-body modal-body-mine">
+								                <ul id="productType" class="list-group">
+								                    <!-- <li class="list-group-item">篮球</li> -->
+								                </ul>  
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<!-- modal end -->
+							</div>
+							<div class="row my-row">
+								<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+									<span>报销金额(￥)</span>
+								</div>
+								<div class="col-xs-8 col-sm-8 col-md-8 my-col">
+									<input type="number" class="itemAlltotals" data-count="0" placeholder="请输入">
+								</div>
+							</div>
+							<div class="row my-row special-row">
+								<div class="col-xs-3 col-sm-3 col-md-3 my-col">
+									<span>费用说明</span>
+									<p><span class="limit">(150字)</span></p>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-9 my-col">
+									<textarea class="remarks" placeholder="请输入" maxlength="150"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="addBtn" class="addSponsor">
+					<p><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp;添加报销</p>
+				</div>
+				<!-- 添加报销结束 -->
+				</section>
+
+				<section>
+				<!-- 总计&报销凭证开始 -->
+				<div class="inWrap">
+					<div class="appendChild">
+						<p class="titleMessage">总计&报销凭证</p>
+						<div class="container-fluid myContainer inputFile">
+							<div class="row my-row">
+								<div class="col-xs-3 col-sm-3 col-md-3 my-col">
+									<span>总计金额</span>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-9 my-col">
+									<input type="text" id="expenseTotal" readonly="readonly" placeholder="0">
+								</div>
+							</div>
+							<div class="row my-row imgUpload">
+								<div class="col-xs-12 col-sm-12 col-md-12 my-col">
+									<p>报销凭证</p>
+								</div>
+								<ul id="uploadWrap" class="uploadWrap clearfix">
+									<li id="uploadBtn" class="uploadBtn">
+										<form id="uploadForm">
+											<input type="file" id="myFile" class="myFile" name="file" accept="image/png,image/jpeg,image/jpg" multiple="multiple">
+										</form>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- modal start -->
+					<div class="modal fade bs-example-modal-sm container imgModalWrap" id="imgModalWrap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+					    <div class="modal-dialog modal-sm modal-center">
+					        <div class="modal-content">
+					            <div class="modal-body modal-body-mine text-center">
+					            	<!-- <span>正在上传,请耐心等待</span> -->
+					            	<div class="spinner">
+					            	  <div class="rect1"></div>
+					            	  <div class="rect2"></div>
+					            	  <div class="rect3"></div>
+					            	  <div class="rect4"></div>
+					            	  <div class="rect5"></div>
+					            	</div>  
+					            </div>
+					        </div>
+					    </div>
+					</div>
+					<!-- modal end -->
+				</div>	
+				<!-- 总计&报销凭证结束 -->
+				</section>
+
+				<section>
+				<!-- 收款信息开始 -->
+				<div class="inWrap">
+					<div class="appendChild">
+						<p class="titleMessage">收款信息</p>
+						<div class="container-fluid myContainer inputFile">
+							<div class="row my-row">
+								<div class="col-xs-3 col-sm-3 col-md-3 my-col">
+									<span>开户行</span>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-9 my-col">
+									<input type="text" id="bankAccount" placeholder="请输入">
+								</div>
+							</div>
+							<div class="row my-row">
+								<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+									<span>开户人姓名</span>
+								</div>
+								<div class="col-xs-8 col-sm-8 col-md-8 my-col">
+									<input type="text" id="accountName" placeholder="请输入">
+								</div>
+							</div>
+							<div class="row my-row">
+								<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+									<span>开户账号</span>
+								</div>
+								<div class="col-xs-8 col-sm-8 col-md-8 my-col">
+									<input type="number" id="accounNumber" placeholder="请输入">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+				<!-- 收款信息结束 -->
+				</section>
+
+				<section>
+				<!-- 审批人结构开始 -->
+				<div class="inWrap last-inWrap">
+					<div class="appendChild">
+						<p class="titleMessage">审批人</p>
+						<div class="container-fluid myContainer inputFile">
+							<div class="row my-row imgUpload">
+								<div class="col-xs-12 col-sm-12 col-md-12 my-col">
+									<p></p>
+								</div>
+								<ul id="approverWrap" class="uploadWrap special-uploadWrap clearfix">
+									<!-- <li class="nowrap addPeople">张三</li> -->
+									<li id="addApprover" class="addApprover addPeople" data-userid='add'></li>
+								</ul>
+								<!-- <ul class="uploadWrap special-uploadWrap clearfix">
+									<li class="nowrap addPeople cashier">出纳</li>
+								</ul> -->
+								<ul id="cashierWrap" class="schedule clearfix">
+								    <!-- <li class="cashier text-center">
+								        <div class="wating text-center progressBar">出纳</div>
+								        <p class="name">贠磊</p>
+								    </li> -->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>	
+				<!-- 审批人结构结束 -->
+				</section>
+
+				<footer>
+				<!-- 底部提交开始 -->
+				<nav class="navbar navbar-default navbar-fixed-bottom footer">
+				    <div class="container-fluid myContainer">
+				        <div class="btn-group-justified">
+				            <a id="submitBtn" class="btn btn-default submitBtn">提交</a>
+				        </div>
+				    </div>
+				</nav>
+				<!-- 底部提交结束 -->
+				</footer>
+				
+			</div>
+    	</main> 
+    	  	
+		<script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../../node_modules/slideout/dist/slideout.min.js"></script>
+		<script type="text/javascript" src="../js/public.js"></script>
+		<script type="text/javascript" src="../js/sponsor.js"></script>
+    </body>
+</html>

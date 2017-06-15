@@ -1,0 +1,75 @@
+.wrap {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild > .titleMessage,
+.wrap .inWrap > .appendChild > .my-breadcrumb {
+  padding: 0.4rem 0.3rem 0.2rem 0.3rem;
+  font-size: 0.24rem;
+}
+.wrap .inWrap > .appendChild > .my-breadcrumb {
+  margin-bottom: 0;
+}
+.wrap .inWrap > .appendChild > .my-breadcrumb a {
+  color: #1E98FF;
+}
+.wrap .inWrap > .appendChild > .my-breadcrumb > li + li:before {
+  padding: 0 5px;
+  color: #ccc;
+  content: "〉";
+}
+.wrap .inWrap > .appendChild > .inputFile {
+  background-color: #fff;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row {
+  padding: 0 0.3rem;
+  height: 1.12rem;
+  margin: 0;
+  cursor: pointer;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col {
+  height: 100%;
+  padding: 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > span,
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > p {
+  line-height: 1rem;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > p {
+  font-size: 0.24rem;
+  color: #999;
+  font-weight: normal;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > p > i {
+  font-style: normal;
+  position: relative;
+  top: -0.04rem;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > p > .glyphicon-menu-right {
+  font-size: 0.32rem;
+  font-weight: lighter;
+}
+.wrap .inWrap > .appendChild > .commonUse {
+  width: 100%;
+  padding: 0.2rem 0.3rem;
+  background-color: #fff;
+}
+.wrap .inWrap > .appendChild > .commonUse > li {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: #fff;
+  font-size: 0.28rem;
+  line-height: 1.2rem;
+  background-color: #1E98FF;
+  display: inline-block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  margin-right: 0.2rem;
+  cursor: pointer;
+}

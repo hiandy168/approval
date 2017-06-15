@@ -1,0 +1,55 @@
+.wrap {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild > .titleMessage {
+  padding: 0.4rem 0.3rem 0.2rem 0.3rem;
+  font-size: 0.24rem;
+}
+.wrap .inWrap > .appendChild > .inputFile {
+  width: 100%;
+  background-color: #fff;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > textarea {
+  height: 3.92rem;
+  width: 100%;
+  border: 0;
+  padding: 0.4rem 0;
+  font-weight: normal;
+}
+.wrap .inWrap > .appendChild > .inputFile > .my-row > .my-col > textarea::-webkit-input-placeholder {
+  color: #ddd;
+  font-weight: normal;
+}
+.wrap .footer {
+  height: 1rem;
+  width: 100%;
+}
+.wrap .footer > .myContainer {
+  height: 100%;
+}
+.wrap .footer > .myContainer > .btn-group-justified {
+  height: 100%;
+}
+.wrap .footer > .myContainer > .btn-group-justified > .passedBtn {
+  background-color: #1E98FF;
+  color: #fff;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border: 0;
+  font-weight: bold;
+}
+.wrap .footer > .myContainer > .btn-group-justified > .refusedBtn {
+  background-color: #FF5555;
+}

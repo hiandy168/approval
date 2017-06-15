@@ -1,0 +1,72 @@
+@import url("public.less");
+
+.wrap{
+	width: 100%;
+	.inWrap>.appendChild{
+		width: 100%;
+		>.titleMessage,>.my-breadcrumb{
+			padding: 0.4rem 0.3rem 0.2rem 0.3rem;
+			font-size: 0.24rem;
+		}
+		>.my-breadcrumb{
+			margin-bottom: 0;
+			a{
+				color: #1E98FF;
+			}
+		}
+		>.my-breadcrumb>li+li:before {
+		    padding: 0 5px;
+		    color: #ccc;
+		    content: "〉";
+		}
+		>.inputFile{
+			background-color: @mainbgc;
+			>.my-row{
+				.padding();
+				height: 1.12rem;
+				margin: 0; 
+				cursor: pointer;
+				>.my-col{
+					height: 100%;
+					padding: 0; 
+					border-bottom: 1px solid #f5f5f5; 
+					>span,>p{
+						line-height: 1rem;
+					}
+					>p{
+						font-size: 0.24rem;
+						color: #999;
+						font-weight: normal;
+						>i{
+							font-style: normal;
+							position: relative;
+							top: -0.04rem;
+						}
+						>.glyphicon-menu-right{
+							font-size: 0.32rem;
+							font-weight: lighter;
+						}
+					}
+				}
+			}
+		}
+		>.commonUse{
+			width: 100%;
+			padding: 0.2rem 0.3rem;
+			background-color: @mainbgc;
+			>li{
+				width: 1.2rem;
+				height: 1.2rem;
+				color: @mainbgc;
+				font-size: 0.28rem;
+				line-height: 1.2rem;
+				background-color: #1E98FF;
+				display: inline-block;
+				border-radius: 50%;
+				.broderRadius();
+				margin-right: 0.2rem;
+				cursor: pointer;
+			}
+		}	
+	}
+}

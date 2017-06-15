@@ -1,0 +1,53 @@
+@import url("public.less");
+
+.wrap{
+	width: 100%;
+	.inWrap>.appendChild{
+		width: 100%;
+		>.titleMessage{
+			padding: 0.4rem 0.3rem 0.2rem 0.3rem;
+			font-size: 0.24rem;
+		}
+		>.inputFile{
+			width: 100%;
+			background-color: @mainbgc;
+			>.my-row{
+				width: 100%;
+				>.my-col{
+					width: 100%;
+					>textarea{
+						height: 3.92rem;
+						width: 100%;
+						border: 0;
+						padding: 0.4rem 0;
+						font-weight: normal;
+					}
+					>textarea::-webkit-input-placeholder{
+						color: #ddd;
+						font-weight: normal;
+					}
+				}
+			}
+		}
+	}
+	.footer{
+		height: 1rem;
+		width: 100%;
+		>.myContainer{
+			height: 100%;
+			>.btn-group-justified{
+				height: 100%;
+				>.passedBtn{
+					background-color: #1E98FF;
+					color: @mainbgc;
+					.broderRadius(0);
+					border: 0;
+					font-weight: bold;
+				}
+				>.refusedBtn{
+					background-color: @danger;
+				}
+			}
+		}
+	}
+}

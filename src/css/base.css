@@ -1,0 +1,163 @@
+/*
+* @Author: Administrator
+* @Date:   2017-05-19 15:13:13
+* @Last Modified by:   Administrator
+* @Last Modified time: 2017-06-09 16:07:35
+*/
+body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,code,em,img,q,small,strong,dd,dl,dt,li,ol,ul,fieldset,form,label,table,tbody,tr,th,td,input{margin:0;padding:0;border:0}
+body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,b,i,span,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside, details,figcaption,figure,footer,header,hgroup, menu,nav,section{ font-family: Tahoma,Arial,Roboto,"Droid Sans","Helvetica Neue","Droid Sans Fallback","Heiti SC", "\5b8b\4f53", sans-serif;}
+body{width: 7.5rem;}
+body, html {
+  font-size: 32px;
+  font-size: .32rem;
+  font-weight: bold;
+  color: #333;
+  max-width: 1080px;
+  margin: 0 auto; 
+  background-color: #F5F5F5;
+  -webkit-overflow-scrolling: touch;
+  -webkit-user-select: none; /*禁止用户选择文字*/
+  -ms-touch-action: manipulation; /* 禁用通过双击放大某些元素 */
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%; /* 禁用字号自动调整 */
+  -ms-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+a,a:active,a:hover,a:focus,a:visited{text-decoration:none}
+a,img{-webkit-touch-callout:none}
+ol,ul,li{list-style:none}
+textarea,input[type="password"],input[type="text"],input[type="number"]{resize:none;outline:0;-webkit-appearance:none;white-space:pre-wrap;word-wrap:break-word;}
+
+/* 字体icon */
+@font-face {font-family: "iconfont";
+  src: url('../font/iconfont.eot?t=1495433954745'); /* IE9*/
+  src: url('../font/iconfont.eot?t=1495433954745#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../font/iconfont.woff?t=1495433954745') format('woff'), /* chrome, firefox */
+  url('../font/iconfont.ttf?t=1495433954745') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../font/iconfont.svg?t=1495433954745#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-weight: normal;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shenpi:before { content: "\e63c"; }
+
+.icon-shenpi1:before { content: "\e611"; }
+
+.icon-ttpodicon:before { content: "\e66d"; }
+
+.icon-tongguo:before { content: "\e64b"; }
+
+.myContainer{
+	padding: 0;
+}
+.my-row{
+	margin: 0;
+}
+
+/* 文字超出显示省略号 */
+.nowrap{
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space:nowrap;
+}
+
+/* 横向滚动 */
+.responsiveBox {
+    white-space: nowrap;
+    overflow: hidden;
+    overflow-x: scroll;
+    -webkit-backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 错误信息提示 */
+.messageInfo{
+  white-space : nowrap;
+  background-color: rgba(0,0,0,.8);
+  padding: 0.2rem;
+  color:#fff;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  z-index: 10000000;
+  display: none;
+}
+
+/* loding */
+#loadingWrap {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.loading{
+    width: 100%;
+    height: 15px;
+    margin: 0 auto;
+    text-align: center;
+}
+.loading span{
+    display: inline-block;
+    width: 15px;
+    height: 100%;
+    margin-right: 5px;
+    border-radius: 50%;
+    background: #333;
+    -webkit-animation: load 1.04s ease infinite;
+    animation: load 1.04s ease infinite;
+}
+.loading span:last-child{
+    margin-right: 0px; 
+}
+@-webkit-keyframes load{
+    0%{
+        opacity: 1;
+        -webkit-transform: scale(1.3);
+        transform: scale(1.3);
+    }
+    100%{
+        opacity: 0.2;
+        -webkit-transform: scale(.3);
+        transform: scale(.3);
+    }
+}
+.loading span:nth-child(1){
+    -webkit-animation-delay:0.13s;
+    animation-delay:0.13s;
+}
+.loading span:nth-child(2){
+    -webkit-animation-delay:0.26s;
+    animation-delay:0.26s;
+}
+.loading span:nth-child(3){
+    -webkit-animation-delay:0.39s;
+    animation-delay:0.39s;
+}
+.loading span:nth-child(4){
+    -webkit-animation-delay:0.52s;
+    animation-delay:0.52s;
+}
+.loading span:nth-child(5){
+    -webkit-animation-delay:0.65s;
+    animation-delay:0.65s;
+}
+.lodingText {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  display: none;
+}
+.lodingText_show {
+  display: block;
+}

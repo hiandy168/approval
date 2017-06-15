@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>报备审批</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">  
+        <link rel="stylesheet" type="text/css" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/base.css">
+        <link rel="stylesheet" type="text/css" href="../css/sponsor.css">
+        <script type="text/javascript" src="../js/fontSize.js"></script>
+    </head>
+    <body>
+        <div class="wrap">
+            <section>
+            <!-- 添加报销开始 --> 
+            <div id="productTypeWrap" class="inWrap">
+                <!-- <div class="appendChild">
+                    <p class="titleMessage clearfix">
+                        <span class="pull-left">报销一</span>
+                        <span class="pull-right passed"><i class="iconfont icon-tongguo my-icon"></i>&nbsp;<b>已通过</b></span> 
+                        <span class="pull-right refused"><i class="iconfont icon-ttpodicon my-icon"></i>&nbsp;<b>已拒绝</b></span> 
+                        <span class="pull-right checking"><i class="glyphicon glyphicon-exclamation-sign my-icon"></i>&nbsp;<b>审核中</b></span> 
+                    </p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>报销类型</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
+                                <input type="text" readonly="readonly" placeholder="请输入" value="办公费用">
+                            </div>
+                        </div>
+                        <div class="row my-row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 my-col">
+                                <span>报销金额(￥)</span>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 my-col redColor lighter">
+                                <input type="text" readonly="readonly" placeholder="请输入" value="2345">
+                            </div>
+                        </div>
+                        <div class="row my-row special-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>费用说明</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
+                                <textarea readonly="readonly" placeholder="请输入">购买电脑内存条、购买女朋友、购买同事等。</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <!-- 添加报销结束 -->
+            </section>
+
+            <section>
+            <!-- 总计&报销凭证开始 -->
+            <div class="inWrap">
+                <div class="appendChild">
+                    <p class="titleMessage">总计&报销凭证</p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>总计金额</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col redColor lighter">
+                                <input type="text" id="expenseTotal" readonly="readonly" value="">
+                            </div>
+                        </div>
+                        <div class="row my-row imgUpload">
+                            <div class="col-xs-12 col-sm-12 col-md-12 my-col">
+                                <p>报销凭证</p>
+                            </div>
+                            <ul id="uploadWrap" class="uploadWrap clearfix">
+                                <!-- <li class="responseImg">
+                                    <img src="http://img06.tooopen.com/images/20160712/tooopen_sy_170083325566.jpg" alt="">
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!-- 总计&报销凭证结束 -->
+            </section>
+
+            <section>
+            <!-- 收款信息开始 -->
+            <div class="inWrap">
+                <div class="appendChild">
+                    <p class="titleMessage">收款信息</p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>开户行</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
+                                <input type="text" id="bankAccount" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="row my-row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 my-col">
+                                <span>开户人姓名</span>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 my-col lighter">
+                                <input type="text" id="accountName" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="row my-row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 my-col">
+                                <span>开户账号</span>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 my-col lighter">
+                                <input type="text" id="accounNumber" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!-- 收款信息结束 -->
+            </section>
+
+            <section>
+            <!-- 审批人结构开始 -->
+            <div class="inWrap">
+                <div class="appendChild">
+                    <p class="titleMessage">审批人</p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row imgUpload">
+                            <ul id="expenseUserWrap" class="schedule clearfix">
+                                <!-- <li class="text-center passed">
+                                    <p class="time">9:00 上午</p>
+                                    <div class="wating text-center progressBar special_progressBar"><span class="iconfont icon-tongguo my-icon"></span></div>
+                                    <p class="name">张三</p>
+                                </li>
+                                <li class="text-center refused">
+                                    <p class="time">9:00 上午</p>
+                                    <div class="wating text-center progressBar special_progressBar"><span class="iconfont icon-ttpodicon my-icon"></span></div>
+                                    <p class="name">张三</p>
+                                </li>
+                                <li class="text-center">
+                                    <p class="time">&nbsp;</p>
+                                    <div class="wating text-center progressBar">等待</div>
+                                    <p class="name">张三</p>
+                                </li> -->
+                            </ul>
+                            <ul id="cashier" class="schedule cashierWrap clearfix">
+                                <!-- <li class="cashier text-center">
+                                    <p class="time">9:00 上午&nbsp;</p>
+                                    <div class="wating text-center progressBar">出纳</div>
+                                    <p class="name">贠磊</p>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!-- 审批人结构结束 -->
+            </section>
+
+            <section>
+            <!-- 评论结构开始 -->
+            <div class="inWrap last-inWrap">
+                <div class="appendChild">
+                    <p class="titleMessage">评论</p>
+                    <div id="expenseLogWrap" class="container-fluid myContainer inputFile commentWrap">
+                        <!-- <div class="row my-row">
+                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                <p class="nowrap">
+                                    <span class="commentName">张三</span>:&nbsp;&nbsp;<span class="commentContent">333333333</span>
+                                </p>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4 text-right nowrap time">
+                                <span>昨天</span>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div> 
+            <!-- 评论结构结束 -->
+            </section>
+
+            <footer class="hide">
+            <!-- 底部提交开始 -->
+            <nav class="navbar navbar-default navbar-fixed-bottom footer">
+                <div class="container-fluid myContainer">
+                    <div class="btn-group-justified">
+                        <a id="passedBtn" class="btn btn-default passedBtn" role="button">通过</a>
+                        <a id="refusedBtn" class="btn btn-default refusedBtn" role="button">驳回</a>
+                    </div>
+                </div>
+            </nav>
+            <!-- 底部提交结束 -->
+            </footer>
+            <div class="messageInfo"></div>
+        </div>
+        <script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../js/public.js"></script>
+        <script type="text/javascript" src="../js/bbsp.js"></script>
+    </body>
+</html>
