@@ -780,6 +780,7 @@ Approval.prototype = {
 	        // li.setAttribute("data-toggle","modal");
 	        // li.setAttribute("data-target","#imgModal");
 	        li.classList.add("newUploadImg");
+	        img.setAttribute("alt", file.name);
 
 	        img.file = file;
 	        li.appendChild(img);
@@ -809,7 +810,7 @@ Approval.prototype = {
 
 					for(var i = 0,len = files.length; i < len; i++) {
 					    var file = files[i];
-					    var type = file.name.split(".")[1].toLowerCase();
+					   var type = file.name.replace(/.+\./,"").toLowerCase();
 					    
 					    if (type !== "jpg" && type !== "jpeg" && type !== "png") {
 					    	$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow"); 
@@ -978,6 +979,18 @@ $(function() {
 	}
 
 	approval.init(); //调用init
+
+	// 加载进度模态框居中
+	var $modal = $('#imgModalWrap');
+	$modal.on('show.bs.modal', function() {
+		var $this = $(this);
+		var $modal_dialog = $this.find('.modal-dialog');
+		// 关键代码，如没将modal设置为 block，则$modala_dialog.height() 为零
+		$this.css('display', 'block');
+		$modal_dialog.css({
+			'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)
+		});
+	});
 
 	// open slideout
 	var addApprover = document.querySelector("#addApprover");

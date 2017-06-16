@@ -652,6 +652,15 @@ Approval.prototype = {
 		                	var timer = null;
 	                   		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow"); 
 
+	                   		!function(){
+	                   		    localStorage.removeItem("sessionTouchData_mySponser");
+	                   		    localStorage.removeItem("pageNum_mySponser");
+	                   		    localStorage.removeItem("dataCount_mySponser");
+	                   		    localStorage.removeItem("sessionTouchData_myApproval");
+	                   		    localStorage.removeItem("pageNum_myApproval");
+	                   		    localStorage.removeItem("dataCount_myApproval");
+	                   		}();
+
 	                   		clearTimeout(timer);
 	                   		timer = setTimeout(function(){
 	                   			window.location.href = "index.html";
@@ -691,6 +700,7 @@ Approval.prototype = {
 	        var img = document.createElement('img');
 	        var li = document.createElement("li");
 	        li.classList.add("newUploadImg");
+	        img.setAttribute("alt", file.name);
 
 	        img.file = file;
 	        li.appendChild(img);
@@ -711,7 +721,6 @@ Approval.prototype = {
 
 			var formdata = new FormData();
 			var files = this.files;
-
 			if (files.length <= 9) {
 				var hasSelectLength = self.config.uploadWrap.querySelectorAll("li");
 				hasSelectLength = Array.prototype.slice.apply(hasSelectLength);
@@ -719,8 +728,7 @@ Approval.prototype = {
 				if (files.length <= 10-hasSelectLength.length) {
 					for(var i = 0,len = files.length; i < len; i++) {
 					    var file = files[i];
-					    var type = file.name.split(".")[1].toLowerCase();
-					    
+					    var type = file.name.replace(/.+\./,"").toLowerCase();
 					    if (type !== "jpg" && type !== "jpeg" && type !== "png") {
 					    	$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow"); 
 					    	return;
@@ -761,13 +769,13 @@ Approval.prototype = {
 			                           		imageUrl = data.pathUrls.split(",");
 			                           		imageNmae = data.fileNames.split(",");
 
-			                           		Array.prototype.push.apply(self.expenseImageUrl,imageUrl);
-			                           		Array.prototype.push.apply(self.expenseImageName,imageNmae);
+			                           		Array.prototype.unshift.apply(self.expenseImageUrl,imageUrl);
+			                           		Array.prototype.unshift.apply(self.expenseImageName,imageNmae);
 
 			                           		$my.messageInfo.html(data.message).fadeIn("fast").delay("1000").fadeOut("slow"); 
 			        	                	break;
 			        	                case "false":
-			        	                	$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("1500").fadeOut("slow"); 
+			        	                	$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("2000").fadeOut("slow"); 
 			        	                	formdata = null;
 			        	                	imageUrl = [];
 			        	                	imageNmae = [];
@@ -804,6 +812,52 @@ Approval.prototype = {
 			
 		}, false);
 	},
+	deleteEpUser: function(){ //删除已选审批人
+		var self = this;		
+		var getIndex = function(i){
+			return function(){
+				this.parentNode.removeChild(this);
+			};
+		};
+
+		slideout.on("close",function(){
+			new Promise(function(resolve,reject){
+				resolve(self.config.approverWrap.querySelectorAll(".nowrap"));
+			}).then(function(epUserList){
+				epUserList = Array.prototype.slice.call(epUserList);
+				for (var i = 0; i < epUserList.length; i++) {
+					epUserList[i].onclick = getIndex(i);
+				};
+			}).catch(function(err){
+				$my.messageInfo.html("异常错误:"+err).fadeIn("fast").delay("2000").fadeOut("slow"); 
+			});
+		});
+	},
+	deleteImg: function(){ //删除图片
+		var self = this;
+		$(self.config.uploadWrap).on('click', 'li.newUploadImg', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			var nowIndex = $(this).index();
+			var imgName = $(this).children('img').attr("alt").replace(/(.*\/)*([^.]+).*/ig,"$2"); //获取点击删除图片的文件名(不包含后缀名)
+			var deleteUrl = function(i){
+				return function(){
+					self.expenseImageUrl.splice(i, 1);
+				}(i);
+			};
+
+			for (var i = 0,len = self.expenseImageName.length; i < len; i++) {
+				if (self.expenseImageName[i] === imgName) {
+					console.log(self.expenseImageName[i]);
+					self.expenseImageName.splice(i, 1);
+					deleteUrl(i);
+				};
+			};
+
+			$(this).remove();
+		});
+	},
 	init: function(){ //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -816,6 +870,8 @@ Approval.prototype = {
 		this.crumbsEvent(); //面包屑点击事件
 		this.selectEpUser(); //常用审批人点击事件
 		this.addImage(); //添加图片
+		this.deleteEpUser(); //删除审批人
+		this.deleteImg(); //删除图片
 	}
 }
 
@@ -828,6 +884,8 @@ $(function() {
 	    userID: sessionStorage.getItem("ddUserID")
 	}
 
+	approval.init(); //调用init
+
 	// 加载进度模态框居中
 	var $modal = $('#imgModalWrap');
 	$modal.on('show.bs.modal', function() {
@@ -839,8 +897,6 @@ $(function() {
 			'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)
 		});
 	});
-
-	approval.init(); //调用init
 
 	// open slideout
 	var addApprover = document.querySelector("#addApprover");
