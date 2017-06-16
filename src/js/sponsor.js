@@ -840,12 +840,8 @@ Approval.prototype = {
 			event.stopPropagation();
 
 			var nowIndex = $(this).index();
-			var imgName = $(this).children('img').attr("alt").replace(/(.*\/)*([^.]+).*/ig,"$2"); //获取点击删除图片的文件名(不包含后缀名)
-			var deleteUrl = function(i){
-				return function(){
-					self.expenseImageUrl.splice(i, 1);
-				}(i);
-			};
+			var fileName = $(this).children('img').attr("alt");
+			var imgName = fileName.substring(0,fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
 
 			for (var i = 0,len = self.expenseImageName.length; i < len; i++) {
 				if (self.expenseImageName[i] === imgName) {
@@ -853,6 +849,12 @@ Approval.prototype = {
 					self.expenseImageName.splice(i, 1);
 					deleteUrl(i);
 				};
+			};
+
+			function deleteUrl(i){
+				return function(){
+					self.expenseImageUrl.splice(i, 1);
+				}(i);
 			};
 
 			$(this).remove();

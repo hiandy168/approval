@@ -11,6 +11,7 @@ function Approval(){
 	this.switchStr = true; //面包屑点击switch
 	this.expenseImageUrl = []; //报销凭证url
 	this.expenseImageName = []; //报销凭证name
+	this.detailid = ""; //详情id
 
 	this.config = {
 		productType: document.querySelector("#productType"),
@@ -44,6 +45,18 @@ Approval.prototype = {
 		method.tId = setTimeout(function() {
 			method.call(context);
 		}, 200);
+	},
+	getDetailed: function(){ //获取详情id
+		var url = window.location.href;
+		var self = this;
+		if (url.indexOf("detailid") != -1) {
+		    var detailidStr = window.location.search;
+
+		    self.detailid = detailidStr.split("=")[1];
+		} else {
+		    $my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+		    throw new Error("url错误");
+		};
 	},
 	getSessionData: function(){ //获取session数据
 		var productType = JSON.parse(sessionStorage.getItem("productType")), //获取报销类型信息
@@ -701,15 +714,15 @@ Approval.prototype = {
 		};
 
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expense/save',
+		    url: getRoothPath+'/ddExpenses/expense/updata',
 		    // async: false, //同步
 		    data: {
+		    	"expenseID": approval.detailid,
 		    	"expenseTotal": expenseTotal,
 		    	"submitUserID": $my.userID,
 		    	"bankAccount": bankAccount,
 		    	"accountName": accountName,
 		    	"accounNumber": accounNumber,
-
 		    	"producttypeIDs": producttypeIDs,
 		    	"itemAlltotals": itemAlltotals,
 		    	"remarks": remarks,
@@ -780,7 +793,6 @@ Approval.prototype = {
 	        // li.setAttribute("data-toggle","modal");
 	        // li.setAttribute("data-target","#imgModal");
 	        li.classList.add("newUploadImg");
-	        img.setAttribute("alt", file.name);
 
 	        img.file = file;
 	        li.appendChild(img);
@@ -953,7 +965,8 @@ Approval.prototype = {
 		}, false);
 	},
 	init: function(){ //init封装
-		this.getSessionData();
+		this.getSessionData(); //获取session数据
+		this.getDetailed(); //获取详情id
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人
 		this.addEvents(); //添加报销事件

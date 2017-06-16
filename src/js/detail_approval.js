@@ -365,6 +365,6 @@ $(function() {
 		event.preventDefault();
 		event.stopPropagation();
 
-		window.location.href = "edit.html";
+		window.location.href = "edit.html?detailid="+$my.detailid;
 	}, false);
 });
