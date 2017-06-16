@@ -469,6 +469,7 @@ body {
   background-color: #fff;
   height: 100%;
   width: 0.1rem;
+  margin-right: 0.1rem;
   display: inline-block;
   -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
   animation: stretchdelay 1.2s infinite ease-in-out;
