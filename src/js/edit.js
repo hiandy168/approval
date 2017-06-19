@@ -791,8 +791,9 @@ Approval.prototype = {
 	        var img = document.createElement('img');
 	        var li = document.createElement("li");
 	        // li.setAttribute("data-toggle","modal");
-	        // li.setAttribute("data-target","#imgModal");
+	        // li.dataset.target = "#imgModal";
 	        li.classList.add("newUploadImg");
+	        img.setAttribute("alt", file.name);
 
 	        img.file = file;
 	        li.appendChild(img);
@@ -935,7 +936,7 @@ Approval.prototype = {
 			$(self.config.deleteApproverWrap).modal("hide"); //手动关闭模态框
 		}, false);
 	},
-	deleteImg: function(){ //删除图片
+	deleteOldImg: function(){ //删除旧图片
 		var self = this;
 		var num = ""; //获取点击下标
 
@@ -964,6 +965,33 @@ Approval.prototype = {
 			$(self.config.imgModal).modal("hide"); //手动关闭模态框
 		}, false);
 	},
+	deleteNewImg: function(){ //删除新图片
+		var self = this;
+		$(self.config.uploadWrap).on('click', 'li.newUploadImg', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			var nowIndex = $(this).index();
+			var fileName = $(this).children('img').attr("alt");
+			var imgName = fileName.substring(0,fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
+
+			for (var i = 0,len = self.expenseImageName.length; i < len; i++) {
+				if (self.expenseImageName[i] === imgName) {
+					console.log(self.expenseImageName[i]);
+					self.expenseImageName.splice(i, 1);
+					deleteUrl(i);
+				};
+			};
+
+			function deleteUrl(i){
+				return function(){
+					self.expenseImageUrl.splice(i, 1);
+				}(i);
+			};
+
+			$(this).remove();
+		});
+	},
 	init: function(){ //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
@@ -978,7 +1006,8 @@ Approval.prototype = {
 		this.selectEpUser(); //常用审批人点击事件
 		this.addImage(); //添加图片
 		this.deleteApprover(); //删除审批人
-		this.deleteImg(); //删除图片
+		this.deleteOldImg(); //删除旧图片
+		this.deleteNewImg(); //删除新图片
 	}
 }
 
