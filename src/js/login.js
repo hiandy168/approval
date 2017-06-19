@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-05-24 14:52:53
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-16 15:32:10
+* @Last Modified time: 2017-06-19 13:56:40
 */
 
 'use strict';
@@ -44,7 +44,7 @@ Expenses.prototype = {
                                     sessionStorage.setItem("ddUserID", userID);
 
                                     // window.location.href = "dist/html/index.html"; //正式
-                                    window.location.href = "./src/html/index.html"; //测试
+                                    window.location.href = "src/html/index.html"; //测试
                                 } else {
                                     $my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
                                     return;
