@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-06-08 10:24:12
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-14 16:34:55
+* @Last Modified time: 2017-06-19 13:24:07
 */
 
 'use strict';
@@ -47,52 +47,58 @@ Approval.prototype = {
 		var reviewType = approval.config.passedBtn.dataset["reviewtype"];
 		var expenselog = approval.config.inputContent.value;
 
-		$.ajax({
-		    url: getRoothPath+'/ddExpenses/review/updataExpenseReview',
-		    data: { 
-		        "expenseID": approval.expenseID,
-		        "expenseReviewID": approval.expenseReviewID,
-		        "reviewType": reviewType,
-		        "expenselog": expenselog
-		    },
-		    success:function(data){
-		        console.log(data);
-    	        if (JSON.stringify(data) !== "{}") 
-    	        {
-    	            var status = data.status;
+		if (expenselog != "") {
+			$.ajax({
+			    url: getRoothPath+'/ddExpenses/review/updataExpenseReview',
+			    data: { 
+			        "expenseID": approval.expenseID,
+			        "expenseReviewID": approval.expenseReviewID,
+			        "reviewType": reviewType,
+			        "expenselog": expenselog
+			    },
+			    success:function(data){
+			        console.log(data);
+	    	        if (JSON.stringify(data) !== "{}") 
+	    	        {
+	    	            var status = data.status;
 
-    	            switch(status){
-    	                case 1:
-    	                	var timer = null;
-                       		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
+	    	            switch(status){
+	    	                case 1:
+	    	                	var timer = null;
+	                       		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
-                       		!function(){
-                       		    localStorage.removeItem("sessionTouchData_mySponser");
-                       		    localStorage.removeItem("pageNum_mySponser");
-                       		    localStorage.removeItem("dataCount_mySponser");
-                       		    localStorage.removeItem("sessionTouchData_myApproval");
-                       		    localStorage.removeItem("pageNum_myApproval");
-                       		    localStorage.removeItem("dataCount_myApproval");
-                       		}();
+	                       		!function(){
+	                       		    localStorage.removeItem("sessionTouchData_mySponser");
+	                       		    localStorage.removeItem("pageNum_mySponser");
+	                       		    localStorage.removeItem("dataCount_mySponser");
+	                       		    localStorage.removeItem("sessionTouchData_myApproval");
+	                       		    localStorage.removeItem("pageNum_myApproval");
+	                       		    localStorage.removeItem("dataCount_myApproval");
+	                       		}();
 
-                       		clearTimeout(timer);
-                       		timer = setTimeout(function(){
-                       			window.location.href = "index.html";
-                       		}, 1200);
-    	                	break;
-    	                case 0:
-    	                	$my.messageInfo.html("提交失败").fadeIn("fast").delay("1500").fadeOut("slow"); 
-    	                	break;
-    	                default:
-    	                    break;
-    	            }           
-    	        } else
-    	        {
-    	            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-    	            return false;
-    	        };
-		    }
-		})
+	                       		clearTimeout(timer);
+	                       		timer = setTimeout(function(){
+	                       			window.location.href = "index.html";
+	                       		}, 1200);
+	    	                	break;
+	    	                case 0:
+	    	                	$my.messageInfo.html("提交失败").fadeIn("fast").delay("1500").fadeOut("slow"); 
+	    	                	break;
+	    	                default:
+	    	                    break;
+	    	            }           
+	    	        } else
+	    	        {
+	    	            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+	    	            return false;
+	    	        };
+			    }
+			})
+		}else{
+			$my.messageInfo.html("请输入审批内容").fadeIn("fast").delay("1500").fadeOut("slow"); 
+			return;
+		};
+		
 	},
 	submitEvent: function(){
 		var self = this;
