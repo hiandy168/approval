@@ -164,7 +164,7 @@ Approval.prototype = {
 	getProductType: function(){ //获取报销类型
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/reviewType',
+		    url: getRoothPath+'/ddExpenses/userController/reviewType.do',
 		    // async: false, //同步
 		    success:function(data){
 		        console.log(data)
@@ -315,7 +315,7 @@ Approval.prototype = {
 	getCashierUser: function(){ //获取出纳人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/cashierUser',
+		    url: getRoothPath+'/ddExpenses/userController/cashierUser.do',
 		    // async: false, //同步
 		    success:function(data){
 		        console.log(data)
@@ -404,7 +404,7 @@ Approval.prototype = {
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser',
+			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser.do',
 			    // data: {"userID":userID},
 			    data: {"userID":userID},
 			    // async: false, //同步
@@ -490,7 +490,7 @@ Approval.prototype = {
 	getDepart: function(departmentID){ //获取部门及联系人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser',
+		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser.do',
 		    // async: false, //同步
 		    data: {"departmentID": departmentID},
 		    success:function(data){
@@ -714,7 +714,7 @@ Approval.prototype = {
 		};
 
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expense/updata',
+		    url: getRoothPath+'/ddExpenses/expense/updata.do',
 		    // async: false, //同步
 		    data: {
 		    	"expenseID": approval.detailid,
@@ -823,7 +823,7 @@ Approval.prototype = {
 
 					for(var i = 0,len = files.length; i < len; i++) {
 					    var file = files[i];
-					   var type = file.name.replace(/.+\./,"").toLowerCase();
+					    var type = file.name.replace(/.+\./,"").toLowerCase();
 					    
 					    if (type !== "jpg" && type !== "jpeg" && type !== "png") {
 					    	$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow"); 
@@ -840,7 +840,7 @@ Approval.prototype = {
 
 					if (files.length != 0) {
 					    $.ajax({ 
-					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu',  
+					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',  
 					        type: 'POST',  
 					        data: formdata, 
 					        timeout: "", 

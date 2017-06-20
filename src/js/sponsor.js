@@ -42,7 +42,7 @@ Approval.prototype = {
 	getProductType: function(){ //获取报销类型
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/reviewType',
+		    url: getRoothPath+'/ddExpenses/userController/reviewType.do',
 		    // async: false, //同步
 		    success:function(data){
 		        console.log(data)
@@ -187,7 +187,7 @@ Approval.prototype = {
 	getCashierUser: function(){ //获取出纳人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/cashierUser',
+		    url: getRoothPath+'/ddExpenses/userController/cashierUser.do',
 		    // async: false, //同步
 		    success:function(data){
 		        console.log(data)
@@ -239,7 +239,7 @@ Approval.prototype = {
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/getOldBank',
+			    url: getRoothPath+'/ddExpenses/userController/getOldBank.do',
 			    // data: {"userID":userID},
 			    data: {"userID":userID},
 			    // async: false, //同步
@@ -324,7 +324,7 @@ Approval.prototype = {
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser',
+			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser.do',
 			    data: {"userID":userID},
 			    // async: false, //同步
 			    success:function(data){
@@ -409,7 +409,7 @@ Approval.prototype = {
 	getDepart: function(departmentID){ //获取部门及联系人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser',
+		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser.do',
 		    // async: false, //同步
 		    data: {"departmentID": departmentID},
 		    success:function(data){
@@ -624,7 +624,7 @@ Approval.prototype = {
 		};
 
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expense/save',
+		    url: getRoothPath+'/ddExpenses/expense/save.do',
 		    // async: false, //同步
 		    data: {
 		    	"expenseTotal": expenseTotal,
@@ -697,22 +697,23 @@ Approval.prototype = {
 
 		//图片预览FileReader
 		var handleImageFile = function(file) {
-	        var img = document.createElement('img');
-	        var li = document.createElement("li");
-	        li.classList.add("newUploadImg");
-	        img.setAttribute("alt", file.name);
+			var img = document.createElement('img');
+			var li = document.createElement("li");
 
-	        img.file = file;
-	        li.appendChild(img);
-	        $(self.config.uploadWrap).prepend(li);
+			li.classList.add("newUploadImg");
+			img.setAttribute("alt", file.name);
 
-	        var reader = new FileReader();
-	        reader.onload = (function(aImg) {
-	            return function(e) {
-	                aImg.src = e.target.result;
-	            }
-	       })(img);
-	       reader.readAsDataURL(file);
+			img.file = file;
+			li.appendChild(img);
+			$(self.config.uploadWrap).prepend(li);
+
+			var reader = new FileReader();
+			reader.onload = (function(aImg) {
+				return function(e) {
+					aImg.src = e.target.result;
+				}
+			})(img);
+			reader.readAsDataURL(file);
 		}
 
 		self.config.myFile.addEventListener("change", function(e){
@@ -744,7 +745,7 @@ Approval.prototype = {
 					
 					if (files.length != 0) {
 					    $.ajax({ 
-					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu',  
+					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',  
 					        type: 'POST',  
 					        data: formdata,
 					        timeout: "", 

@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-05-24 14:52:53
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-19 13:56:40
+* @Last Modified time: 2017-06-20 16:05:21
 */
 
 'use strict';
@@ -25,7 +25,7 @@ Expenses.prototype = {
     verification: function(ddUserID){
     	if (ddUserID != null && ddUserID != "null") {
     		$.ajax({
-    		    url: getRoothPath+'/ddExpenses/userController/login',
+    		    url: getRoothPath+'/ddExpenses/userController/login.do',
     		    data: { "ddUserID":ddUserID},
     		    // async: false, //同步
     		    success:function(data){

@@ -44,7 +44,7 @@ Approval.prototype = {
 	getData: function(){
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expenseInfo/expenseDetail',
+		    url: getRoothPath+'/ddExpenses/expenseInfo/expenseDetail.do',
 		    data: { 
 		        "id": $my.detailid
 		    },

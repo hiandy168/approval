@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-06-08 10:24:12
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-19 13:24:07
+* @Last Modified time: 2017-06-20 16:05:51
 */
 
 'use strict';
@@ -49,7 +49,7 @@ Approval.prototype = {
 
 		if (expenselog != "") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/review/updataExpenseReview',
+			    url: getRoothPath+'/ddExpenses/review/updataExpenseReview.do',
 			    data: { 
 			        "expenseID": approval.expenseID,
 			        "expenseReviewID": approval.expenseReviewID,

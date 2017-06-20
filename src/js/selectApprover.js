@@ -9,7 +9,7 @@ EpUser.prototype = {
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser',
+			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser.do',
 			    // data: {"userID":userID},
 			    data: {"userID":userID},
 			    // async: false, //同步

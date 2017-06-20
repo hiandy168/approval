@@ -65,7 +65,7 @@ Approval.prototype = {
 		var self = this;
 		if (ddUserID != null && ddUserID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/expenseInfo/sum',
+			    url: getRoothPath+'/ddExpenses/expenseInfo/sum.do',
 			    data: { "userID": ddUserID},
 			    // async: false, //同步
 			    success:function(data){
