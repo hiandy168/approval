@@ -347,6 +347,8 @@ Approval.prototype = {
 										};
 
 										self.config.epUserWrap.innerHTML = str;
+									}else if(dataArr.length == 0){
+										self.config.epUserWrap.innerHTML = "<span style='font-weight:normal'>暂无常用审批人</span>";
 									};
 
 								} else{
