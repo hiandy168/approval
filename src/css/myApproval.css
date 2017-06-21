@@ -76,7 +76,7 @@
   position: absolute;
   z-index: 10000;
   top: 0;
-  right: 0;
+  left: 0.55rem;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;

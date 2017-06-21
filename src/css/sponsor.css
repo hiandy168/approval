@@ -548,6 +548,7 @@ body {
   color: #fff;
 }
 .wrap .footer > .myContainer > .btn-group-justified > .passedBtn {
+  font-weight: bold;
   background-color: #fff;
   color: #1E98FF;
   -webkit-border-radius: 0;
@@ -563,6 +564,7 @@ body {
   box-shadow: 0 -2px 8px 0 #ffffff;
 }
 .wrap .footer > .myContainer > .btn-group-justified > .refusedBtn {
+  font-weight: bold;
   background-color: #FF5555;
   color: #fff;
   -webkit-border-radius: 0;
