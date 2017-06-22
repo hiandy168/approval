@@ -741,6 +741,45 @@ body {
 				// 	}
 				// }
 			}
+			>.input-group{
+				margin-top: 0.2rem;
+				padding: 0.1rem 0;
+				background-color: @mainbgc;
+				>.input-group-addon{
+					background-color: @mainbgc;
+					border: 0;
+					padding-right: 0.1rem;
+					>.my-icon{
+						font-size: 0.24rem;
+						color: #bcbcbc;
+						font-weight: lighter;
+					}
+				}
+				>.form-control{
+					border: 1px solid @mainbgc;
+					.broderRadius(0);
+				    -webkit-box-shadow: inset 0 1px 1px @mainbgc;
+				    -moz-box-shadow: inset 0 1px 1px @mainbgc;
+				    -ms-box-shadow: inset 0 1px 1px @mainbgc;
+				    -o-box-shadow: inset 0 1px 1px @mainbgc;
+				    box-shadow: inset 0 1px 1px @mainbgc;
+				    padding-left: 0;
+				}
+				>.form-control::-webkit-input-placeholder{
+					color: #bcbcbc;
+					font-size: 0.30rem;
+					font-weight: normal;
+				}
+			}
 		}
 	}
+	>.depart{
+		display: none;
+	}
+	// >.showTrue{
+	// 	display: block;
+	// }
+	// >.showFalse{
+	// 	display: none;
+	// }
 }
