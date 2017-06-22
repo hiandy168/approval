@@ -11,6 +11,7 @@ function Approval(){
 	this.switchStr = true; //面包屑点击switch
 	this.expenseImageUrl = []; //报销凭证url
 	this.expenseImageName = []; //报销凭证name
+	this.num = 0; //添加报销num
 
 	this.config = {
 		productType: document.querySelector("#productType"),
@@ -99,7 +100,7 @@ Approval.prototype = {
 			event.preventDefault();
 			event.stopPropagation();
 
-			num = parseInt($(this).parents("#appendChild")[0].dataset["index"]);
+			num = parseInt($(this).parents(".bx_appendChild")[0].dataset["index"]);
 			
 			$(myModal).modal("show");
 		});
@@ -112,7 +113,7 @@ Approval.prototype = {
 				var val = this.innerHTML;
 				var productid = this.dataset["producttypeid"];
 
-				var domArr = self.config.inWrap.querySelectorAll(".appendChild");
+				var domArr = self.config.inWrap.querySelectorAll(".bx_appendChild");
 				Array.prototype.forEach.call(domArr,function(item,index){
 					if (num === index) {
 						item.querySelector(".product").value = val;
@@ -125,20 +126,19 @@ Approval.prototype = {
 		};
 	},
 	addEvents: function(){ //添加报销
-		var num = 0;
+		// var num = 0;
 		var str = "";
 		var text = "";
 		var self = this;
 
 		self.config.addBtn.addEventListener("click", function(){
-			num++;
-			if (num > 2) {
-				// alert("最多添加2个报销")
+			self.num++;
+			if (self.num > 2) {
 				$my.messageInfo.html("最多添加2个报销").fadeIn("fast").delay("1000").fadeOut("slow");
 				return false;
 			} else{
 
-				switch(num){
+				switch(self.num){
 					case 1:
 						text = "报销二";
 						break;
@@ -148,8 +148,8 @@ Approval.prototype = {
 					default:
 						break;
 				}
-				str += '<div id="appendChild" class="appendChild" data-index='+num+'>';
-				str += '<p class="titleMessage">'+text+'</p>';
+				str += '<div class="appendChild bx_appendChild" data-index='+self.num+'>';
+				str += '<p class="titleMessage clearfix">'+text+' <i class="iconfont icon-ttpodicon deleteIcon pull-right"></i></p>';
 				str += '<div class="container-fluid myContainer inputFile">';
 				str += '<div class="row my-row">';
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
@@ -407,6 +407,46 @@ Approval.prototype = {
 
 		this.config.departmentWrap.innerHTML = str;
 		this.switchStr = true;
+	},
+	_deleteProductType:function(){ //删除报销类型
+		var self = this;
+
+		$(self.config.inWrap).on('click', '.deleteIcon', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			var index = $(this).parents(".bx_appendChild").attr("data-index");
+			var length = $(this).parents("#inWrap").find('.bx_appendChild').length;
+
+			switch(length){
+				case 2:
+					$(this).parents(".bx_appendChild").next(".bx_appendChild").attr('data-index', '1');
+					self.num = 0;
+					break;
+				case 3:
+					if (index === "1") {
+						$(this).parents(".bx_appendChild").next(".bx_appendChild").attr('data-index', '1').children('.titleMessage').html("报销二 <i class='iconfont icon-ttpodicon deleteIcon pull-right'></i>");
+						self.num = 1;
+					}else if(index === "2"){
+						self.num = 1;
+					};
+					break;
+				default:
+					$my.messageInfo.html("异常错误").fadeIn("fast").delay("1500").fadeOut("slow"); 
+					break;
+			};
+
+			$(this).parents(".bx_appendChild").remove();
+
+			//计算总金额
+			var totalCount = 0;
+			var itemAlltotalsList = self.config.inWrap.querySelectorAll(".itemAlltotals");
+			Array.prototype.forEach.call(itemAlltotalsList,function(item){
+				totalCount += parseFloat(item.dataset["count"]);
+			});
+
+			self.config.expenseTotal.value = totalCount.toFixed(4);
+		});
 	},
 	getDepart: function(departmentID){ //获取部门及联系人
 		var self = this;
@@ -877,6 +917,7 @@ Approval.prototype = {
 		this.addImage(); //添加图片
 		this.deleteEpUser(); //删除审批人
 		this.deleteImg(); //删除图片
+		this._deleteProductType(); //删除报销类型
 	}
 }
 
