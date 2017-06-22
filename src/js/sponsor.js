@@ -799,6 +799,10 @@ Approval.prototype = {
 					        beforeSend: function(){
 					        	$("#imgModalWrap").modal("show");
 					        	$('#imgModalWrap').modal({backdrop: 'static', keyboard: false});
+					        	$("#imgModalWrap").on('touchmove', function(event) {
+					        		event.preventDefault();
+					        		event.stopPropagation();
+					        	});
 					        },
 					        success: function (data) {  
 					            console.log(data);
