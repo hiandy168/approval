@@ -1,6 +1,8 @@
 function Approval(){
 	this.expenseLog = []; //评论集合
 	this.expenseUser = []; //审核信息
+	this.departName = ""; //报销部门
+	this.departmentID = ""; //报销部门id
 	this.accountName = ""; //开户人姓名
 	this.accounNumber = ""; //银行账号
 	this.bankAccount = ""; //开户行
@@ -19,7 +21,8 @@ function Approval(){
 		accounNumber: document.querySelector("#accounNumber"),
 		bankAccount: document.querySelector("#bankAccount"),
 		expenseTotal: document.querySelector("#expenseTotal"),
-		cashier: document.querySelector("#cashier")
+		cashier: document.querySelector("#cashier"),
+		departName: document.querySelector("#departName")
 	}
 }
 
@@ -65,6 +68,8 @@ Approval.prototype = {
     								self.accounNumber = expenseInfoData[0].accounNumber;
     								self.bankAccount = expenseInfoData[0].bankAccount;
     								self.expenseTotal = expenseInfoData[0].expenseTotal;
+    								self.departName = expenseInfoData[0].departName;
+    								self.departmentID = expenseInfoData[0].departmentID;
 
     								if (expenseInfoData[0].imageUrl != null && expenseInfoData[0].imageUrl != "null") {
     									self.imgArr = expenseInfoData[0].imageUrl.split(",");
@@ -96,6 +101,8 @@ Approval.prototype = {
     								// 存入sessionStorage
     								sessionStorage.setItem("productType",JSON.stringify(info.productType));
     								sessionStorage.setItem("expenseUser",JSON.stringify(info.expenseUser));
+    								sessionStorage.setItem("departName",self.departName);
+    								sessionStorage.setItem("departmentID",self.departmentID);
     								sessionStorage.setItem("accountName",self.accountName);
     								sessionStorage.setItem("accounNumber",self.accounNumber);
     								sessionStorage.setItem("bankAccount",self.bankAccount);
@@ -230,6 +237,8 @@ Approval.prototype = {
 		this.config.accounNumber.value = this.accounNumber;
 		this.config.bankAccount.value = this.bankAccount;
 		this.config.expenseTotal.value = this.expenseTotal;
+		this.config.departName.value = this.departName;
+		this.config.departName.dataset.departmentid = this.departmentID;
 	},
 	_renderImg: function(){ //render报销凭证
 		var str = "";

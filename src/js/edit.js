@@ -35,7 +35,15 @@ function Approval(){
 		confirmBtn: document.querySelector("#confirmBtn"),
 		imgModal: document.querySelector("#imgModal"),
 		cancleBtn_img: document.querySelector("#cancleBtn_img"),
-		confirmBtn_img: document.querySelector("#confirmBtn_img")
+		confirmBtn_img: document.querySelector("#confirmBtn_img"),
+
+		addApprover: document.querySelector("#addApprover"),
+		departWrapID: document.querySelector("#departWrapID"),
+		closeBtn: document.querySelector("#closeBtn"),
+		closeBtn_depart: document.querySelector("#closeBtn_depart"),
+		menu: document.querySelector("#menu"),
+		departSearch: document.querySelector("#departSearch"),
+		departmentContent: document.querySelector("#departmentContent")
 	}
 }
 
@@ -45,6 +53,24 @@ Approval.prototype = {
 		method.tId = setTimeout(function() {
 			method.call(context);
 		}, 200);
+	},
+	throttleInput: function(method, delay, duration) { //input节流
+		var timer = null,
+			begin = new Date();
+		return function() {
+			var context = this,
+				args = arguments,
+				current = new Date();;
+			clearTimeout(timer);
+			if (current - begin >= duration) {
+				method.apply(context, args);
+				begin = current;
+			} else {
+				timer = setTimeout(function() {
+					method.apply(context, args);
+				}, delay);
+			}
+		}
 	},
 	getDetailed: function(){ //获取详情id
 		var url = window.location.href;
@@ -61,6 +87,10 @@ Approval.prototype = {
 	getSessionData: function(){ //获取session数据
 		var productType = JSON.parse(sessionStorage.getItem("productType")), //获取报销类型信息
 			expenseUser = JSON.parse(sessionStorage.getItem("expenseUser")), //获取审批人
+
+			departName = sessionStorage.getItem("departName"), //报销部门
+			departmentID = sessionStorage.getItem("departmentID"), //报销部门id
+
 			accountName = sessionStorage.getItem("accountName"), //开户人姓名
 			accounNumber = sessionStorage.getItem("accounNumber"), //开户人账号
 			bankAccount = sessionStorage.getItem("bankAccount"), //开户行
@@ -72,6 +102,8 @@ Approval.prototype = {
 			approverStr = "",
 			imgStr = "";
 
+		this.config.departWrapID.value = departName;
+		this.config.departWrapID.dataset.departmentinputid = departmentID
 		this.config.accountName.value = accountName;
 		this.config.accounNumber.value = accounNumber;
 		this.config.bankAccount.value = bankAccount;
@@ -453,7 +485,7 @@ Approval.prototype = {
             return false;
 		};	
 	},
-	_renderDepart: function(info){ //渲染获取部门及联系人
+	_renderDepartWrap: function(info){ //渲染获取部门及联系人
 		var str = "";
 		var listUserArr = info.listUser;
 		var listDepartArr = info.listDepart;
@@ -504,7 +536,7 @@ Approval.prototype = {
 	                   		var info = data.info;
 	                   		
 							if (JSON.stringify(info) !== "{}") {
-								self._renderDepart(info)
+								self._renderDepartWrap(info)
 							} else{
 								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
 								return;
@@ -636,6 +668,7 @@ Approval.prototype = {
 			bankAccount = approval.config.bankAccount.value,
 			accountName = approval.config.accountName.value,
 			accounNumber = approval.config.accounNumber.value,
+			departmentID = approval.config.departWrapID.dataset["departmentinputid"],
 			producttypeIDs = [],
 			itemAlltotals = [],
 			remarks = [],
@@ -661,6 +694,11 @@ Approval.prototype = {
 		for (var i = 0,len = oldImgDomArr.length; i < len; i++) {
 			oldImageUrlArr.push(oldImgDomArr[i].querySelector("img").dataset["src"]);
 			oldImageNameArr.push(oldImgDomArr[i].querySelector("img").getAttribute("alt"));
+		};
+
+		if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
+			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			return;
 		};
 
 		for (var i = 0,len = producttypeDomArr.length; i < len; i++) {
@@ -717,6 +755,7 @@ Approval.prototype = {
 		    url: getRoothPath+'/ddExpenses/expense/updata.do',
 		    // async: false, //同步
 		    data: {
+		    	"departmentID":departmentID,
 		    	"expenseID": approval.detailid,
 		    	"expenseTotal": expenseTotal,
 		    	"submitUserID": $my.userID,
@@ -992,6 +1031,172 @@ Approval.prototype = {
 			$(this).remove();
 		});
 	},
+	_renderDepart: function(name,parentID){ //render报销部门
+		var self = this;
+		$.ajax({
+		    url: getRoothPath+'/ddExpenses/userController/expenseDepartSearch.do',
+		    data: {"name":name,"parentID":parentID},
+		    // async: false, //同步
+		    success:function(data){
+		        console.log(data)
+		        if (JSON.stringify(data) !== "{}") 
+		        {
+		            var status = data.status;
+
+		            switch(status){
+		                case "true":
+	                   		var info = data.info;
+	                   		
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								var str = "";
+
+								if (dataArr.length && dataArr.length != 0) {
+									for (var i = 0,len = dataArr.length; i < len; i++) {
+										str += '<div class="row my-row" data-departmentwrapid='+dataArr[i].departmentID+'>';
+										str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
+										str += '<span>'+dataArr[i].departName+'</span>';
+										str += '</div>';
+										str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right departConfirmBtn">';
+										str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
+										str += '</div>';
+										str += '</div>';
+									};
+									self.config.departmentContent.innerHTML = str;
+								}else{
+									str += '<div class="row my-row">';
+									str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap">';
+									str += '<span>查询信息为空</span>';
+									str += '</div>';
+									str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
+									str += '<p></p>';
+									str += '</div>';
+									str += '</div>';
+
+									self.config.departmentContent.innerHTML = str;
+								};
+							} else{
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								return;
+							};
+		                	break;
+		                case "failure":
+		                	$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
+		                	break;
+		                default:
+		                    break;
+		            }           
+		        } else
+		        {
+		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+		            return false;
+		        };
+		    },
+		    complete:function(){
+		    	if (self.config.departmentContent.querySelectorAll(".row")) {
+		    		var rowList = self.config.departmentContent.querySelectorAll(".row");
+		    	};
+		    	self.expenseDepartEvent(rowList);
+		    }
+		})
+	},
+	expenseDepartSearch: function(){ //搜索查询报销部门
+		var self = this;
+		var _searchDepartBuffer = function(){
+			var val = this.value;
+			self._renderDepart(val);
+		};
+		self.config.departSearch.addEventListener("input", self.throttleInput(_searchDepartBuffer, 500, 1000), false);
+	},
+	expenseDepartEvent: function(arr){ //报销部门点击/选择
+		var self = this;
+		var getTarget = function(target,that){ //获取target
+			if(target.className.indexOf('my-col')!==-1){return target;}
+			if(target == that){return false;}
+			while (target.className.indexOf('my-col') === -1) {
+				target = target.parentNode;
+			}
+			return target;
+		};
+		var hasClass = function(el, className) { //判断class
+			return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+		};
+
+		if (arr) {
+			[].forEach.call(arr,function(item){
+				item.addEventListener("click", function(event){
+					event.preventDefault();
+					event.stopPropagation();
+
+					var departmentwrapid = this.dataset.departmentwrapid;
+					var searchDepartNameVal = "";
+					if (this.querySelector(".searchDepartName")) {
+						searchDepartNameVal = this.querySelector(".searchDepartName").querySelector("span").innerHTML;
+					};
+					
+					var that = this;
+					var target = event.target;
+					var eleName = getTarget(target,that);
+					if (eleName) {
+						var booleanStr = hasClass(eleName,"searchDepartName");
+						if (booleanStr) {
+							self._renderDepart("",departmentwrapid);
+						}else{ //选中此部门
+							if (that.querySelector(".departConfirmBtn")) {
+								that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
+							};
+							
+							if (searchDepartNameVal && departmentwrapid) {
+								self.config.departWrapID.value = searchDepartNameVal;
+								self.config.departWrapID.dataset["departmentinputid"] = departmentwrapid;
+							};
+							slideout.close();
+						};
+					};
+				}, false);
+			});
+		};
+	},
+	asideEvent: function(){ //slideout
+		var self = this;
+		// open slideout
+		self.config.addApprover.addEventListener("click", function(event){
+			event.preventDefault();
+			event.stopPropagation();
+
+			self.config.menu.getElementsByClassName("content")[0].classList.remove("hide");
+			self.config.menu.getElementsByClassName("content")[0].classList.add("show");
+			self.config.menu.querySelector(".depart").classList.remove("show");
+			self.config.menu.querySelector(".depart").classList.add("hide");
+			slideout.open();		
+		}, false);
+
+		self.config.departWrapID.addEventListener("click", function(event){
+			event.preventDefault();
+			event.stopPropagation();
+
+			self.config.menu.getElementsByClassName("content")[0].classList.remove("show");
+			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
+			self.config.menu.querySelector(".depart").classList.remove("hide");
+			self.config.menu.querySelector(".depart").classList.add("show");
+			slideout.open();		
+		}, false);
+
+		// close slideout
+		self.config.closeBtn.addEventListener("touchend",function(event){
+			event.preventDefault();
+			event.stopPropagation();
+
+			slideout.close();	
+		},false);
+
+		self.config.closeBtn_depart.addEventListener("touchend",function(event){
+			event.preventDefault();
+			event.stopPropagation();
+
+			slideout.close();	
+		},false);
+	},
 	init: function(){ //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
@@ -1008,6 +1213,9 @@ Approval.prototype = {
 		this.deleteApprover(); //删除审批人
 		this.deleteOldImg(); //删除旧图片
 		this.deleteNewImg(); //删除新图片
+		this.expenseDepartSearch(); //搜索查询报销部门
+		this.expenseDepartEvent(); //报销部门点击事件
+		this.asideEvent(); //slideout
 	}
 }
 
@@ -1033,24 +1241,6 @@ $(function() {
 			'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)
 		});
 	});
-
-	// open slideout
-	var addApprover = document.querySelector("#addApprover");
-	addApprover.addEventListener("click", function(event){
-		event.preventDefault();
-		event.stopPropagation();
-
-		slideout.open();		
-	}, false);
-
-	// close slideout
-	var closeBtn = document.querySelector("#closeBtn");
-	closeBtn.addEventListener("touchend",function(event){
-		event.preventDefault();
-		event.stopPropagation();
-
-		slideout.close();	
-	},false);
 
 	 //提交保存事件
 	var submitBtn = document.querySelector("#submitBtn");
