@@ -158,7 +158,7 @@ Approval.prototype = {
 				switch(status){
 					case 0:
 						judgeStr = '<li class="text-center refused" data-expenseuserid='+this.expenseUser[i].expenseUserID+'>';
-						timeStr = '<p class="time">'+this.expenseUser[i].expenseTime+'</p>';
+						timeStr = '<p class="time">'+this.expenseUser[i].expenseTime.substring(0,10)+'</p>';
 						iconStr = '<div class="wating text-center progressBar special_progressBar"><span class="iconfont icon-ttpodicon my-icon"></span></div>';
 						break;
 					case 1:
@@ -168,7 +168,7 @@ Approval.prototype = {
 						break;
 					case 2:
 						judgeStr = '<li class="text-center passed" data-expenseuserid='+this.expenseUser[i].expenseUserID+'>';
-						timeStr = '<p class="time">'+this.expenseUser[i].expenseTime+'</p>';
+						timeStr = '<p class="time">'+this.expenseUser[i].expenseTime.substring(0,10)+'</p>';
 						iconStr = '<div class="wating text-center progressBar special_progressBar"><span class="iconfont icon-tongguo my-icon"></span></div>';
 						break;
 					default:
