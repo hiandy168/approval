@@ -36,7 +36,6 @@ function Approval(){
 		imgModal: document.querySelector("#imgModal"),
 		cancleBtn_img: document.querySelector("#cancleBtn_img"),
 		confirmBtn_img: document.querySelector("#confirmBtn_img"),
-
 		addApprover: document.querySelector("#addApprover"),
 		departWrapID: document.querySelector("#departWrapID"),
 		closeBtn: document.querySelector("#closeBtn"),
