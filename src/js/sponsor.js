@@ -1275,9 +1275,9 @@ Approval.prototype = {
 													self.config.groupWrap.classList.add("show");
 												} else {
 													$my.messageInfo.html("返回信息为空,请重新输入").fadeIn("fast").delay("1500").fadeOut("slow");
-													// inGroupWrap.innerHTML = "<li class='list-group-item'>返回信息为空,请重新输入</li>";
-													// self.config.groupWrap.classList.add("show");
-													// self.config.accountName.value = "";
+													inGroupWrap.innerHTML = "";
+													self.config.groupWrap.classList.remove("show");
+													self.config.groupWrap.classList.add("hide");
 													return;
 												};
 
