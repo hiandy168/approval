@@ -1267,7 +1267,7 @@ Approval.prototype = {
 						})
 					};
 				}else{
-					$my.messageInfo.html("输入的不是数字").fadeIn("fast").delay("1000").fadeOut("slow"); 
+					$my.messageInfo.html("输入不合法").fadeIn("fast").delay("1000").fadeOut("slow"); 
 					this.value = "";
 					return;
 				}
