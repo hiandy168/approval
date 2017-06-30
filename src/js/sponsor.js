@@ -37,7 +37,8 @@ function Approval(){
 		menu: document.querySelector("#menu"),
 		departSearch: document.querySelector("#departSearch"),
 		departmentContent: document.querySelector("#departmentContent"),
-		jobNum: document.querySelector("#jobNum")
+		jobNum: document.querySelector("#jobNum"),
+		groupWrap: document.querySelector("#groupWrap")
 	}
 }
 
@@ -1229,6 +1230,163 @@ Approval.prototype = {
 
 		self.config.jobNum.addEventListener("input", self.throttle(inputFn, 1500), false);
 	},
+	expenseAName: function(){ //检索开户名
+		var self = this,
+			reg = /^[\u4e00-\u9fa5]{0,}$/,
+			flag = true,
+			inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
+
+		var inputFn = function(){
+			var val = this.value;
+			if (val == "") {
+				inGroupWrap.innerHTML = "";
+				self.config.groupWrap.classList.remove("show");
+				self.config.groupWrap.classList.add("hide");
+			};
+
+			if (flag) {
+				if (reg.test(val)) {
+					var len = val.length;
+					if (len >= 2) {
+						$.ajax({
+							url: getRoothPath + '/ddExpenses/userController/expenseAName.do',
+							data: {
+								"name": val
+							},
+							// async: false, //同步
+							success: function(data) {
+								console.log(data)
+								if (JSON.stringify(data) !== "{}") {
+									var status = data.status;
+									switch (status) {
+										case "true":
+											var info = data.info;
+
+											if (JSON.stringify(info) !== "{}") {
+												var dataArr = info.data;
+												if (dataArr.length) {
+													var str = "";
+													for (var i = 0, len = dataArr.length; i < len; i++) {
+														str += '<li class="list-group-item" data-accountnameid=' + dataArr[i].id + '>' + dataArr[i].accountName + '</li>';
+													};
+
+													inGroupWrap.innerHTML = str;
+													self.config.groupWrap.classList.remove("hide");
+													self.config.groupWrap.classList.add("show");
+												} else {
+													$my.messageInfo.html("返回信息为空,请重新输入").fadeIn("fast").delay("1500").fadeOut("slow");
+													// inGroupWrap.innerHTML = "<li class='list-group-item'>返回信息为空,请重新输入</li>";
+													// self.config.groupWrap.classList.add("show");
+													// self.config.accountName.value = "";
+													return;
+												};
+
+											} else {
+												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+												return;
+											};
+											break;
+										case "failure":
+											$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+											break;
+										default:
+											break;
+									}
+								} else {
+									$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+									return false;
+								};
+							}
+						})
+					};
+				} else {
+					$my.messageInfo.html("请输入中文汉字").fadeIn("fast").delay("1500").fadeOut("slow");
+					// this.value = "";
+					return;
+				};
+			};
+			
+		};
+
+		self.config.accountName.addEventListener("compositionstart", function(){
+			console.log("开始");
+			inGroupWrap.innerHTML = "";
+			self.config.groupWrap.classList.remove("show");
+			self.config.groupWrap.classList.add("hide");
+			flag = false;
+		}, false);
+
+		self.config.accountName.addEventListener("compositionend", function(){
+			console.log("结束");
+			flag = true;
+		}, false);	
+		
+		self.config.accountName.addEventListener("input",self.throttle(inputFn, 1000), false);
+
+		self.config.accountName.addEventListener("blur",function(){
+			inGroupWrap.innerHTML = "";
+			self.config.groupWrap.classList.add("hide");
+		}, false);
+	},
+	expenseANameEvent: function(){ //开户名检索账号
+		var self =this;
+		var inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
+		// 怂了，用jQuery了 ^-^
+		$(inGroupWrap).on('touchend', 'li', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			self.config.groupWrap.classList.remove("show");
+			self.config.groupWrap.classList.add("hide");
+			
+			var accountnameid = this.dataset.accountnameid;
+			var val = this.innerHTML;
+
+			self.config.accountName.value = val;
+
+			$.ajax({
+				url: getRoothPath + '/ddExpenses/userController/expenseBank.do',
+				data: {
+					"id": accountnameid
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
+						switch (status) {
+							case "true":
+								var info = data.info;
+
+								if (JSON.stringify(info) !== "{}") {
+									var dataArr = info.data;
+									if (dataArr.length) {
+										self.config.bankAccount.value = dataArr[0].bankAccount;
+										self.config.accounNumber.value = dataArr[0].accounNumber;
+									} else {
+										$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1500").fadeOut("slow");
+										return;
+									};
+
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return;
+								};
+								break;
+							case "failure":
+								$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
+			})
+		});
+	},
 	init: function(){ //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1249,6 +1407,8 @@ Approval.prototype = {
 		this.expenseDepartSearch(); //搜索查询报销部门
 		this.expenseDepartEvent(); //报销部门点击事件
 		this.jobNumEvent(); //报销人工号输入
+		this.expenseAName(); //检索开户名
+		this.expenseANameEvent(); //开户名检索账号
 	}
 }
 
