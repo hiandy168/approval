@@ -92,65 +92,7 @@ Approval.prototype = {
 		var judgeIcon = "";
 		var backlogClass = "";
 
-		for (var i = data.length - 1; i >= 0; i--) {
-			var status = data[i].expenseState;
-			var backlogStatus = data[i].reviewType;
-
-			switch(status){
-				case "审核中":
-					judgeStr = '<li class="underReview" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="glyphicon glyphicon-exclamation-sign my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
-					break;
-				case "已通过":
-					judgeStr = '<li class="passed" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="iconfont icon-tongguo my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
-					break;
-				case "已拒绝":
-					judgeStr = '<li class="refused" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="iconfont icon-ttpodicon my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
-					break;
-				default:
-					judgeStr = '<li>';
-					judgeIcon = '<p>&nbsp;&nbsp;</p>'
-					break;
-			}
-
-			switch(backlogStatus){
-				case "待我审批":
-					backlogClass = "backlog";
-					break;
-				case "":
-					backlogClass = "";
-					break;
-				default:
-					backlogClass = "";
-					break;
-			}
-
-			str += ''+judgeStr+'';
-			str += '<div class="container-fluid myContainer">';
-			str += '<div class="row my-row">';
-			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col '+backlogClass+'">';
-			str += '<span class="peopleName nowrap text-center">'+data[i].ExpenseUserName+'</span>';
-			str += '</div>';
-			str += '<div class="col-xs-6 col-sm-6 col-md-6 my-col">';
-			str += '<div class="inTop">';
-			str += '<p class="nowrap">'+data[i].itemName+'&nbsp;</p>';
-			str += '</div>';
-			str += '<div class="inBottom">';
-			str += '<p class="count">￥<span>'+data[i].expenseTotal+'</span></p>';
-			str += '</div>';
-			str += '</div>';
-			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
-			str += '<div class="inTop">';
-			str += ''+judgeIcon+'';
-			str += '</div>';
-			str += '<div class="inBottom">';
-			str += '<span>'+data[i].updateTime.substring(6)+' <span></span></span>';
-			str += '</div></div></div></div></li>';
-		};
-
-		// for (var i = 0; i < data.length; i++) {
+		// for (var i = data.length - 1; i >= 0; i--) {
 		// 	var status = data[i].expenseState;
 		// 	var backlogStatus = data[i].reviewType;
 
@@ -206,7 +148,65 @@ Approval.prototype = {
 		// 	str += '<div class="inBottom">';
 		// 	str += '<span>'+data[i].updateTime.substring(6)+' <span></span></span>';
 		// 	str += '</div></div></div></div></li>';
-		// };	
+		// };
+
+		for (var i = 0; i < data.length; i++) {
+			var status = data[i].expenseState;
+			var backlogStatus = data[i].reviewType;
+
+			switch(status){
+				case "审核中":
+					judgeStr = '<li class="underReview" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
+					judgeIcon = '<p class="status"><span class="glyphicon glyphicon-exclamation-sign my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					break;
+				case "已通过":
+					judgeStr = '<li class="passed" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
+					judgeIcon = '<p class="status"><span class="iconfont icon-tongguo my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					break;
+				case "已拒绝":
+					judgeStr = '<li class="refused" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
+					judgeIcon = '<p class="status"><span class="iconfont icon-ttpodicon my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					break;
+				default:
+					judgeStr = '<li>';
+					judgeIcon = '<p>&nbsp;&nbsp;</p>'
+					break;
+			}
+
+			switch(backlogStatus){
+				case "待我审批":
+					backlogClass = "backlog";
+					break;
+				case "":
+					backlogClass = "";
+					break;
+				default:
+					backlogClass = "";
+					break;
+			}
+
+			str += ''+judgeStr+'';
+			str += '<div class="container-fluid myContainer">';
+			str += '<div class="row my-row">';
+			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col '+backlogClass+'">';
+			str += '<span class="peopleName nowrap text-center">'+data[i].ExpenseUserName+'</span>';
+			str += '</div>';
+			str += '<div class="col-xs-6 col-sm-6 col-md-6 my-col">';
+			str += '<div class="inTop">';
+			str += '<p class="nowrap">'+data[i].itemName+'&nbsp;</p>';
+			str += '</div>';
+			str += '<div class="inBottom">';
+			str += '<p class="count">￥<span>'+data[i].expenseTotal+'</span></p>';
+			str += '</div>';
+			str += '</div>';
+			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
+			str += '<div class="inTop">';
+			str += ''+judgeIcon+'';
+			str += '</div>';
+			str += '<div class="inBottom">';
+			str += '<span>'+data[i].updateTime.substring(6)+' <span></span></span>';
+			str += '</div></div></div></div></li>';
+		};	
 
 		$($my.inWrap).append(str);
 		$my.flag = false;
