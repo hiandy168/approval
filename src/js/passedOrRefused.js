@@ -1,12 +1,13 @@
 /*
-* @Author: Administrator
-* @Date:   2017-06-08 10:24:12
-* @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-20 16:05:51
-*/
+ * @Author: Administrator
+ * @Date:   2017-06-08 10:24:12
+ * @Last Modified by:   Administrator
+ * @Last Modified time: 2017-07-25 18:30:47
+ */
 
 'use strict';
-function Approval(){
+
+function Approval() {
 	this.expenseID = ""; //报销id
 	this.expenseReviewID = ""; //审核明细id
 
@@ -22,9 +23,9 @@ Approval.prototype = {
 		clearTimeout(method.tId);
 		method.tId = setTimeout(function() {
 			method.call(context);
-		}, 200);
+		}, 1000);
 	},
-	getUrlArguments: function(){
+	getUrlArguments: function() {
 		var url = window.location.href;
 		var getParam = function(name) {
 			var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -36,74 +37,72 @@ Approval.prototype = {
 		}
 
 		if (url.indexOf("expenseID") != -1 && url.indexOf("expenseReviewID") != -1) {
-		    this.expenseID = getParam("expenseID");
-		    this.expenseReviewID = getParam("expenseReviewID");
+			this.expenseID = getParam("expenseID");
+			this.expenseReviewID = getParam("expenseReviewID");
 		} else {
-		    $my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
-		    throw new Error("url错误");
+			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+			throw new Error("url错误");
 		};
 	},
-	_passedFn: function(){
+	_passedFn: function() {
 		var reviewType = approval.config.passedBtn.dataset["reviewtype"];
 		var expenselog = approval.config.inputContent.value;
 
 		if (expenselog != "") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/review/updataExpenseReview.do',
-			    data: { 
-			        "expenseID": approval.expenseID,
-			        "expenseReviewID": approval.expenseReviewID,
-			        "reviewType": reviewType,
-			        "expenselog": expenselog
-			    },
-			    success:function(data){
-			        console.log(data);
-	    	        if (JSON.stringify(data) !== "{}") 
-	    	        {
-	    	            var status = data.status;
+				url: getRoothPath + '/ddExpenses/review/updataExpenseReview.do',
+				data: {
+					"expenseID": approval.expenseID,
+					"expenseReviewID": approval.expenseReviewID,
+					"reviewType": reviewType,
+					"expenselog": expenselog
+				},
+				success: function(data) {
+					console.log(data);
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
 
-	    	            switch(status){
-	    	                case 1:
-	    	                	var timer = null;
-	                       		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
+						switch (status) {
+							case 1:
+								var timer = null;
+								$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
-	                       		!function(){
-	                       		    localStorage.removeItem("sessionTouchData_mySponser");
-	                       		    localStorage.removeItem("pageNum_mySponser");
-	                       		    localStorage.removeItem("dataCount_mySponser");
-	                       		    localStorage.removeItem("sessionTouchData_myApproval");
-	                       		    localStorage.removeItem("pageNum_myApproval");
-	                       		    localStorage.removeItem("dataCount_myApproval");
-	                       		}();
+								! function() {
+									localStorage.removeItem("sessionTouchData_mySponser");
+									localStorage.removeItem("pageNum_mySponser");
+									localStorage.removeItem("dataCount_mySponser");
+									localStorage.removeItem("sessionTouchData_myApproval");
+									localStorage.removeItem("pageNum_myApproval");
+									localStorage.removeItem("dataCount_myApproval");
+								}();
 
-	                       		clearTimeout(timer);
-	                       		timer = setTimeout(function(){
-	                       			window.location.href = "index.html";
-	                       		}, 1200);
-	    	                	break;
-	    	                case 0:
-	    	                	$my.messageInfo.html("提交失败").fadeIn("fast").delay("1500").fadeOut("slow"); 
-	    	                	break;
-	    	                default:
-	    	                    break;
-	    	            }           
-	    	        } else
-	    	        {
-	    	            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-	    	            return false;
-	    	        };
-			    }
+								clearTimeout(timer);
+								timer = setTimeout(function() {
+									window.location.href = "index.html";
+								}, 1200);
+								break;
+							case 0:
+								$my.messageInfo.html("提交失败").fadeIn("fast").delay("1500").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
 			})
-		}else{
-			$my.messageInfo.html("请输入审批内容").fadeIn("fast").delay("1500").fadeOut("slow"); 
+		} else {
+			$my.messageInfo.html("请输入审批内容").fadeIn("fast").delay("1500").fadeOut("slow");
 			return;
 		};
-		
+
 	},
-	submitEvent: function(){
+	submitEvent: function() {
 		var self = this;
 
-		self.config.passedBtn.addEventListener("click", function(event){
+		self.config.passedBtn.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
