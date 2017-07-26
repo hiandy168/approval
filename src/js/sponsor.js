@@ -642,8 +642,9 @@ Approval.prototype = {
 			itemAlltotalDomArr = approval.config.inWrap.querySelectorAll(".itemAlltotals"),
 			remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
 			expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
+			loginName = approval.config.jobNum.value;
 
-			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
+		producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 		itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
 		remarksDomArr = Array.prototype.slice.apply(remarksDomArr);
 
@@ -697,6 +698,17 @@ Approval.prototype = {
 			return;
 		};
 
+		if (loginName == "") {
+			$my.messageInfo.html("请完善报销人工号").fadeIn("fast").delay("1000").fadeOut("slow");
+			return;
+		} else {
+			var reg = /^\d{7}$/;
+			if (!reg.test(loginName)) {
+				$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+		};
+
 		producttypeIDs = producttypeIDs.join();
 		itemAlltotals = itemAlltotals.join();
 		remarks = remarks.join();
@@ -722,7 +734,8 @@ Approval.prototype = {
 				"expensesUserIDs": expensesUserID,
 				"cashierUserID": cashierUserID,
 				"expenseImageUrl": imageUrlArr.join(),
-				"expenseImageName": approval.expenseImageName.join()
+				"expenseImageName": approval.expenseImageName.join(),
+				"loginName": loginName
 			},
 			success: function(data) {
 				console.log(data)
@@ -1363,6 +1376,7 @@ Approval.prototype = {
 									if (dataArr.length) {
 										self.config.bankAccount.value = dataArr[0].bankAccount;
 										self.config.accounNumber.value = dataArr[0].accounNumber;
+										self.config.jobNum.value = dataArr[0].loginName;
 									} else {
 										$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1500").fadeOut("slow");
 										return;
@@ -1409,6 +1423,7 @@ Approval.prototype = {
 		this.jobNumEvent(); //报销人工号输入
 		this.expenseAName(); //检索开户名
 		this.expenseANameEvent(); //开户名检索账号
+		this._renderDepart('', ''); //页面主动加载报销部门
 	}
 }
 

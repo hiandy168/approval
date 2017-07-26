@@ -1,13 +1,13 @@
 // slideout
 var slideout = new Slideout({
-    'panel': document.getElementById('panel'),
-    'menu': document.getElementById('menu'),
-    'padding': 256,
-    'tolerance': 70,
-    'touch': false
+	'panel': document.getElementById('panel'),
+	'menu': document.getElementById('menu'),
+	'padding': 256,
+	'tolerance': 70,
+	'touch': false
 });
 
-function Approval(){
+function Approval() {
 	this.switchStr = true; //面包屑点击switch
 	this.expenseImageUrl = []; //报销凭证url
 	this.expenseImageName = []; //报销凭证name
@@ -55,7 +55,7 @@ Approval.prototype = {
 	// 		method.call(context);
 	// 	}, 200);
 	// },
-	throttle: function(method, delay){ //节流
+	throttle: function(method, delay) { //节流
 		var timer = null;
 		return function() {
 			var context = this,
@@ -84,29 +84,28 @@ Approval.prototype = {
 			}
 		}
 	},
-	getDetailed: function(){ //获取详情id
+	getDetailed: function() { //获取详情id
 		var url = window.location.href;
 		var self = this;
 		if (url.indexOf("detailid") != -1) {
-		    var detailidStr = window.location.search;
+			var detailidStr = window.location.search;
 
-		    self.detailid = detailidStr.split("=")[1];
+			self.detailid = detailidStr.split("=")[1];
 		} else {
-		    $my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
-		    throw new Error("url错误");
+			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+			throw new Error("url错误");
 		};
 	},
-	getSessionData: function(){ //获取session数据
+	getSessionData: function() { //获取session数据
 		var productType = JSON.parse(sessionStorage.getItem("productType")), //获取报销类型信息
 			expenseUser = JSON.parse(sessionStorage.getItem("expenseUser")), //获取审批人
-
 			departName = sessionStorage.getItem("departName"), //报销部门
 			departmentID = sessionStorage.getItem("departmentID"), //报销部门id
-
 			accountName = sessionStorage.getItem("accountName"), //开户人姓名
 			accounNumber = sessionStorage.getItem("accounNumber"), //开户人账号
 			bankAccount = sessionStorage.getItem("bankAccount"), //开户行
 			expenseTotal = sessionStorage.getItem("expenseTotal"), //总计金额
+			jobNum = sessionStorage.getItem("jobNum"), //报销人工号
 			imgArr = sessionStorage.getItem("imgArr"), //图片数组
 			imageNameArr = sessionStorage.getItem("imageNameArr"), //图片名集合
 			str = "",
@@ -120,12 +119,13 @@ Approval.prototype = {
 		this.config.accounNumber.value = accounNumber;
 		this.config.bankAccount.value = bankAccount;
 		this.config.expenseTotal.value = expenseTotal;
+		this.config.jobNum.value = jobNum;
 
 		if (productType) {
-			$my.productTypeLength = productType.length-1;
+			$my.productTypeLength = productType.length - 1;
 			if (productType.length) {
-				for (var i = 0,len = productType.length; i < len; i++) {
-					switch(i){
+				for (var i = 0, len = productType.length; i < len; i++) {
+					switch (i) {
 						case 0:
 							text = "报销一";
 							break;
@@ -139,15 +139,15 @@ Approval.prototype = {
 							break;
 					}
 
-					str += '<div id="appendChild" class="appendChild" data-index='+i+'>';
-					str += '<p class="titleMessage">'+text+'</p>';
+					str += '<div id="appendChild" class="appendChild" data-index=' + i + '>';
+					str += '<p class="titleMessage">' + text + '</p>';
 					str += '<div class="container-fluid myContainer inputFile">';
 					str += '<div class="row my-row">';
 					str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
 					str += '<span>报销类型</span>';
 					str += '</div>';
 					str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col">';
-					str += '<input type="text" class="product" data-productid='+productType[i].producttypeID+' value='+productType[i].productTypeName+' readonly="readonly" data-toggle="modal" data-target="#myModal" placeholder="请输入">';
+					str += '<input type="text" class="product" data-productid=' + productType[i].producttypeID + ' value=' + productType[i].productTypeName + ' readonly="readonly" data-toggle="modal" data-target="#myModal" placeholder="请输入">';
 					str += '</div>';
 					str += '</div>';
 					str += '<div class="row my-row">';
@@ -155,16 +155,16 @@ Approval.prototype = {
 					str += '<span>报销金额(￥)</span>';
 					str += '</div>';
 					str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col">';
-					str += '<input type="number" class="itemAlltotals" data-count='+productType[i].itemAlltotal+' value='+productType[i].itemAlltotal+' placeholder="请输入">';
+					str += '<input type="number" class="itemAlltotals" data-count=' + productType[i].itemAlltotal + ' value=' + productType[i].itemAlltotal + ' placeholder="请输入">';
 					str += '</div>';
 					str += '</div>';
 					str += '<div class="row my-row special-row">';
 					str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
 					str += '<span>费用说明</span>';
 					str += '<span class="limit">(150字)</span>';
-					str += '</div>'; 
+					str += '</div>';
 					str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col">';
-					str += '<textarea class="remarks" placeholder="请输入" maxlength="150">'+productType[i].remark+'</textarea>';
+					str += '<textarea class="remarks" placeholder="请输入" maxlength="150">' + productType[i].remark + '</textarea>';
 					str += '</div>';
 					str += '</div>';
 					str += '</div>';
@@ -173,29 +173,29 @@ Approval.prototype = {
 				this.config.inWrap.innerHTML = str;
 			};
 		};
-		
+
 		if (expenseUser) {
 			if (expenseUser.length) {
-				for (var i = 0,len = expenseUser.length; i < len; i++) {
-					approverStr += '<li class="nowrap addPeople deleteApprover" data-userid='+expenseUser[i].expenseUserID+' data-toggle="modal" data-target="#deleteApprover">'+expenseUser[i].expenseUserName+'</li>';
+				for (var i = 0, len = expenseUser.length; i < len; i++) {
+					approverStr += '<li class="nowrap addPeople deleteApprover" data-userid=' + expenseUser[i].expenseUserID + ' data-toggle="modal" data-target="#deleteApprover">' + expenseUser[i].expenseUserName + '</li>';
 				};
 				this.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 			};
-		};	
+		};
 
 		if (imgArr) {
 			imgArr = imgArr.split(",");
 			imageNameArr = imageNameArr.split(",");
 
 			if (imgArr.length) {
-				for (var i = 0,len = imgArr.length; i < len; i++) {
+				for (var i = 0, len = imgArr.length; i < len; i++) {
 					imgStr += '<li class="myImg" data-toggle="modal" data-target="#imgModal">';
-					imgStr += '<img data-src='+imgArr[i]+' src='+imgArr[i]+'?imageView2/1/w/200/h/200 alt='+imageNameArr[i]+'>';
+					imgStr += '<img data-src=' + imgArr[i] + ' src=' + imgArr[i] + '?imageView2/1/w/200/h/200 alt=' + imageNameArr[i] + '>';
 					imgStr += '</li>';
 				};
 				this.config.uploadWrap.insertAdjacentHTML('afterBegin', imgStr);
 			};
-		};	
+		};
 		// sessionStorage.removeItem("productType");
 		// sessionStorage.removeItem("expenseUser");
 		// sessionStorage.removeItem("accountName");
@@ -205,72 +205,70 @@ Approval.prototype = {
 		// sessionStorage.removeItem("imgArr");
 		// sessionStorage.removeItem("imageNameArr");
 	},
-	getProductType: function(){ //获取报销类型
+	getProductType: function() { //获取报销类型
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/reviewType.do',
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/reviewType.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   	var info = data.info;
-	                   	if (JSON.stringify(info) !== "{}") {
-							var dataArr = info.data;
-							if (dataArr.length) {
-								var str = "";
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
 
-								for (var i = 0,len = dataArr.length; i < len; i++) {
-									str += '<li class="list-group-item" data-producttypeid='+dataArr[i].productTypeID+'>'+dataArr[i].productTypeName+'</li>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="list-group-item" data-producttypeid=' + dataArr[i].productTypeID + '>' + dataArr[i].productTypeName + '</li>';
+									};
+
+									self.config.productType.innerHTML = str;
+									self.selectProductType();
+								} else {
+									$my.messageInfo.html("报销类型为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return false;
 								};
 
-								self.config.productType.innerHTML = str;
-								self.selectProductType();
-							} else{
-								$my.messageInfo.html("报销类型为空").fadeIn("fast").delay("1000").fadeOut("slow");
+							} else {
+								$my.messageInfo.html("暂无报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
 								return false;
 							};
 
-	                   	} else{
-	                		$my.messageInfo.html("暂无报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
-	                		return false;
-	                   	};
-	
-		                   break;
-		                case "failure":
-		                   $my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                   break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	selectProductType: function(){ //报销类型选择事件
+	selectProductType: function() { //报销类型选择事件
 		var self = this;
 		var num = ""; //点击下标
 		var productTypeList = this.config.productType.querySelectorAll("li");
 		productTypeList = Array.prototype.slice.apply(productTypeList);
 
-		$(self.config.inWrap).on('touchend',".product", function(event) {
+		$(self.config.inWrap).on('touchend', ".product", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
 			num = parseInt($(this).parents("#appendChild")[0].dataset["index"]);
 			$(myModal).modal("show");
 		});
-		
-		for (var i = 0,len = productTypeList.length; i < len; i++) {			
-			productTypeList[i].addEventListener("click", function(event){
+
+		for (var i = 0, len = productTypeList.length; i < len; i++) {
+			productTypeList[i].addEventListener("click", function(event) {
 				event.preventDefault();
 				event.stopPropagation();
 
@@ -278,7 +276,7 @@ Approval.prototype = {
 				var productid = this.dataset["producttypeid"];
 
 				var domArr = self.config.inWrap.querySelectorAll(".appendChild");
-				Array.prototype.forEach.call(domArr,function(item,index){
+				Array.prototype.forEach.call(domArr, function(item, index) {
 					if (num === index) {
 						item.querySelector(".product").value = val;
 						item.querySelector(".product").dataset["productid"] = productid;
@@ -289,8 +287,8 @@ Approval.prototype = {
 			}, false);
 		};
 	},
-	addEvents: function(){ //添加报销
-		if($my.productTypeLength === undefined){
+	addEvents: function() { //添加报销
+		if ($my.productTypeLength === undefined) {
 			$my.productTypeLength = -1
 		};
 
@@ -299,15 +297,15 @@ Approval.prototype = {
 		var text = "";
 		var self = this;
 
-		self.config.addBtn.addEventListener("click", function(){
+		self.config.addBtn.addEventListener("click", function() {
 			num++;
 			if (num > 2) {
 				// alert("最多添加2个报销")
 				$my.messageInfo.html("最多添加2个报销").fadeIn("fast").delay("1000").fadeOut("slow");
 				return false;
-			} else{
+			} else {
 
-				switch(num){
+				switch (num) {
 					case 0:
 						text = "报销一";
 						break;
@@ -320,8 +318,8 @@ Approval.prototype = {
 					default:
 						break;
 				}
-				str += '<div id="appendChild" class="appendChild" data-index='+num+'>';
-				str += '<p class="titleMessage">'+text+'</p>';
+				str += '<div id="appendChild" class="appendChild" data-index=' + num + '>';
+				str += '<p class="titleMessage">' + text + '</p>';
 				str += '<div class="container-fluid myContainer inputFile">';
 				str += '<div class="row my-row">';
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
@@ -343,7 +341,7 @@ Approval.prototype = {
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
 				str += '<span>费用说明</span>';
 				str += '<span class="limit">(150字)</span>';
-				str += '</div>'; 
+				str += '</div>';
 				str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col">';
 				str += '<textarea class="remarks" placeholder="请输入" maxlength="150"></textarea>';
 				str += '</div>';
@@ -356,174 +354,172 @@ Approval.prototype = {
 			}
 		}, false);
 	},
-	getCashierUser: function(){ //获取出纳人
+	getCashierUser: function() { //获取出纳人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/cashierUser.do',
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/cashierUser.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								var dataArr = info.data;
 								if (dataArr.length) {
 									var str = "";
 
-									for (var i = 0,len = dataArr.length; i < len; i++) {
-										str += '<li class="cashier text-center" data-cashierUserID='+dataArr[i].cashierUserID+'>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="cashier text-center" data-cashierUserID=' + dataArr[i].cashierUserID + '>';
 										str += '<div class="wating text-center progressBar">出纳</div>';
-										str += '<p class="name">'+dataArr[i].cashierUserName+'</p>';
+										str += '<p class="name">' + dataArr[i].cashierUserName + '</p>';
 										str += '</li>';
 									};
 
 									self.config.cashierWrap.innerHTML = str;
-								} else{
-									$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								} else {
+									$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									return;
 								};
 
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	calcExpenseTotal: function(){ //计算总金额
+	calcExpenseTotal: function() { //计算总金额
 		var self = this;
 		var reg = /^\d+(\.\d+)?$/; //非负浮点数
-		$(self.config.inWrap).on('keyup',".itemAlltotals", function(event) {
+		$(self.config.inWrap).on('keyup', ".itemAlltotals", function(event) {
 			var totalCount = 0;
 			event.preventDefault();
 			event.stopPropagation();
-			
+
 			if (this.value != "") {
 				if (reg.test(this.value)) {
 
-					if (parseFloat(this.value) <= 1000000) {					
+					if (parseFloat(this.value) <= 1000000) {
 						this.dataset["count"] = this.value;
-					} else{
-						$my.messageInfo.html("单个报销金额最大100万").fadeIn("fast").delay("1500").fadeOut("slow"); 
+					} else {
+						$my.messageInfo.html("单个报销金额最大100万").fadeIn("fast").delay("1500").fadeOut("slow");
 						this.value = "";
 						this.dataset["count"] = 0;
 						// return;
-					};					
-				} else{
-					$my.messageInfo.html("请输入非负浮点数").fadeIn("fast").delay("1000").fadeOut("slow"); 
+					};
+				} else {
+					$my.messageInfo.html("请输入非负浮点数").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
-			}else if(this.value == ""){
+			} else if (this.value == "") {
 				this.dataset["count"] = 0;
-			};	
+			};
 
 			//计算总金额
 			var itemAlltotalsList = $(this).parents("#inWrap")[0].querySelectorAll(".itemAlltotals");
-			Array.prototype.forEach.call(itemAlltotalsList,function(item){
+			Array.prototype.forEach.call(itemAlltotalsList, function(item) {
 				totalCount += parseFloat(item.dataset["count"]);
 			});
 
-			self.config.expenseTotal.value = totalCount.toFixed(4);
+			self.config.expenseTotal.value = totalCount.toFixed(2);
 		});
 	},
-	getEpUser: function(userID){ //获取常用审批人
+	getEpUser: function(userID) { //获取常用审批人
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser.do',
-			    // data: {"userID":userID},
-			    data: {"userID":userID},
-			    // async: false, //同步
-			    success:function(data){
-			        console.log(data)
-			        if (JSON.stringify(data) !== "{}") 
-			        {
-			            var status = data.status;
+				url: getRoothPath + '/ddExpenses/userController/oldExpensesUser.do',
+				// data: {"userID":userID},
+				data: {
+					"userID": userID
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
 
-			            switch(status){
-			                case "true":
-		                   		var info = data.info;
-		                   		
+						switch (status) {
+							case "true":
+								var info = data.info;
+
 								if (JSON.stringify(info) !== "{}") {
 									var dataArr = info.data;
 									if (dataArr.length) {
 										var str = "";
 
-										for (var i = 0,len = dataArr.length; i < len; i++) {
-											str += '<li class="nowrap text-center" data-oldEpUserID='+dataArr[i].oldEpUserID+'>'+dataArr[i].oldEpUserUserName+'</li>';
+										for (var i = 0, len = dataArr.length; i < len; i++) {
+											str += '<li class="nowrap text-center" data-oldEpUserID=' + dataArr[i].oldEpUserID + '>' + dataArr[i].oldEpUserUserName + '</li>';
 										};
 
 										self.config.epUserWrap.innerHTML = str;
 									};
 
-								} else{
-									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									return;
 								};
-			                	break;
-			                case "failure":
-			                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-			                	break;
-			                default:
-			                    break;
-			            }           
-			        } else
-			        {
-			            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-			            return false;
-			        };
-			    }
+								break;
+							case "failure":
+								$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
 			})
-		} else{
+		} else {
 			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
-            return false;
-		};	
+			return false;
+		};
 	},
-	_renderDepartWrap: function(info){ //渲染获取部门及联系人
+	_renderDepartWrap: function(info) { //渲染获取部门及联系人
 		var str = "";
 		var listUserArr = info.listUser;
 		var listDepartArr = info.listDepart;
 
 		if (listDepartArr.length) {
-			for (var i = 0,len = listDepartArr.length; i < len; i++) {
-				str += '<div class="row my-row" data-departID='+listDepartArr[i].departID+'>';
+			for (var i = 0, len = listDepartArr.length; i < len; i++) {
+				str += '<div class="row my-row" data-departID=' + listDepartArr[i].departID + '>';
 				str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
-				str += '<span class="departName">'+listDepartArr[i].departName+'</span>';
+				str += '<span class="departName">' + listDepartArr[i].departName + '</span>';
 				str += '</div>';
 				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-				str += '<p><i>'+listDepartArr[i].userCount+'</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
+				str += '<p><i>' + listDepartArr[i].userCount + '</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
 				str += '</div>';
 				str += '</div>';
 			};
 		};
 
 		if (listUserArr.length) {
-			for (var i = 0,len = listUserArr.length; i < len; i++) {
-				str += '<div class="row my-row" data-departUserID='+listUserArr[i].departUserID+'>';
-					str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
-						str += '<span class="departUserName">'+listUserArr[i].departUserName+'</span>';
-					str += '</div>';
-					str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-						str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
-					str += '</div>';
+			for (var i = 0, len = listUserArr.length; i < len; i++) {
+				str += '<div class="row my-row" data-departUserID=' + listUserArr[i].departUserID + '>';
+				str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
+				str += '<span class="departUserName">' + listUserArr[i].departUserName + '</span>';
+				str += '</div>';
+				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
+				str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
+				str += '</div>';
 				str += '</div>';
 			};
 		};
@@ -531,44 +527,44 @@ Approval.prototype = {
 		this.config.departmentWrap.innerHTML = str;
 		this.switchStr = true;
 	},
-	getDepart: function(departmentID){ //获取部门及联系人
+	getDepart: function(departmentID) { //获取部门及联系人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser.do',
-		    // async: false, //同步
-		    data: {"departmentID": departmentID},
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/getDepartOrUser.do',
+			// async: false, //同步
+			data: {
+				"departmentID": departmentID
+			},
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								self._renderDepartWrap(info)
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("部门及人员获取错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("部门及人员获取错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	asyncGetDepart: function(){ //异步加载部门及联系人&选择审批人
+	asyncGetDepart: function() { //异步加载部门及联系人&选择审批人
 		var self = this;
 		$(departmentWrap).on('click', '.row', function(event) {
 			event.preventDefault();
@@ -581,11 +577,11 @@ Approval.prototype = {
 			if (this.querySelector(".departName")) {
 				departStr = this.querySelector(".departName").innerHTML;
 
-				str = '<li data-departmentID='+departid+'><a href="javascript:;">'+departStr+'</a></li>';
+				str = '<li data-departmentID=' + departid + '><a href="javascript:;">' + departStr + '</a></li>';
 				self.getDepart(departid);
 
 				$(self.config.breadcrumb).append(str);
-			}else{ //选择审批人
+			} else { //选择审批人
 				var departUserName = ""; //选择审批人名
 				var userid = ""; //选择审批人id
 				var approverStr = "";
@@ -600,28 +596,28 @@ Approval.prototype = {
 					return;
 				};
 
-				Array.prototype.forEach.call(approverList,function(item){
+				Array.prototype.forEach.call(approverList, function(item) {
 					if (userid == item.dataset["userid"]) {
 						$my.messageInfo.html("该审批人已在列表中").fadeIn("fast").delay("1000").fadeOut("slow");
 						throw new Error("该审批人已在列表中");
 					};
 				});
 				this.querySelector(".my-icon").classList.add("hasselect");
-				approverStr = '<li class="nowrap addPeople" data-userid='+userid+'>'+departUserName+'</li>';
+				approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
 				self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 				slideout.close();
-			};		
+			};
 
 			var breadcrumbList = self.config.breadcrumb.querySelectorAll("li");
 			breadcrumbList = Array.prototype.slice.call(breadcrumbList);
 			breadcrumbList.pop();
-			
-			for (var i = 0,len = breadcrumbList.length; i < len; i++) {
+
+			for (var i = 0, len = breadcrumbList.length; i < len; i++) {
 				breadcrumbList[i].classList.add("active");
 			};
 		});
 	},
-	crumbsEvent: function(){ //面包屑点击事件
+	crumbsEvent: function() { //面包屑点击事件
 		var self = this;
 		$(breadcrumb).on('click', 'li', function(event) {
 			event.preventDefault();
@@ -636,19 +632,19 @@ Approval.prototype = {
 					var departmentid = this.dataset["departmentid"];
 					var num = $(this).index();
 					var breadcrumbList = this.parentNode.querySelectorAll("li");
-					breadcrumbList = Array.prototype.slice.apply(breadcrumbList);			
-					breadcrumbList = breadcrumbList.slice(0, num+1);
-					
-					for (var i = 0,len = breadcrumbList.length; i < len; i++) {
-						str += breadcrumbList[i].outerHTML;				
+					breadcrumbList = Array.prototype.slice.apply(breadcrumbList);
+					breadcrumbList = breadcrumbList.slice(0, num + 1);
+
+					for (var i = 0, len = breadcrumbList.length; i < len; i++) {
+						str += breadcrumbList[i].outerHTML;
 					};
 					self.config.breadcrumb.innerHTML = str;
 					self.getDepart(departmentid);
 				};
-			};			
+			};
 		});
 	},
-	selectEpUser: function(){ //常用审批人点击事件
+	selectEpUser: function() { //常用审批人点击事件
 		var self = this;
 		var departUserName = ""; //选择审批人名
 		var userid = ""; //选择审批人id
@@ -662,19 +658,19 @@ Approval.prototype = {
 			departUserName = this.innerHTML;
 
 			var approverList = self.config.approverWrap.querySelectorAll("li");
-			Array.prototype.forEach.call(approverList,function(item){
+			Array.prototype.forEach.call(approverList, function(item) {
 				if (userid == item.dataset["userid"]) {
 					$my.messageInfo.html("该审批人已在列表中").fadeIn("fast").delay("1000").fadeOut("slow");
 					throw new Error("该审批人已在列表中");
 				};
 			});
 
-			approverStr = '<li class="nowrap addPeople" data-userid='+userid+'>'+departUserName+'</li>';
+			approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
 			self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 			slideout.close();
 		});
 	},
-	submitEvent: function(){ //提交保存事件
+	submitEvent: function() { //提交保存事件
 		var imageUrlArr = [],
 			expenseTotal = approval.config.expenseTotal.value,
 			bankAccount = approval.config.bankAccount.value,
@@ -697,30 +693,30 @@ Approval.prototype = {
 		producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 		itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
 		remarksDomArr = Array.prototype.slice.apply(remarksDomArr);
-		oldImgDomArr = Array.prototype.slice.apply(oldImgDomArr);	
+		oldImgDomArr = Array.prototype.slice.apply(oldImgDomArr);
 
-		Array.prototype.forEach.call(expensesUserDomArr,function(item){
-			expensesUserID .push(item.dataset["userid"]);
+		Array.prototype.forEach.call(expensesUserDomArr, function(item) {
+			expensesUserID.push(item.dataset["userid"]);
 		})
 
-		for (var i = 0,len = oldImgDomArr.length; i < len; i++) {
+		for (var i = 0, len = oldImgDomArr.length; i < len; i++) {
 			oldImageUrlArr.push(oldImgDomArr[i].querySelector("img").dataset["src"]);
 			oldImageNameArr.push(oldImgDomArr[i].querySelector("img").getAttribute("alt"));
 		};
 
 		if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
-			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
-		for (var i = 0,len = producttypeDomArr.length; i < len; i++) {
+		for (var i = 0, len = producttypeDomArr.length; i < len; i++) {
 			if (producttypeDomArr[i].dataset["productid"] == "") {
-				$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
 			if (itemAlltotalDomArr[i].value == "") {
-				$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -730,27 +726,27 @@ Approval.prototype = {
 		};
 
 		if (bankAccount == "" || accountName == "" || accounNumber == "") {
-			$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (expenseTotal == "") {
-			$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (approval.expenseImageUrl == "" && oldImgDomArr.length === 0) {
-			$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (expensesUserID.length === 0) {
-			$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (cashierUserID == "") {
-			$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
@@ -759,68 +755,66 @@ Approval.prototype = {
 		remarks = remarks.join();
 		expensesUserID = expensesUserID.join();
 
-		for (var i = 0,len = approval.expenseImageUrl.length; i < len; i++) {//拼接图片域名
-			imageUrlArr.push(clouddnImgStr+"/"+approval.expenseImageUrl[i]);
+		for (var i = 0, len = approval.expenseImageUrl.length; i < len; i++) { //拼接图片域名
+			imageUrlArr.push(clouddnImgStr + "/" + approval.expenseImageUrl[i]);
 		};
 
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expense/updata.do',
-		    // async: false, //同步
-		    data: {
-		    	"departmentID":departmentID,
-		    	"expenseID": approval.detailid,
-		    	"expenseTotal": expenseTotal,
-		    	"submitUserID": $my.userID,
-		    	"bankAccount": bankAccount,
-		    	"accountName": accountName,
-		    	"accounNumber": accounNumber,
-		    	"producttypeIDs": producttypeIDs,
-		    	"itemAlltotals": itemAlltotals,
-		    	"remarks": remarks,
-		    	"expensesUserIDs": expensesUserID,
-		    	"cashierUserID": cashierUserID,
-		    	"expenseImageUrl": imageUrlArr.concat(oldImageUrlArr).join(),
-		    	"expenseImageName": approval.expenseImageName.concat(oldImageNameArr).join()
-		    },
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status; 
-		            switch(status){
-		                case 1:
-		                	var timer = null;
-	                   		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow"); 
+			url: getRoothPath + '/ddExpenses/expense/updata.do',
+			// async: false, //同步
+			data: {
+				"departmentID": departmentID,
+				"expenseID": approval.detailid,
+				"expenseTotal": expenseTotal,
+				"submitUserID": $my.userID,
+				"bankAccount": bankAccount,
+				"accountName": accountName,
+				"accounNumber": accounNumber,
+				"producttypeIDs": producttypeIDs,
+				"itemAlltotals": itemAlltotals,
+				"remarks": remarks,
+				"expensesUserIDs": expensesUserID,
+				"cashierUserID": cashierUserID,
+				"expenseImageUrl": imageUrlArr.concat(oldImageUrlArr).join(),
+				"expenseImageName": approval.expenseImageName.concat(oldImageNameArr).join()
+			},
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+					switch (status) {
+						case 1:
+							var timer = null;
+							$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
-	                   		!function(){
-	                   		    localStorage.removeItem("sessionTouchData_mySponser");
-	                   		    localStorage.removeItem("pageNum_mySponser");
-	                   		    localStorage.removeItem("dataCount_mySponser");
-	                   		    localStorage.removeItem("sessionTouchData_myApproval");
-	                   		    localStorage.removeItem("pageNum_myApproval");
-	                   		    localStorage.removeItem("dataCount_myApproval");
-	                   		}();
+							! function() {
+								localStorage.removeItem("sessionTouchData_mySponser");
+								localStorage.removeItem("pageNum_mySponser");
+								localStorage.removeItem("dataCount_mySponser");
+								localStorage.removeItem("sessionTouchData_myApproval");
+								localStorage.removeItem("pageNum_myApproval");
+								localStorage.removeItem("dataCount_myApproval");
+							}();
 
-	                   		clearTimeout(timer);
-	                   		timer = setTimeout(function(){
-	                   			window.location.href = "index.html";
-	                   		}, 1200);
-		                	break;
-		                case 0:
-		                	$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							clearTimeout(timer);
+							timer = setTimeout(function() {
+								window.location.href = "index.html";
+							}, 1200);
+							break;
+						case 0:
+							$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 
-		+function(){ // 释放内存
+		+ function() { // 释放内存
 			imageUrlArr = null;
 			producttypeIDs = null;
 			itemAlltotals = null;
@@ -830,36 +824,36 @@ Approval.prototype = {
 			oldImageNameArr = null;
 		}();
 	},
-	addImage: function(){ //添加图片
+	addImage: function() { //添加图片
 		var self = this;
 
-		self.config.uploadBtn.addEventListener("click", function(){ // 添加照片trigger
+		self.config.uploadBtn.addEventListener("click", function() { // 添加照片trigger
 			$(myFile).trigger('click');
 		}, false);
 
 		//图片预览FileReader
 		var handleImageFile = function(file) {
-	        var img = document.createElement('img');
-	        var li = document.createElement("li");
-	        // li.setAttribute("data-toggle","modal");
-	        // li.dataset.target = "#imgModal";
-	        li.classList.add("newUploadImg");
-	        img.setAttribute("alt", file.name);
+			var img = document.createElement('img');
+			var li = document.createElement("li");
+			// li.setAttribute("data-toggle","modal");
+			// li.dataset.target = "#imgModal";
+			li.classList.add("newUploadImg");
+			img.setAttribute("alt", file.name);
 
-	        img.file = file;
-	        li.appendChild(img);
-	        $(self.config.uploadWrap).prepend(li);
+			img.file = file;
+			li.appendChild(img);
+			$(self.config.uploadWrap).prepend(li);
 
-	        var reader = new FileReader();
-	        reader.onload = (function(aImg) {
-	            return function(e) {
-	                aImg.src = e.target.result;
-	            }
-	       })(img);
-	       reader.readAsDataURL(file);
+			var reader = new FileReader();
+			reader.onload = (function(aImg) {
+				return function(e) {
+					aImg.src = e.target.result;
+				}
+			})(img);
+			reader.readAsDataURL(file);
 		}
 
-		self.config.myFile.addEventListener("change", function(e){
+		self.config.myFile.addEventListener("change", function(e) {
 			e.stopPropagation();
 			e.preventDefault();
 
@@ -870,97 +864,98 @@ Approval.prototype = {
 				var hasSelectLength = self.config.uploadWrap.querySelectorAll("li");
 				hasSelectLength = Array.prototype.slice.apply(hasSelectLength);
 
-				if (files.length <= 10-hasSelectLength.length) {
+				if (files.length <= 10 - hasSelectLength.length) {
 
-					for(var i = 0,len = files.length; i < len; i++) {
-					    var file = files[i];
-					    var type = file.name.replace(/.+\./,"").toLowerCase();
-					    
-					    if (type !== "jpg" && type !== "jpeg" && type !== "png") {
-					    	$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow"); 
-					    	return;
-					    };
+					for (var i = 0, len = files.length; i < len; i++) {
+						var file = files[i];
+						var type = file.name.replace(/.+\./, "").toLowerCase();
 
-					    if (file.size > 5*1024*1024) {
-					    	$my.messageInfo.html("单张图片大小不可超过5M").fadeIn("fast").delay("1000").fadeOut("slow"); 
-					    	return;
-					    };
-					    formdata.append('files', file);
-					    handleImageFile(file);
+						if (type !== "jpg" && type !== "jpeg" && type !== "png") {
+							$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow");
+							return;
+						};
+
+						if (file.size > 5 * 1024 * 1024) {
+							$my.messageInfo.html("单张图片大小不可超过5M").fadeIn("fast").delay("1000").fadeOut("slow");
+							return;
+						};
+						formdata.append('files', file);
+						handleImageFile(file);
 					}
 
 					if (files.length != 0) {
-					    $.ajax({ 
-					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',  
-					        type: 'POST',  
-					        data: formdata, 
-					        timeout: "", 
-					        dataType: "json",
-					        // async: false,  
-					        cache: false,  
-					        contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
-					        processData: false,  // 告诉jQuery不要去处理发送的数据
-					        beforeSend: function(){
-					        	$("#imgModalWrap").modal("show");
-					        	$('#imgModalWrap').modal({backdrop: 'static', keyboard: false});
-					        },
-					        success: function (data) {  
-					            console.log(data);
-			        	        if (JSON.stringify(data) !== "{}") 
-			        	        {
-			        	            var status = data.statas;
-			        	            var imageUrl = "";
-			        	            var imageNmae = "";
-			        	            switch(status){
-			        	                case "true":
-	            	                   		imageUrl = data.pathUrls.split(",");
-	            	                   		imageNmae = data.fileNames.split(",");
+						$.ajax({
+							url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',
+							type: 'POST',
+							data: formdata,
+							timeout: "",
+							dataType: "json",
+							// async: false,  
+							cache: false,
+							contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+							processData: false, // 告诉jQuery不要去处理发送的数据
+							beforeSend: function() {
+								$("#imgModalWrap").modal("show");
+								$('#imgModalWrap').modal({
+									backdrop: 'static',
+									keyboard: false
+								});
+							},
+							success: function(data) {
+								console.log(data);
+								if (JSON.stringify(data) !== "{}") {
+									var status = data.statas;
+									var imageUrl = "";
+									var imageNmae = "";
+									switch (status) {
+										case "true":
+											imageUrl = data.pathUrls.split(",");
+											imageNmae = data.fileNames.split(",");
 
-	            	                   		Array.prototype.push.apply(self.expenseImageUrl,imageUrl);
-	            	                   		Array.prototype.push.apply(self.expenseImageName,imageNmae);
+											Array.prototype.push.apply(self.expenseImageUrl, imageUrl);
+											Array.prototype.push.apply(self.expenseImageName, imageNmae);
 
-			                           		$my.messageInfo.html(data.message).fadeIn("fast").delay("1000").fadeOut("slow"); 
+											$my.messageInfo.html(data.message).fadeIn("fast").delay("1000").fadeOut("slow");
 
-			        	                	break;
-			        	                case "false":
-			        	                	$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("1500").fadeOut("slow"); 
-			        	                	formdata = null;
-			        	                	imageUrl = [];
-			        	                	imageNmae = [];
-			        	                	$(self.config.uploadWrap).find('li.newUploadImg').remove();
-			        	                	break;
-			        	                default:
-			        	                    break;
-			        	            }           
-			        	        } else
-			        	        {
-			        	            $my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
-			        	            return;
-			        	        };
-					        },
-					        complete: function(){
-					        	$("#imgModalWrap").modal("hide");
-					        },
-					        error: function (returndata) {  
-					        	$("#imgModalWrap").modal("hide");
-					        	formdata = null;
-					            $(self.config.uploadWrap).find('li.newUploadImg').remove(); 
-					        }  
-					    });
+											break;
+										case "false":
+											$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("1500").fadeOut("slow");
+											formdata = null;
+											imageUrl = [];
+											imageNmae = [];
+											$(self.config.uploadWrap).find('li.newUploadImg').remove();
+											break;
+										default:
+											break;
+									}
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return;
+								};
+							},
+							complete: function() {
+								$("#imgModalWrap").modal("hide");
+							},
+							error: function(returndata) {
+								$("#imgModalWrap").modal("hide");
+								formdata = null;
+								$(self.config.uploadWrap).find('li.newUploadImg').remove();
+							}
+						});
 					};
-				
-				} else{
-					$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow"); 
+
+				} else {
+					$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
-			} else{
-				$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			} else {
+				$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
-			
+
 		}, false);
 	},
-	deleteApprover: function(){ //删除审批人
+	deleteApprover: function() { //删除审批人
 		var self = this;
 		var num = ""; //获取点击下标
 
@@ -972,13 +967,13 @@ Approval.prototype = {
 			$(self.config.deleteApproverWrap).modal("show"); //手动显示模态框
 		});
 
-		self.config.cancleBtn.addEventListener("touchend", function(){
+		self.config.cancleBtn.addEventListener("touchend", function() {
 			$(self.config.deleteApproverWrap).modal("hide"); //手动关闭模态框
 		}, false);
 
-		self.config.confirmBtn.addEventListener("touchend", function(){
+		self.config.confirmBtn.addEventListener("touchend", function() {
 			var approverList = self.config.approverWrap.querySelectorAll(".nowrap");
-			[].forEach.call(approverList, function(item,index){
+			[].forEach.call(approverList, function(item, index) {
 				if (num == index) {
 					item.parentNode.removeChild(item);
 				};
@@ -987,7 +982,7 @@ Approval.prototype = {
 			$(self.config.deleteApproverWrap).modal("hide"); //手动关闭模态框
 		}, false);
 	},
-	deleteOldImg: function(){ //删除旧图片
+	deleteOldImg: function() { //删除旧图片
 		var self = this;
 		var num = ""; //获取点击下标
 
@@ -996,18 +991,18 @@ Approval.prototype = {
 			event.stopPropagation();
 
 			var newUploadImgList = self.config.uploadWrap.querySelectorAll(".newUploadImg");
-			
+
 			num = $(this).index() - newUploadImgList.length;
 			$(self.config.imgModal).modal("show"); //手动显示模态框
 		});
 
-		self.config.cancleBtn_img.addEventListener("touchend", function(){
+		self.config.cancleBtn_img.addEventListener("touchend", function() {
 			$(self.config.imgModal).modal("hide"); //手动关闭模态框
 		}, false);
 
-		self.config.confirmBtn_img.addEventListener("touchend", function(){
+		self.config.confirmBtn_img.addEventListener("touchend", function() {
 			var imgList = self.config.uploadWrap.querySelectorAll(".myImg");
-			[].forEach.call(imgList, function(item,index){
+			[].forEach.call(imgList, function(item, index) {
 				if (num == index) {
 					item.parentNode.removeChild(item);
 				};
@@ -1016,7 +1011,7 @@ Approval.prototype = {
 			$(self.config.imgModal).modal("hide"); //手动关闭模态框
 		}, false);
 	},
-	deleteNewImg: function(){ //删除新图片
+	deleteNewImg: function() { //删除新图片
 		var self = this;
 		$(self.config.uploadWrap).on('click', 'li.newUploadImg', function(event) {
 			event.preventDefault();
@@ -1024,9 +1019,9 @@ Approval.prototype = {
 
 			var nowIndex = $(this).index();
 			var fileName = $(this).children('img').attr("alt");
-			var imgName = fileName.substring(0,fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
+			var imgName = fileName.substring(0, fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
 
-			for (var i = 0,len = self.expenseImageName.length; i < len; i++) {
+			for (var i = 0, len = self.expenseImageName.length; i < len; i++) {
 				if (self.expenseImageName[i] === imgName) {
 					console.log(self.expenseImageName[i]);
 					self.expenseImageName.splice(i, 1);
@@ -1034,8 +1029,8 @@ Approval.prototype = {
 				};
 			};
 
-			function deleteUrl(i){
-				return function(){
+			function deleteUrl(i) {
+				return function() {
 					self.expenseImageUrl.splice(i, 1);
 				}(i);
 			};
@@ -1043,31 +1038,33 @@ Approval.prototype = {
 			$(this).remove();
 		});
 	},
-	_renderDepart: function(name,parentID){ //render报销部门
+	_renderDepart: function(name, parentID) { //render报销部门
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/expenseDepartSearch.do',
-		    data: {"name":name,"parentID":parentID},
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/expenseDepartSearch.do',
+			data: {
+				"name": name,
+				"parentID": parentID
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								var dataArr = info.data;
 								var str = "";
 
 								if (dataArr.length && dataArr.length != 0) {
-									for (var i = 0,len = dataArr.length; i < len; i++) {
-										str += '<div class="row my-row" data-departmentwrapid='+dataArr[i].departmentID+'>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + '>';
 										str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
-										str += '<span>'+dataArr[i].departName+'</span>';
+										str += '<span>' + dataArr[i].departName + '</span>';
 										str += '</div>';
 										str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right departConfirmBtn">';
 										str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
@@ -1075,7 +1072,7 @@ Approval.prototype = {
 										str += '</div>';
 									};
 									self.config.departmentContent.innerHTML = str;
-								}else{
+								} else {
 									str += '<div class="row my-row">';
 									str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap">';
 									str += '<span>查询信息为空</span>';
@@ -1087,44 +1084,47 @@ Approval.prototype = {
 
 									self.config.departmentContent.innerHTML = str;
 								};
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    },
-		    complete:function(){
-		    	if (self.config.departmentContent.querySelectorAll(".row")) {
-		    		var rowList = self.config.departmentContent.querySelectorAll(".row");
-		    	};
-		    	self.expenseDepartEvent(rowList);
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			},
+			complete: function() {
+				if (self.config.departmentContent.querySelectorAll(".row")) {
+					var rowList = self.config.departmentContent.querySelectorAll(".row");
+				};
+				self.expenseDepartEvent(rowList);
+			}
 		})
 	},
-	expenseDepartSearch: function(){ //搜索查询报销部门
+	expenseDepartSearch: function() { //搜索查询报销部门
 		var self = this;
-		var _searchDepartBuffer = function(){
+		var _searchDepartBuffer = function() {
 			var val = this.value;
 			self._renderDepart(val);
 		};
 		self.config.departSearch.addEventListener("input", self.throttleInput(_searchDepartBuffer, 500, 1000), false);
 	},
-	expenseDepartEvent: function(arr){ //报销部门点击/选择
+	expenseDepartEvent: function(arr) { //报销部门点击/选择
 		var self = this;
-		var getTarget = function(target,that){ //获取target
-			if(target.className.indexOf('my-col')!==-1){return target;}
-			if(target == that){return false;}
+		var getTarget = function(target, that) { //获取target
+			if (target.className.indexOf('my-col') !== -1) {
+				return target;
+			}
+			if (target == that) {
+				return false;
+			}
 			while (target.className.indexOf('my-col') === -1) {
 				target = target.parentNode;
 			}
@@ -1135,8 +1135,8 @@ Approval.prototype = {
 		};
 
 		if (arr) {
-			[].forEach.call(arr,function(item){
-				item.addEventListener("click", function(event){
+			[].forEach.call(arr, function(item) {
+				item.addEventListener("click", function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 
@@ -1145,19 +1145,19 @@ Approval.prototype = {
 					if (this.querySelector(".searchDepartName")) {
 						searchDepartNameVal = this.querySelector(".searchDepartName").querySelector("span").innerHTML;
 					};
-					
+
 					var that = this;
 					var target = event.target;
-					var eleName = getTarget(target,that);
+					var eleName = getTarget(target, that);
 					if (eleName) {
-						var booleanStr = hasClass(eleName,"searchDepartName");
+						var booleanStr = hasClass(eleName, "searchDepartName");
 						if (booleanStr) {
-							self._renderDepart("",departmentwrapid);
-						}else{ //选中此部门
+							self._renderDepart("", departmentwrapid);
+						} else { //选中此部门
 							if (that.querySelector(".departConfirmBtn")) {
 								that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
 							};
-							
+
 							if (searchDepartNameVal && departmentwrapid) {
 								self.config.departWrapID.value = searchDepartNameVal;
 								self.config.departWrapID.dataset["departmentinputid"] = departmentwrapid;
@@ -1169,10 +1169,10 @@ Approval.prototype = {
 			});
 		};
 	},
-	asideEvent: function(){ //slideout
+	asideEvent: function() { //slideout
 		var self = this;
 		// open slideout
-		self.config.addApprover.addEventListener("click", function(event){
+		self.config.addApprover.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -1180,10 +1180,10 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("show");
 			self.config.menu.querySelector(".depart").classList.remove("show");
 			self.config.menu.querySelector(".depart").classList.add("hide");
-			slideout.open();		
+			slideout.open();
 		}, false);
 
-		self.config.departWrapID.addEventListener("click", function(event){
+		self.config.departWrapID.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -1191,83 +1191,82 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
 			self.config.menu.querySelector(".depart").classList.remove("hide");
 			self.config.menu.querySelector(".depart").classList.add("show");
-			slideout.open();		
+			slideout.open();
 		}, false);
 
 		// close slideout
-		self.config.closeBtn.addEventListener("touchend",function(event){
+		self.config.closeBtn.addEventListener("touchend", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			slideout.close();	
-		},false);
+			slideout.close();
+		}, false);
 
-		self.config.closeBtn_depart.addEventListener("touchend",function(event){
+		self.config.closeBtn_depart.addEventListener("touchend", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			slideout.close();	
-		},false);
+			slideout.close();
+		}, false);
 	},
-
-	jobNumEvent: function(){ //报销人工号输入
+	jobNumEvent: function() { //报销人工号输入
 		var self = this,
 			reg = /^[0-9]*$/,
 			reg2 = /^\d{7}$/,
-			inputFn = function(){
-				if(reg.test(this.value)){
-					if (!reg2.test(this.value)){
-						$my.messageInfo.html("请输入7位数字").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			inputFn = function() {
+				if (reg.test(this.value)) {
+					if (!reg2.test(this.value)) {
+						$my.messageInfo.html("请输入7位数字").fadeIn("fast").delay("1000").fadeOut("slow");
 						return;
-					}else{
+					} else {
 						var loginName = this.value;
 						$.ajax({
-						    url: getRoothPath+'/ddExpenses/userController/expenseUser.do',
-						    data: {"loginName":loginName},
-						    // async: false, //同步
-						    success:function(data){
-						        console.log(data)
-						        if (JSON.stringify(data) !== "{}") 
-						        {
-						            var status = data.status;
+							url: getRoothPath + '/ddExpenses/userController/expenseUser.do',
+							data: {
+								"loginName": loginName
+							},
+							// async: false, //同步
+							success: function(data) {
+								console.log(data)
+								if (JSON.stringify(data) !== "{}") {
+									var status = data.status;
 
-						            switch(status){
-						                case "true":
-					                   		var info = data.info;
-					                   		
+									switch (status) {
+										case "true":
+											var info = data.info;
+
 											if (JSON.stringify(info) !== "{}") {
 												var dataArr = info.data;
 												if (dataArr.length) {
 													self.config.bankAccount.value = dataArr[0].bankAccount;
 													self.config.accountName.value = dataArr[0].accountName;
 													self.config.accounNumber.value = dataArr[0].accounNumber;
-												}else{
+												} else {
 													$my.messageInfo.html("返回信息为空,请重新输入").fadeIn("fast").delay("1500").fadeOut("slow");
 													self.config.jobNum.value = "";
 													return;
 												};
 
-											} else{
-												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+											} else {
+												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 												return;
 											};
-						                	break;
-						                case "failure":
-						                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-						                	break;
-						                default:
-						                    break;
-						            }           
-						        } else
-						        {
-						            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-						            return false;
-						        };
-						    }
+											break;
+										case "failure":
+											$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+											break;
+										default:
+											break;
+									}
+								} else {
+									$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+									return false;
+								};
+							}
 						})
 					};
-				}else{
-					$my.messageInfo.html("输入不合法").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				} else {
+					$my.messageInfo.html("输入不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 					this.value = "";
 					return;
 				}
@@ -1275,13 +1274,13 @@ Approval.prototype = {
 
 		self.config.jobNum.addEventListener("input", self.throttle(inputFn, 1500), false);
 	},
-	expenseAName: function(){ //检索开户名
+	expenseAName: function() { //检索开户名
 		var self = this,
 			reg = /^[\u4e00-\u9fa5]{0,}$/,
 			flag = true,
 			inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
 
-		var inputFn = function(){
+		var inputFn = function() {
 			var val = this.value;
 			if (val == "") {
 				inGroupWrap.innerHTML = "";
@@ -1350,10 +1349,10 @@ Approval.prototype = {
 					return;
 				};
 			};
-			
+
 		};
 
-		self.config.accountName.addEventListener("compositionstart", function(){
+		self.config.accountName.addEventListener("compositionstart", function() {
 			console.log("开始");
 			inGroupWrap.innerHTML = "";
 			self.config.groupWrap.classList.remove("show");
@@ -1361,20 +1360,20 @@ Approval.prototype = {
 			flag = false;
 		}, false);
 
-		self.config.accountName.addEventListener("compositionend", function(){
+		self.config.accountName.addEventListener("compositionend", function() {
 			console.log("结束");
 			flag = true;
-		}, false);	
-		
-		self.config.accountName.addEventListener("input",self.throttle(inputFn, 1000), false);
+		}, false);
 
-		self.config.accountName.addEventListener("blur",function(){
+		self.config.accountName.addEventListener("input", self.throttle(inputFn, 1000), false);
+
+		self.config.accountName.addEventListener("blur", function() {
 			inGroupWrap.innerHTML = "";
 			self.config.groupWrap.classList.add("hide");
 		}, false);
 	},
-	expenseANameEvent: function(){ //开户名检索账号
-		var self =this;
+	expenseANameEvent: function() { //开户名检索账号
+		var self = this;
 		var inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
 		// 怂了，用jQuery了 ^-^
 		$(inGroupWrap).on('touchend', 'li', function(event) {
@@ -1383,7 +1382,7 @@ Approval.prototype = {
 
 			self.config.groupWrap.classList.remove("show");
 			self.config.groupWrap.classList.add("hide");
-			
+
 			var accountnameid = this.dataset.accountnameid;
 			var val = this.innerHTML;
 
@@ -1432,8 +1431,7 @@ Approval.prototype = {
 			})
 		});
 	},
-
-	init: function(){ //init封装
+	init: function() { //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
 		this.getProductType(); //获取报销类型
@@ -1455,6 +1453,7 @@ Approval.prototype = {
 		this.jobNumEvent(); //报销人工号输入
 		this.expenseAName(); //检索开户名
 		this.expenseANameEvent(); //开户名检索账号
+		this._renderDepart('', ''); //页面主动加载报销部门
 	}
 }
 
@@ -1463,8 +1462,8 @@ var approval = new Approval();
 
 $(function() {
 	window.$my = {
-	    messageInfo: $(".messageInfo"),
-	    userID: sessionStorage.getItem("ddUserID"),
+		messageInfo: $(".messageInfo"),
+		userID: sessionStorage.getItem("ddUserID"),
 	}
 
 	approval.init(); //调用init
@@ -1481,7 +1480,7 @@ $(function() {
 		});
 	});
 
-	 //提交保存事件
+	//提交保存事件
 	var submitBtn = document.querySelector("#submitBtn");
 	// submitBtn.addEventListener("click", function(event){
 	// 	event.preventDefault();
@@ -1490,7 +1489,5 @@ $(function() {
 	// 	approval.throttle(approval.submitEvent, this);
 	// }, false);
 
-	submitBtn.addEventListener("click",approval.throttle(approval.submitEvent, 200), false);
+	submitBtn.addEventListener("click", approval.throttle(approval.submitEvent, 200), false);
 });
-
-	
