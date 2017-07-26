@@ -782,3 +782,6 @@ body {
 .menu > .depart {
   display: none;
 }
+.menu > .depart .glyphicon-ok {
+  border: 1px solid #ccc;
+}
