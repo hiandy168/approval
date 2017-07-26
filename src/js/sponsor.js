@@ -1,13 +1,13 @@
 // slideout
 var slideout = new Slideout({
-    'panel': document.getElementById('panel'),
-    'menu': document.getElementById('menu'),
-    'padding': 256,
-    'tolerance': 70,
-    'touch': false
+	'panel': document.getElementById('panel'),
+	'menu': document.getElementById('menu'),
+	'padding': 256,
+	'tolerance': 70,
+	'touch': false
 });
 
-function Approval(){
+function Approval() {
 	this.switchStr = true; //面包屑点击switch
 	this.expenseImageUrl = []; //报销凭证url
 	this.expenseImageName = []; //报销凭证name
@@ -49,7 +49,7 @@ Approval.prototype = {
 	// 		method.call(context);
 	// 	}, 200);
 	// },
-	throttle: function(method, delay){ //节流
+	throttle: function(method, delay) { //节流
 		var timer = null;
 		return function() {
 			var context = this,
@@ -78,73 +78,71 @@ Approval.prototype = {
 			}
 		}
 	},
-	getProductType: function(){ //获取报销类型
+	getProductType: function() { //获取报销类型
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/reviewType.do',
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/reviewType.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   	var info = data.info;
-	                   	if (JSON.stringify(info) !== "{}") {
-							var dataArr = info.data;
-							if (dataArr.length) {
-								var str = "";
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
 
-								for (var i = 0,len = dataArr.length; i < len; i++) {
-									str += '<li class="list-group-item" data-producttypeid='+dataArr[i].productTypeID+'>'+dataArr[i].productTypeName+'</li>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="list-group-item" data-producttypeid=' + dataArr[i].productTypeID + '>' + dataArr[i].productTypeName + '</li>';
+									};
+
+									self.config.productType.innerHTML = str;
+									self.selectProductType();
+								} else {
+									$my.messageInfo.html("报销类型为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return false;
 								};
 
-								self.config.productType.innerHTML = str;
-								self.selectProductType();
-							} else{
-								$my.messageInfo.html("报销类型为空").fadeIn("fast").delay("1000").fadeOut("slow");
+							} else {
+								$my.messageInfo.html("暂无报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
 								return false;
 							};
 
-	                   	} else{
-	                		$my.messageInfo.html("暂无报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
-	                		return false;
-	                   	};
-	
-		                   break;
-		                case "failure":
-		                   $my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                   break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	selectProductType: function(){ //报销类型选择事件
+	selectProductType: function() { //报销类型选择事件
 		var self = this;
 		var num = ""; //点击下标
 		var productTypeList = this.config.productType.querySelectorAll("li");
 		productTypeList = Array.prototype.slice.apply(productTypeList);
 
-		$(self.config.inWrap).on('touchend',".product", function(event) {
+		$(self.config.inWrap).on('touchend', ".product", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
 			num = parseInt($(this).parents(".bx_appendChild")[0].dataset["index"]);
-			
+
 			$(myModal).modal("show");
 		});
-		
-		for (var i = 0,len = productTypeList.length; i < len; i++) {			
-			productTypeList[i].addEventListener("click", function(event){
+
+		for (var i = 0, len = productTypeList.length; i < len; i++) {
+			productTypeList[i].addEventListener("click", function(event) {
 				event.preventDefault();
 				event.stopPropagation();
 
@@ -152,7 +150,7 @@ Approval.prototype = {
 				var productid = this.dataset["producttypeid"];
 
 				var domArr = self.config.inWrap.querySelectorAll(".bx_appendChild");
-				Array.prototype.forEach.call(domArr,function(item,index){
+				Array.prototype.forEach.call(domArr, function(item, index) {
 					if (num === index) {
 						item.querySelector(".product").value = val;
 						item.querySelector(".product").dataset["productid"] = productid;
@@ -163,20 +161,20 @@ Approval.prototype = {
 			}, false);
 		};
 	},
-	addEvents: function(){ //添加报销
+	addEvents: function() { //添加报销
 		// var num = 0;
 		var str = "";
 		var text = "";
 		var self = this;
 
-		self.config.addBtn.addEventListener("click", function(){
+		self.config.addBtn.addEventListener("click", function() {
 			self.num++;
 			if (self.num > 2) {
 				$my.messageInfo.html("最多添加2个报销").fadeIn("fast").delay("1000").fadeOut("slow");
 				return false;
-			} else{
+			} else {
 
-				switch(self.num){
+				switch (self.num) {
 					case 1:
 						text = "报销二";
 						break;
@@ -186,8 +184,8 @@ Approval.prototype = {
 					default:
 						break;
 				}
-				str += '<div class="appendChild bx_appendChild" data-index='+self.num+'>';
-				str += '<p class="titleMessage clearfix">'+text+' <i class="iconfont icon-ttpodicon deleteIcon pull-right"></i></p>';
+				str += '<div class="appendChild bx_appendChild" data-index=' + self.num + '>';
+				str += '<p class="titleMessage clearfix">' + text + ' <i class="iconfont icon-ttpodicon deleteIcon pull-right"></i></p>';
 				str += '<div class="container-fluid myContainer inputFile">';
 				str += '<div class="row my-row">';
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
@@ -209,7 +207,7 @@ Approval.prototype = {
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col">';
 				str += '<span>费用说明</span>';
 				str += '<span class="limit">(150字)</span>';
-				str += '</div>'; 
+				str += '</div>';
 				str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col">';
 				str += '<textarea class="remarks" placeholder="请输入" maxlength="150"></textarea>';
 				str += '</div>';
@@ -222,76 +220,75 @@ Approval.prototype = {
 			}
 		}, false);
 	},
-	getCashierUser: function(){ //获取出纳人
+	getCashierUser: function() { //获取出纳人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/cashierUser.do',
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/cashierUser.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								var dataArr = info.data;
 								if (dataArr.length) {
 									var str = "";
 
-									for (var i = 0,len = dataArr.length; i < len; i++) {
-										str += '<li class="cashier text-center" data-cashierUserID='+dataArr[i].cashierUserID+'>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="cashier text-center" data-cashierUserID=' + dataArr[i].cashierUserID + '>';
 										str += '<div class="wating text-center progressBar">出纳</div>';
-										str += '<p class="name">'+dataArr[i].cashierUserName+'</p>';
+										str += '<p class="name">' + dataArr[i].cashierUserName + '</p>';
 										str += '</li>';
 									};
 
 									self.config.cashierWrap.innerHTML = str;
-								} else{
+								} else {
 									self.config.cashierWrap.innerHTML = "<span style='font-weight:normal'>暂无出纳人信息</span>";
 								};
 
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	getOldBank: function(userID){ //获取历史收款信息
+	getOldBank: function(userID) { //获取历史收款信息
 		var self = this;
 
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/getOldBank.do',
-			    // data: {"userID":userID},
-			    data: {"userID":userID},
-			    // async: false, //同步
-			    success:function(data){
-			        console.log(data)
-			        if (JSON.stringify(data) !== "{}") 
-			        {
-			            var status = data.status;
+				url: getRoothPath + '/ddExpenses/userController/getOldBank.do',
+				// data: {"userID":userID},
+				data: {
+					"userID": userID
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
 
-			            switch(status){
-			                case "true":
-		                   		var info = data.info;
-		                   		
+						switch (status) {
+							case "true":
+								var info = data.info;
+
 								if (JSON.stringify(info) !== "{}") {
 									var dataArr = info.data;
 									if (dataArr.length) {
@@ -300,146 +297,145 @@ Approval.prototype = {
 										self.config.accounNumber.value = dataArr[0].accounNumber;
 									};
 
-								} else{
-									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									return;
 								};
-			                	break;
-			                case "failure":
-			                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-			                	break;
-			                default:
-			                    break;
-			            }           
-			        } else
-			        {
-			            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-			            return false;
-			        };
-			    }
+								break;
+							case "failure":
+								$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
 			})
-		} else{
-			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow"); 
+		} else {
+			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 	},
-	calcExpenseTotal: function(){ //计算总金额
+	calcExpenseTotal: function() { //计算总金额
 		var self = this;
 		var reg = /^\d+(\.\d+)?$/; //非负浮点数
-		$(self.config.inWrap).on('keyup',".itemAlltotals", function(event) {
+		$(self.config.inWrap).on('keyup', ".itemAlltotals", function(event) {
 			var totalCount = 0;
 			event.preventDefault();
 			event.stopPropagation();
-			
+
 			if (this.value != "") {
 				if (reg.test(this.value)) {
 
-					if (parseFloat(this.value) <= 1000000) {					
+					if (parseFloat(this.value) <= 1000000) {
 						this.dataset["count"] = this.value;
-					} else{
-						$my.messageInfo.html("单个报销金额最大100万").fadeIn("fast").delay("1500").fadeOut("slow"); 
+					} else {
+						$my.messageInfo.html("单个报销金额最大100万").fadeIn("fast").delay("1500").fadeOut("slow");
 						this.value = "";
 						this.dataset["count"] = 0;
 						// return;
-					};					
-				} else{
-					$my.messageInfo.html("请输入非负浮点数").fadeIn("fast").delay("1000").fadeOut("slow"); 
+					};
+				} else {
+					$my.messageInfo.html("请输入非负浮点数").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
-			}else if(this.value == ""){
+			} else if (this.value == "") {
 				this.dataset["count"] = 0;
-			};	
+			};
 
 			//计算总金额
 			var itemAlltotalsList = $(this).parents("#inWrap")[0].querySelectorAll(".itemAlltotals");
-			Array.prototype.forEach.call(itemAlltotalsList,function(item){
+			Array.prototype.forEach.call(itemAlltotalsList, function(item) {
 				totalCount += parseFloat(item.dataset["count"]);
 			});
 
-			self.config.expenseTotal.value = totalCount.toFixed(4);
+			self.config.expenseTotal.value = totalCount.toFixed(2);
 		});
 	},
-	getEpUser: function(userID){ //获取常用审批人
+	getEpUser: function(userID) { //获取常用审批人
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/oldExpensesUser.do',
-			    data: {"userID":userID},
-			    // async: false, //同步
-			    success:function(data){
-			        console.log(data)
-			        if (JSON.stringify(data) !== "{}") 
-			        {
-			            var status = data.status;
+				url: getRoothPath + '/ddExpenses/userController/oldExpensesUser.do',
+				data: {
+					"userID": userID
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
 
-			            switch(status){
-			                case "true":
-		                   		var info = data.info;
-		                   		
+						switch (status) {
+							case "true":
+								var info = data.info;
+
 								if (JSON.stringify(info) !== "{}") {
 									var dataArr = info.data;
 									if (dataArr.length) {
 										var str = "";
 
-										for (var i = 0,len = dataArr.length; i < len; i++) {
-											str += '<li class="nowrap text-center" data-oldEpUserID='+dataArr[i].oldEpUserID+'>'+dataArr[i].oldEpUserUserName+'</li>';
+										for (var i = 0, len = dataArr.length; i < len; i++) {
+											str += '<li class="nowrap text-center" data-oldEpUserID=' + dataArr[i].oldEpUserID + '>' + dataArr[i].oldEpUserUserName + '</li>';
 										};
 
 										self.config.epUserWrap.innerHTML = str;
-									}else if(dataArr.length == 0){
+									} else if (dataArr.length == 0) {
 										self.config.epUserWrap.innerHTML = "<span style='font-weight:normal'>暂无常用审批人</span>";
 									};
 
-								} else{
-									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									return;
 								};
-			                	break;
-			                case "failure":
-			                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-			                	break;
-			                default:
-			                    break;
-			            }           
-			        } else
-			        {
-			            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-			            return false;
-			        };
-			    }
+								break;
+							case "failure":
+								$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
 			})
-		} else{
+		} else {
 			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
-            return false;
-		};	
+			return false;
+		};
 	},
-	_renderDepartSP: function(info){ //渲染获取部门及联系人
+	_renderDepartSP: function(info) { //渲染获取部门及联系人
 		var str = "";
 		var listUserArr = info.listUser;
 		var listDepartArr = info.listDepart;
 
 		if (listDepartArr.length) {
-			for (var i = 0,len = listDepartArr.length; i < len; i++) {
-				str += '<div class="row my-row" data-departID='+listDepartArr[i].departID+'>';
+			for (var i = 0, len = listDepartArr.length; i < len; i++) {
+				str += '<div class="row my-row" data-departID=' + listDepartArr[i].departID + '>';
 				str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
-				str += '<span class="departName">'+listDepartArr[i].departName+'</span>';
+				str += '<span class="departName">' + listDepartArr[i].departName + '</span>';
 				str += '</div>';
 				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-				str += '<p><i>'+listDepartArr[i].userCount+'</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
+				str += '<p><i>' + listDepartArr[i].userCount + '</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
 				str += '</div>';
 				str += '</div>';
 			};
 		};
 
 		if (listUserArr.length) {
-			for (var i = 0,len = listUserArr.length; i < len; i++) {
-				str += '<div class="row my-row" data-departUserID='+listUserArr[i].departUserID+'>';
-					str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
-						str += '<span class="departUserName">'+listUserArr[i].departUserName+'</span>';
-					str += '</div>';
-					str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-						str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
-					str += '</div>';
+			for (var i = 0, len = listUserArr.length; i < len; i++) {
+				str += '<div class="row my-row" data-departUserID=' + listUserArr[i].departUserID + '>';
+				str += '<div class="col-xs-8 col-sm-8 col-md-8 my-col nowrap">';
+				str += '<span class="departUserName">' + listUserArr[i].departUserName + '</span>';
+				str += '</div>';
+				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
+				str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
+				str += '</div>';
 				str += '</div>';
 			};
 		};
@@ -447,7 +443,7 @@ Approval.prototype = {
 		this.config.departmentWrap.innerHTML = str;
 		this.switchStr = true;
 	},
-	_deleteProductType:function(){ //删除报销类型
+	_deleteProductType: function() { //删除报销类型
 		var self = this;
 
 		$(self.config.inWrap).on('touchend', '.deleteIcon', function(event) {
@@ -457,7 +453,7 @@ Approval.prototype = {
 			var index = $(this).parents(".bx_appendChild").attr("data-index");
 			var length = $(this).parents("#inWrap").find('.bx_appendChild').length;
 
-			switch(length){
+			switch (length) {
 				case 2:
 					$(this).parents(".bx_appendChild").next(".bx_appendChild").attr('data-index', '1');
 					self.num = 0;
@@ -466,12 +462,12 @@ Approval.prototype = {
 					if (index === "1") {
 						$(this).parents(".bx_appendChild").next(".bx_appendChild").attr('data-index', '1').children('.titleMessage').html("报销二 <i class='iconfont icon-ttpodicon deleteIcon pull-right'></i>");
 						self.num = 1;
-					}else if(index === "2"){
+					} else if (index === "2") {
 						self.num = 1;
 					};
 					break;
 				default:
-					$my.messageInfo.html("异常错误").fadeIn("fast").delay("1500").fadeOut("slow"); 
+					$my.messageInfo.html("异常错误").fadeIn("fast").delay("1500").fadeOut("slow");
 					break;
 			};
 
@@ -480,51 +476,51 @@ Approval.prototype = {
 			//计算总金额
 			var totalCount = 0;
 			var itemAlltotalsList = self.config.inWrap.querySelectorAll(".itemAlltotals");
-			Array.prototype.forEach.call(itemAlltotalsList,function(item){
+			Array.prototype.forEach.call(itemAlltotalsList, function(item) {
 				totalCount += parseFloat(item.dataset["count"]);
 			});
 
 			self.config.expenseTotal.value = totalCount.toFixed(4);
 		});
 	},
-	getDepart: function(departmentID){ //获取部门及联系人
+	getDepart: function(departmentID) { //获取部门及联系人
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/getDepartOrUser.do',
-		    // async: false, //同步
-		    data: {"departmentID": departmentID},
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/getDepartOrUser.do',
+			// async: false, //同步
+			data: {
+				"departmentID": departmentID
+			},
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								self._renderDepartSP(info)
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("部门及人员获取错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("部门及人员获取错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	asyncGetDepart: function(){ //异步加载部门及联系人&选择审批人
+	asyncGetDepart: function() { //异步加载部门及联系人&选择审批人
 		var self = this;
 		$(departmentWrap).on('click', '.row', function(event) {
 			event.preventDefault();
@@ -537,11 +533,11 @@ Approval.prototype = {
 			if (this.querySelector(".departName")) {
 				departStr = this.querySelector(".departName").innerHTML;
 
-				str = '<li data-departmentID='+departid+'><a href="javascript:;">'+departStr+'</a></li>';
+				str = '<li data-departmentID=' + departid + '><a href="javascript:;">' + departStr + '</a></li>';
 				self.getDepart(departid);
 
 				$(self.config.breadcrumb).append(str);
-			}else{ //选择审批人
+			} else { //选择审批人
 				var departUserName = ""; //选择审批人名
 				var userid = ""; //选择审批人id
 				var approverStr = "";
@@ -556,28 +552,28 @@ Approval.prototype = {
 					return;
 				};
 
-				Array.prototype.forEach.call(approverList,function(item){
+				Array.prototype.forEach.call(approverList, function(item) {
 					if (userid == item.dataset["userid"]) {
 						$my.messageInfo.html("该审批人已在列表中").fadeIn("fast").delay("1000").fadeOut("slow");
 						throw new Error("该审批人已在列表中");
 					};
 				});
 				this.querySelector(".my-icon").classList.add("hasselect");
-				approverStr = '<li class="nowrap addPeople" data-userid='+userid+'>'+departUserName+'</li>';
+				approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
 				self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 				slideout.close();
-			};		
+			};
 
 			var breadcrumbList = self.config.breadcrumb.querySelectorAll("li");
 			breadcrumbList = Array.prototype.slice.call(breadcrumbList);
 			breadcrumbList.pop();
-			
-			for (var i = 0,len = breadcrumbList.length; i < len; i++) {
+
+			for (var i = 0, len = breadcrumbList.length; i < len; i++) {
 				breadcrumbList[i].classList.add("active");
 			};
 		});
 	},
-	crumbsEvent: function(){ //面包屑点击事件
+	crumbsEvent: function() { //面包屑点击事件
 		var self = this;
 		$(breadcrumb).on('click', 'li', function(event) {
 			event.preventDefault();
@@ -592,19 +588,19 @@ Approval.prototype = {
 					var departmentid = this.dataset["departmentid"];
 					var num = $(this).index();
 					var breadcrumbList = this.parentNode.querySelectorAll("li");
-					breadcrumbList = Array.prototype.slice.apply(breadcrumbList);			
-					breadcrumbList = breadcrumbList.slice(0, num+1);
-					
-					for (var i = 0,len = breadcrumbList.length; i < len; i++) {
-						str += breadcrumbList[i].outerHTML;				
+					breadcrumbList = Array.prototype.slice.apply(breadcrumbList);
+					breadcrumbList = breadcrumbList.slice(0, num + 1);
+
+					for (var i = 0, len = breadcrumbList.length; i < len; i++) {
+						str += breadcrumbList[i].outerHTML;
 					};
 					self.config.breadcrumb.innerHTML = str;
 					self.getDepart(departmentid);
 				};
-			};			
+			};
 		});
 	},
-	selectEpUser: function(){ //常用审批人点击事件
+	selectEpUser: function() { //常用审批人点击事件
 		var self = this;
 		var departUserName = ""; //选择审批人名
 		var userid = ""; //选择审批人id
@@ -618,19 +614,19 @@ Approval.prototype = {
 			departUserName = this.innerHTML;
 
 			var approverList = self.config.approverWrap.querySelectorAll("li");
-			Array.prototype.forEach.call(approverList,function(item){
+			Array.prototype.forEach.call(approverList, function(item) {
 				if (userid == item.dataset["userid"]) {
 					$my.messageInfo.html("该审批人已在列表中").fadeIn("fast").delay("1000").fadeOut("slow");
 					throw new Error("该审批人已在列表中");
 				};
 			});
 
-			approverStr = '<li class="nowrap addPeople" data-userid='+userid+'>'+departUserName+'</li>';
+			approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
 			self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 			slideout.close();
 		});
 	},
-	submitEvent: function(){ //提交保存事件
+	submitEvent: function() { //提交保存事件
 		var imageUrlArr = [],
 			expenseTotal = approval.config.expenseTotal.value,
 			bankAccount = approval.config.bankAccount.value,
@@ -647,22 +643,22 @@ Approval.prototype = {
 			remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
 			expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
 
-		producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
+			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 		itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
 		remarksDomArr = Array.prototype.slice.apply(remarksDomArr);
 
-		Array.prototype.forEach.call(expensesUserDomArr,function(item){
+		Array.prototype.forEach.call(expensesUserDomArr, function(item) {
 			expensesUserID.push(item.dataset["userid"]);
 		})
 
-		for (var i = 0,len = producttypeDomArr.length; i < len; i++) {
+		for (var i = 0, len = producttypeDomArr.length; i < len; i++) {
 			if (producttypeDomArr[i].dataset["productid"] == "") {
-				$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
 			if (itemAlltotalDomArr[i].value == "") {
-				$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -672,32 +668,32 @@ Approval.prototype = {
 		};
 
 		if (departmentID == "") {
-			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (bankAccount == "" || accountName == "" || accounNumber == "") {
-			$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (expenseTotal == "") {
-			$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (approval.expenseImageUrl.length === 0) {
-			$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (expensesUserID.length === 0) {
-			$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
 		if (cashierUserID == "") {
-			$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 			return;
 		};
 
@@ -706,68 +702,66 @@ Approval.prototype = {
 		remarks = remarks.join();
 		expensesUserID = expensesUserID.join();
 
-		for (var i = 0,len = approval.expenseImageUrl.length; i < len; i++) {//拼接图片域名
-			imageUrlArr.push(clouddnImgStr+"/"+approval.expenseImageUrl[i]);
+		for (var i = 0, len = approval.expenseImageUrl.length; i < len; i++) { //拼接图片域名
+			imageUrlArr.push(clouddnImgStr + "/" + approval.expenseImageUrl[i]);
 		};
 
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expense/save.do',
-		    // async: false, //同步
-		    data: {
-		    	"departmentID":departmentID,
-		    	"expenseTotal": expenseTotal,
-		    	"submitUserID": $my.userID,
-		    	"bankAccount": bankAccount,
-		    	"accountName": accountName,
-		    	"accounNumber": accounNumber,
-		    	"producttypeIDs": producttypeIDs,
-		    	"itemAlltotals": itemAlltotals,
-		    	"remarks": remarks,
-		    	"expensesUserIDs": expensesUserID,
-		    	"cashierUserID": cashierUserID,
-		    	"expenseImageUrl": imageUrlArr.join(),
-		    	"expenseImageName": approval.expenseImageName.join()
-		    },
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/expense/save.do',
+			// async: false, //同步
+			data: {
+				"departmentID": departmentID,
+				"expenseTotal": expenseTotal,
+				"submitUserID": $my.userID,
+				"bankAccount": bankAccount,
+				"accountName": accountName,
+				"accounNumber": accounNumber,
+				"producttypeIDs": producttypeIDs,
+				"itemAlltotals": itemAlltotals,
+				"remarks": remarks,
+				"expensesUserIDs": expensesUserID,
+				"cashierUserID": cashierUserID,
+				"expenseImageUrl": imageUrlArr.join(),
+				"expenseImageName": approval.expenseImageName.join()
+			},
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case 1:
-		                	var timer = null;
-	                   		$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow"); 
+					switch (status) {
+						case 1:
+							var timer = null;
+							$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
-	                   		!function(){
-	                   		    localStorage.removeItem("sessionTouchData_mySponser");
-	                   		    localStorage.removeItem("pageNum_mySponser");
-	                   		    localStorage.removeItem("dataCount_mySponser");
-	                   		    localStorage.removeItem("sessionTouchData_myApproval");
-	                   		    localStorage.removeItem("pageNum_myApproval");
-	                   		    localStorage.removeItem("dataCount_myApproval");
-	                   		}();
+							! function() {
+								localStorage.removeItem("sessionTouchData_mySponser");
+								localStorage.removeItem("pageNum_mySponser");
+								localStorage.removeItem("dataCount_mySponser");
+								localStorage.removeItem("sessionTouchData_myApproval");
+								localStorage.removeItem("pageNum_myApproval");
+								localStorage.removeItem("dataCount_myApproval");
+							}();
 
-	                   		clearTimeout(timer);
-	                   		timer = setTimeout(function(){
-	                   			window.location.href = "index.html";
-	                   		}, 1200);
-		                	break;
-		                case 0:
-		                	$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    }
+							clearTimeout(timer);
+							timer = setTimeout(function() {
+								window.location.href = "index.html";
+							}, 1200);
+							break;
+						case 0:
+							$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
-		
-		+function(){ // 释放内存
+
+		+ function() { // 释放内存
 			imageUrlArr = null;
 			producttypeIDs = null;
 			itemAlltotals = null;
@@ -775,10 +769,10 @@ Approval.prototype = {
 			expensesUserID = null;
 		}();
 	},
-	addImage: function(){ //添加图片
+	addImage: function() { //添加图片
 		var self = this;
 
-		self.config.uploadBtn.addEventListener("click", function(){ // 添加照片trigger
+		self.config.uploadBtn.addEventListener("click", function() { // 添加照片trigger
 			$(myFile).trigger('click');
 		}, false);
 
@@ -803,7 +797,7 @@ Approval.prototype = {
 			reader.readAsDataURL(file);
 		}
 
-		self.config.myFile.addEventListener("change", function(e){
+		self.config.myFile.addEventListener("change", function(e) {
 			e.stopPropagation();
 			e.preventDefault();
 
@@ -813,119 +807,120 @@ Approval.prototype = {
 				var hasSelectLength = self.config.uploadWrap.querySelectorAll("li");
 				hasSelectLength = Array.prototype.slice.apply(hasSelectLength);
 
-				if (files.length <= 10-hasSelectLength.length) {
-					for(var i = 0,len = files.length; i < len; i++) {
-					    var file = files[i];
-					    var type = file.name.replace(/.+\./,"").toLowerCase();
-					    if (type !== "jpg" && type !== "jpeg" && type !== "png") {
-					    	$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow"); 
-					    	return;
-					    };
+				if (files.length <= 10 - hasSelectLength.length) {
+					for (var i = 0, len = files.length; i < len; i++) {
+						var file = files[i];
+						var type = file.name.replace(/.+\./, "").toLowerCase();
+						if (type !== "jpg" && type !== "jpeg" && type !== "png") {
+							$my.messageInfo.html("请选择扩展名.jpg/.jpeg/.png图片").fadeIn("fast").delay("1500").fadeOut("slow");
+							return;
+						};
 
-					    if (file.size > 5*1024*1024) {
-					    	$my.messageInfo.html("单张图片大小不可超过5M").fadeIn("fast").delay("1000").fadeOut("slow"); 
-					    	return;
-					    };
-					    formdata.append('files', file);
-					    handleImageFile(file);
+						if (file.size > 5 * 1024 * 1024) {
+							$my.messageInfo.html("单张图片大小不可超过5M").fadeIn("fast").delay("1000").fadeOut("slow");
+							return;
+						};
+						formdata.append('files', file);
+						handleImageFile(file);
 					}
-					
+
 					if (files.length != 0) {
-					    $.ajax({ 
-					        url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',  
-					        type: 'POST',  
-					        data: formdata,
-					        timeout: "", 
-					        dataType: "json",
-					        // async: false,  
-					        cache: false,  
-					        contentType: false,  // 告诉jQuery不要去设置Content-Type请求头
-					        processData: false,  // 告诉jQuery不要去处理发送的数据
-					        beforeSend: function(){
-					        	$("#imgModalWrap").modal("show");
-					        	$('#imgModalWrap').modal({backdrop: 'static', keyboard: false});
-					        	$("#imgModalWrap").on('touchmove', function(event) {
-					        		event.preventDefault();
-					        		event.stopPropagation();
-					        	});
-					        },
-					        success: function (data) {  
-					            console.log(data);
-			        	        if (JSON.stringify(data) !== "{}") 
-			        	        {
-			        	            var status = data.statas;
-			        	            var imageUrl = "";
-			        	            var imageNmae = "";
-			        	            switch(status){
-			        	                case "true":
-			                           		imageUrl = data.pathUrls.split(",");
-			                           		imageNmae = data.fileNames.split(",");
+						$.ajax({
+							url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',
+							type: 'POST',
+							data: formdata,
+							timeout: "",
+							dataType: "json",
+							// async: false,  
+							cache: false,
+							contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+							processData: false, // 告诉jQuery不要去处理发送的数据
+							beforeSend: function() {
+								$("#imgModalWrap").modal("show");
+								$('#imgModalWrap').modal({
+									backdrop: 'static',
+									keyboard: false
+								});
+								$("#imgModalWrap").on('touchmove', function(event) {
+									event.preventDefault();
+									event.stopPropagation();
+								});
+							},
+							success: function(data) {
+								console.log(data);
+								if (JSON.stringify(data) !== "{}") {
+									var status = data.statas;
+									var imageUrl = "";
+									var imageNmae = "";
+									switch (status) {
+										case "true":
+											imageUrl = data.pathUrls.split(",");
+											imageNmae = data.fileNames.split(",");
 
-			                           		Array.prototype.unshift.apply(self.expenseImageUrl,imageUrl);
-			                           		Array.prototype.unshift.apply(self.expenseImageName,imageNmae);
+											Array.prototype.unshift.apply(self.expenseImageUrl, imageUrl);
+											Array.prototype.unshift.apply(self.expenseImageName, imageNmae);
 
-			                           		$my.messageInfo.html(data.message).fadeIn("fast").delay("1000").fadeOut("slow"); 
-			        	                	break;
-			        	                case "false":
-			        	                	$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("2000").fadeOut("slow"); 
-			        	                	formdata = null;
-			        	                	imageUrl = [];
-			        	                	imageNmae = [];
-			        	                	$(self.config.uploadWrap).find('li.newUploadImg').remove();
-			        	                	break;
-			        	                default:
-			        	                    break;
-			        	            }           
-			        	        } else
-			        	        {
-			        	            $my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
-			        	            return;
-			        	        };
-					        },
-					        complete: function(){
-					        	$("#imgModalWrap").modal("hide");
-					        },  
-					        error: function (returndata) { 
-					        	$("#imgModalWrap").modal("hide");
-					        	formdata = null;
-					        	$(self.config.uploadWrap).find('li.newUploadImg').remove();
-					        }  
-					    });
+											$my.messageInfo.html(data.message).fadeIn("fast").delay("1000").fadeOut("slow");
+											break;
+										case "false":
+											$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("2000").fadeOut("slow");
+											formdata = null;
+											imageUrl = [];
+											imageNmae = [];
+											$(self.config.uploadWrap).find('li.newUploadImg').remove();
+											break;
+										default:
+											break;
+									}
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return;
+								};
+							},
+							complete: function() {
+								$("#imgModalWrap").modal("hide");
+							},
+							error: function(returndata) {
+								$("#imgModalWrap").modal("hide");
+								formdata = null;
+								$(self.config.uploadWrap).find('li.newUploadImg').remove();
+							}
+						});
 					};
-				    
-				} else{
-					$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow"); 
+
+				} else {
+					$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
-			} else{
-				$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			} else {
+				$my.messageInfo.html("单次图片最多上传9张").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
-			
+
 		}, false);
 	},
-	deleteEpUser: function(){ //删除已选审批人
-		var self = this;		
-		var getIndex = function(i){
-			return function(){
+	deleteEpUser: function() { //删除已选审批人
+		var self = this;
+		var getIndex = function(i) {
+			return function() {
 				this.parentNode.removeChild(this);
 			};
 		};
 
-		slideout.on("close",function(){
-			new Promise(function(resolve,reject){
+		slideout.on("close", function() {
+			new Promise(function(resolve, reject) {
 				resolve(self.config.approverWrap.querySelectorAll(".nowrap"));
-			}).then(function(epUserList){
+			}).then(function(epUserList) {
 				epUserList = Array.prototype.slice.call(epUserList);
 				for (var i = 0; i < epUserList.length; i++) {
 					epUserList[i].onclick = getIndex(i);
 				};
-			}).catch(function(err){
-				$my.messageInfo.html("异常错误:"+err).fadeIn("fast").delay("2000").fadeOut("slow"); 
+			}).catch(function(err) {
+				$my.messageInfo.html("异常错误:" + err).fadeIn("fast").delay("2000").fadeOut("slow");
 			});
 		});
 	},
-	deleteImg: function(){ //删除图片
+	deleteImg: function() { //删除图片
 		var self = this;
 		$(self.config.uploadWrap).on('click', 'li.newUploadImg', function(event) {
 			event.preventDefault();
@@ -933,9 +928,9 @@ Approval.prototype = {
 
 			var nowIndex = $(this).index();
 			var fileName = $(this).children('img').attr("alt");
-			var imgName = fileName.substring(0,fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
+			var imgName = fileName.substring(0, fileName.lastIndexOf(".")); //获取点击删除图片的文件名(不包含后缀名)
 
-			for (var i = 0,len = self.expenseImageName.length; i < len; i++) {
+			for (var i = 0, len = self.expenseImageName.length; i < len; i++) {
 				if (self.expenseImageName[i] === imgName) {
 					console.log(self.expenseImageName[i]);
 					self.expenseImageName.splice(i, 1);
@@ -943,8 +938,8 @@ Approval.prototype = {
 				};
 			};
 
-			function deleteUrl(i){
-				return function(){
+			function deleteUrl(i) {
+				return function() {
 					self.expenseImageUrl.splice(i, 1);
 				}(i);
 			};
@@ -952,23 +947,24 @@ Approval.prototype = {
 			$(this).remove();
 		});
 	},
-	expenseDepart: function(userID){ //默认获取报销部门
+	expenseDepart: function(userID) { //默认获取报销部门
 		var self = this;
 		if (userID != null && userID != "null") {
 			$.ajax({
-			    url: getRoothPath+'/ddExpenses/userController/expenseDepart.do',
-			    data: {"userID":userID},
-			    // async: false, //同步
-			    success:function(data){
-			        console.log(data)
-			        if (JSON.stringify(data) !== "{}") 
-			        {
-			            var status = data.status;
+				url: getRoothPath + '/ddExpenses/userController/expenseDepart.do',
+				data: {
+					"userID": userID
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
 
-			            switch(status){
-			                case "true":
-		                   		var info = data.info;
-		                   		
+						switch (status) {
+							case "true":
+								var info = data.info;
+
 								if (JSON.stringify(info) !== "{}") {
 									var dataArr = info.data;
 									if (dataArr.length) {
@@ -976,54 +972,55 @@ Approval.prototype = {
 										self.config.departWrapID.dataset.departmentinputid = dataArr[0].departmentID;
 									};
 
-								} else{
-									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									return;
 								};
-			                	break;
-			                case "failure":
-			                	$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-			                	break;
-			                default:
-			                    break;
-			            }           
-			        } else
-			        {
-			            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-			            return false;
-			        };
-			    }
+								break;
+							case "failure":
+								$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
 			})
-		}else{
+		} else {
 			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
-            return false;
+			return false;
 		};
 	},
-	_renderDepart: function(name,parentID){ //render报销部门
+	_renderDepart: function(name, parentID) { //render报销部门
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/userController/expenseDepartSearch.do',
-		    data: {"name":name,"parentID":parentID},
-		    // async: false, //同步
-		    success:function(data){
-		        console.log(data)
-		        if (JSON.stringify(data) !== "{}") 
-		        {
-		            var status = data.status;
+			url: getRoothPath + '/ddExpenses/userController/expenseDepartSearch.do',
+			data: {
+				"name": name,
+				"parentID": parentID
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-		            switch(status){
-		                case "true":
-	                   		var info = data.info;
-	                   		
+					switch (status) {
+						case "true":
+							var info = data.info;
+
 							if (JSON.stringify(info) !== "{}") {
 								var dataArr = info.data;
 								var str = "";
 
 								if (dataArr.length && dataArr.length != 0) {
-									for (var i = 0,len = dataArr.length; i < len; i++) {
-										str += '<div class="row my-row" data-departmentwrapid='+dataArr[i].departmentID+'>';
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + '>';
 										str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
-										str += '<span>'+dataArr[i].departName+'</span>';
+										str += '<span>' + dataArr[i].departName + '</span>';
 										str += '</div>';
 										str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right departConfirmBtn">';
 										str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
@@ -1031,7 +1028,7 @@ Approval.prototype = {
 										str += '</div>';
 									};
 									self.config.departmentContent.innerHTML = str;
-								}else{
+								} else {
 									str += '<div class="row my-row">';
 									str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap">';
 									str += '<span>查询信息为空</span>';
@@ -1043,44 +1040,47 @@ Approval.prototype = {
 
 									self.config.departmentContent.innerHTML = str;
 								};
-							} else{
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 								return;
 							};
-		                	break;
-		                case "failure":
-		                	$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-		                	break;
-		                default:
-		                    break;
-		            }           
-		        } else
-		        {
-		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-		            return false;
-		        };
-		    },
-		    complete:function(){
-		    	if (self.config.departmentContent.querySelectorAll(".row")) {
-		    		var rowList = self.config.departmentContent.querySelectorAll(".row");
-		    	};
-		    	self.expenseDepartEvent(rowList);
-		    }
+							break;
+						case "failure":
+							$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			},
+			complete: function() {
+				if (self.config.departmentContent.querySelectorAll(".row")) {
+					var rowList = self.config.departmentContent.querySelectorAll(".row");
+				};
+				self.expenseDepartEvent(rowList);
+			}
 		})
 	},
-	expenseDepartSearch: function(){ //搜索查询报销部门
+	expenseDepartSearch: function() { //搜索查询报销部门
 		var self = this;
-		var _searchDepartBuffer = function(){
+		var _searchDepartBuffer = function() {
 			var val = this.value;
 			self._renderDepart(val);
 		};
 		self.config.departSearch.addEventListener("input", self.throttleInput(_searchDepartBuffer, 500, 1000), false);
 	},
-	expenseDepartEvent: function(arr){ //报销部门点击/选择
+	expenseDepartEvent: function(arr) { //报销部门点击/选择
 		var self = this;
-		var getTarget = function(target,that){ //获取target
-			if(target.className.indexOf('my-col')!==-1){return target;}
-			if(target == that){return false;}
+		var getTarget = function(target, that) { //获取target
+			if (target.className.indexOf('my-col') !== -1) {
+				return target;
+			}
+			if (target == that) {
+				return false;
+			}
 			while (target.className.indexOf('my-col') === -1) {
 				target = target.parentNode;
 			}
@@ -1091,8 +1091,8 @@ Approval.prototype = {
 		};
 
 		if (arr) {
-			[].forEach.call(arr,function(item){
-				item.addEventListener("click", function(event){
+			[].forEach.call(arr, function(item) {
+				item.addEventListener("click", function(event) {
 					event.preventDefault();
 					event.stopPropagation();
 
@@ -1101,19 +1101,19 @@ Approval.prototype = {
 					if (this.querySelector(".searchDepartName")) {
 						searchDepartNameVal = this.querySelector(".searchDepartName").querySelector("span").innerHTML;
 					};
-					
+
 					var that = this;
 					var target = event.target;
-					var eleName = getTarget(target,that);
+					var eleName = getTarget(target, that);
 					if (eleName) {
-						var booleanStr = hasClass(eleName,"searchDepartName");
+						var booleanStr = hasClass(eleName, "searchDepartName");
 						if (booleanStr) {
-							self._renderDepart("",departmentwrapid);
-						}else{ //选中此部门
+							self._renderDepart("", departmentwrapid);
+						} else { //选中此部门
 							if (that.querySelector(".departConfirmBtn")) {
 								that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
 							};
-							
+
 							if (searchDepartNameVal && departmentwrapid) {
 								self.config.departWrapID.value = searchDepartNameVal;
 								self.config.departWrapID.dataset["departmentinputid"] = departmentwrapid;
@@ -1125,10 +1125,10 @@ Approval.prototype = {
 			});
 		};
 	},
-	asideEvent: function(){ //slideout
+	asideEvent: function() { //slideout
 		var self = this;
 		// open slideout
-		self.config.addApprover.addEventListener("click", function(event){
+		self.config.addApprover.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -1136,10 +1136,10 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("show");
 			self.config.menu.querySelector(".depart").classList.remove("show");
 			self.config.menu.querySelector(".depart").classList.add("hide");
-			slideout.open();		
+			slideout.open();
 		}, false);
 
-		self.config.departWrapID.addEventListener("click", function(event){
+		self.config.departWrapID.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -1147,82 +1147,82 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
 			self.config.menu.querySelector(".depart").classList.remove("hide");
 			self.config.menu.querySelector(".depart").classList.add("show");
-			slideout.open();		
+			slideout.open();
 		}, false);
 
 		// close slideout
-		self.config.closeBtn.addEventListener("touchend",function(event){
+		self.config.closeBtn.addEventListener("touchend", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			slideout.close();	
-		},false);
+			slideout.close();
+		}, false);
 
-		self.config.closeBtn_depart.addEventListener("touchend",function(event){
+		self.config.closeBtn_depart.addEventListener("touchend", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			slideout.close();	
-		},false);
+			slideout.close();
+		}, false);
 	},
-	jobNumEvent: function(){ //报销人工号输入
+	jobNumEvent: function() { //报销人工号输入
 		var self = this,
 			reg = /^[0-9]*$/,
 			reg2 = /^\d{7}$/,
-			inputFn = function(){
-				if(reg.test(this.value)){
-					if (!reg2.test(this.value)){
-						$my.messageInfo.html("请输入7位数字").fadeIn("fast").delay("1000").fadeOut("slow"); 
+			inputFn = function() {
+				if (reg.test(this.value)) {
+					if (!reg2.test(this.value)) {
+						$my.messageInfo.html("请输入7位数字").fadeIn("fast").delay("1000").fadeOut("slow");
 						return;
-					}else{
+					} else {
 						var loginName = this.value;
 						$.ajax({
-						    url: getRoothPath+'/ddExpenses/userController/expenseUser.do',
-						    data: {"loginName":loginName},
-						    // async: false, //同步
-						    success:function(data){
-						        console.log(data)
-						        if (JSON.stringify(data) !== "{}") 
-						        {
-						            var status = data.status;
+							url: getRoothPath + '/ddExpenses/userController/expenseUser.do',
+							data: {
+								"loginName": loginName
+							},
+							// async: false, //同步
+							success: function(data) {
+								console.log(data)
+								if (JSON.stringify(data) !== "{}") {
+									var status = data.status;
 
-						            switch(status){
-						                case "true":
-					                   		var info = data.info;
-					                   		
+									switch (status) {
+										case "true":
+											var info = data.info;
+
 											if (JSON.stringify(info) !== "{}") {
 												var dataArr = info.data;
 												if (dataArr.length) {
 													self.config.bankAccount.value = dataArr[0].bankAccount;
 													self.config.accountName.value = dataArr[0].accountName;
 													self.config.accounNumber.value = dataArr[0].accounNumber;
-												}else{
+												} else {
 													$my.messageInfo.html("返回信息为空,请重新输入").fadeIn("fast").delay("1500").fadeOut("slow");
 													self.config.jobNum.value = "";
 													return;
 												};
 
-											} else{
-												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
+											} else {
+												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 												return;
 											};
-						                	break;
-						                case "failure":
-						                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-						                	break;
-						                default:
-						                    break;
-						            }           
-						        } else
-						        {
-						            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-						            return false;
-						        };
-						    }
+											break;
+										case "failure":
+											$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+											break;
+										default:
+											break;
+									}
+								} else {
+									$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+									return false;
+								};
+							}
 						})
 					};
-				}else{
-					$my.messageInfo.html("输入不合法").fadeIn("fast").delay("1000").fadeOut("slow"); 
+				} else {
+					$my.messageInfo.html("输入不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 					this.value = "";
 					return;
 				}
@@ -1230,13 +1230,13 @@ Approval.prototype = {
 
 		self.config.jobNum.addEventListener("input", self.throttle(inputFn, 1500), false);
 	},
-	expenseAName: function(){ //检索开户名
+	expenseAName: function() { //检索开户名
 		var self = this,
 			reg = /^[\u4e00-\u9fa5]{0,}$/,
 			flag = true,
 			inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
 
-		var inputFn = function(){
+		var inputFn = function() {
 			var val = this.value;
 			if (val == "") {
 				inGroupWrap.innerHTML = "";
@@ -1305,10 +1305,10 @@ Approval.prototype = {
 					return;
 				};
 			};
-			
+
 		};
 
-		self.config.accountName.addEventListener("compositionstart", function(){
+		self.config.accountName.addEventListener("compositionstart", function() {
 			console.log("开始");
 			inGroupWrap.innerHTML = "";
 			self.config.groupWrap.classList.remove("show");
@@ -1316,20 +1316,20 @@ Approval.prototype = {
 			flag = false;
 		}, false);
 
-		self.config.accountName.addEventListener("compositionend", function(){
+		self.config.accountName.addEventListener("compositionend", function() {
 			console.log("结束");
 			flag = true;
-		}, false);	
-		
-		self.config.accountName.addEventListener("input",self.throttle(inputFn, 1000), false);
+		}, false);
 
-		self.config.accountName.addEventListener("blur",function(){
+		self.config.accountName.addEventListener("input", self.throttle(inputFn, 1000), false);
+
+		self.config.accountName.addEventListener("blur", function() {
 			inGroupWrap.innerHTML = "";
 			self.config.groupWrap.classList.add("hide");
 		}, false);
 	},
-	expenseANameEvent: function(){ //开户名检索账号
-		var self =this;
+	expenseANameEvent: function() { //开户名检索账号
+		var self = this;
 		var inGroupWrap = self.config.groupWrap.querySelector("#inGroupWrap");
 		// 怂了，用jQuery了 ^-^
 		$(inGroupWrap).on('touchend', 'li', function(event) {
@@ -1338,7 +1338,7 @@ Approval.prototype = {
 
 			self.config.groupWrap.classList.remove("show");
 			self.config.groupWrap.classList.add("hide");
-			
+
 			var accountnameid = this.dataset.accountnameid;
 			var val = this.innerHTML;
 
@@ -1387,7 +1387,7 @@ Approval.prototype = {
 			})
 		});
 	},
-	init: function(){ //init封装
+	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
 		this.getOldBank($my.userID); //获取历史收款信息	
@@ -1417,8 +1417,8 @@ var approval = new Approval();
 
 $(function() {
 	window.$my = {
-	    messageInfo: $(".messageInfo"),
-	    userID: sessionStorage.getItem("ddUserID")
+		messageInfo: $(".messageInfo"),
+		userID: sessionStorage.getItem("ddUserID")
 	}
 
 	approval.init(); //调用init
@@ -1433,9 +1433,9 @@ $(function() {
 		$modal_dialog.css({
 			'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2)
 		});
-	});	
+	});
 
-	 //提交保存事件
+	//提交保存事件
 	var submitBtn = document.querySelector("#submitBtn");
 	// submitBtn.addEventListener("click", function(event){
 	// 	event.preventDefault();
@@ -1444,8 +1444,6 @@ $(function() {
 	// 	approval.throttle(approval.submitEvent, 200);
 	// }, false);
 
-	submitBtn.addEventListener("click",approval.throttle(approval.submitEvent, 200), false);
+	submitBtn.addEventListener("click", approval.throttle(approval.submitEvent, 200), false);
 
 });
-
-	
