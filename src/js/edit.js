@@ -688,7 +688,8 @@ Approval.prototype = {
 			expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
 			oldImgDomArr = approval.config.uploadWrap.querySelectorAll(".myImg"),
 			oldImageUrlArr = [],
-			oldImageNameArr = [];
+			oldImageNameArr = [],
+			loginName = approval.config.jobNum.value;
 
 		producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 		itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
@@ -750,6 +751,17 @@ Approval.prototype = {
 			return;
 		};
 
+		if (loginName == "") {
+			$my.messageInfo.html("请完善报销人工号").fadeIn("fast").delay("1000").fadeOut("slow");
+			return;
+		} else {
+			var reg = /^\d{7}$/;
+			if (!reg.test(loginName)) {
+				$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+		};
+
 		producttypeIDs = producttypeIDs.join();
 		itemAlltotals = itemAlltotals.join();
 		remarks = remarks.join();
@@ -776,7 +788,8 @@ Approval.prototype = {
 				"expensesUserIDs": expensesUserID,
 				"cashierUserID": cashierUserID,
 				"expenseImageUrl": imageUrlArr.concat(oldImageUrlArr).join(),
-				"expenseImageName": approval.expenseImageName.concat(oldImageNameArr).join()
+				"expenseImageName": approval.expenseImageName.concat(oldImageNameArr).join(),
+				"loginName": loginName
 			},
 			success: function(data) {
 				console.log(data)
