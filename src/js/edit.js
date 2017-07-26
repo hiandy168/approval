@@ -518,7 +518,7 @@ Approval.prototype = {
 				str += '<span class="departUserName">' + listUserArr[i].departUserName + '</span>';
 				str += '</div>';
 				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-				str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
+				str += '<p></p>';
 				str += '</div>';
 				str += '</div>';
 			};
@@ -602,7 +602,7 @@ Approval.prototype = {
 						throw new Error("该审批人已在列表中");
 					};
 				});
-				this.querySelector(".my-icon").classList.add("hasselect");
+				// this.querySelector(".my-icon").classList.add("hasselect");
 				approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
 				self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
 				slideout.close();
@@ -1075,7 +1075,7 @@ Approval.prototype = {
 
 								if (dataArr.length && dataArr.length != 0) {
 									for (var i = 0, len = dataArr.length; i < len; i++) {
-										str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + '>';
+										str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + ' data-type=' + dataArr[i].type + '>';
 										str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
 										str += '<span>' + dataArr[i].departName + '</span>';
 										str += '</div>';
@@ -1153,6 +1153,7 @@ Approval.prototype = {
 					event.preventDefault();
 					event.stopPropagation();
 
+					var type = this.dataset.type; //部门可继续往下层点击type
 					var departmentwrapid = this.dataset.departmentwrapid;
 					var searchDepartNameVal = "";
 					if (this.querySelector(".searchDepartName")) {
@@ -1165,9 +1166,23 @@ Approval.prototype = {
 					if (eleName) {
 						var booleanStr = hasClass(eleName, "searchDepartName");
 						if (booleanStr) {
-							self._renderDepart("", departmentwrapid);
+							switch (type) {
+								case "0":
+									break;
+								case "1":
+									self._renderDepart("", departmentwrapid);
+									break;
+								default:
+									break;
+							}
 						} else { //选中此部门
 							if (that.querySelector(".departConfirmBtn")) {
+								var departConfirmBtn_NodeList = approval.config.departmentContent.querySelectorAll(".departConfirmBtn");
+
+								[].forEach.call(departConfirmBtn_NodeList, function(item) {
+									item.querySelector(".my-icon").classList.remove("hasselect");
+								})
+
 								that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
 							};
 
@@ -1255,8 +1270,8 @@ Approval.prototype = {
 													self.config.accountName.value = dataArr[0].accountName;
 													self.config.accounNumber.value = dataArr[0].accounNumber;
 												} else {
-													$my.messageInfo.html("返回信息为空,请重新输入").fadeIn("fast").delay("1500").fadeOut("slow");
-													self.config.jobNum.value = "";
+													$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1500").fadeOut("slow");
+													// self.config.jobNum.value = "";
 													return;
 												};
 
