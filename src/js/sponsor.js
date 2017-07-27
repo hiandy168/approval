@@ -12,6 +12,7 @@ function Approval() {
 	this.expenseImageUrl = []; //报销凭证url
 	this.expenseImageName = []; //报销凭证name
 	this.num = 0; //添加报销num
+	this.flag = true; //防重复提交标志位
 
 	this.config = {
 		productType: document.querySelector("#productType"),
@@ -627,160 +628,166 @@ Approval.prototype = {
 		});
 	},
 	submitEvent: function() { //提交保存事件
-		var imageUrlArr = [],
-			expenseTotal = approval.config.expenseTotal.value,
-			bankAccount = approval.config.bankAccount.value,
-			accountName = approval.config.accountName.value,
-			accounNumber = approval.config.accounNumber.value,
-			departmentID = approval.config.departWrapID.dataset["departmentinputid"],
-			producttypeIDs = [],
-			itemAlltotals = [],
-			remarks = [],
-			expensesUserID = [],
-			cashierUserID = approval.config.cashierWrap.querySelector("li.cashier").dataset["cashieruserid"],
-			producttypeDomArr = approval.config.inWrap.querySelectorAll(".product"),
-			itemAlltotalDomArr = approval.config.inWrap.querySelectorAll(".itemAlltotals"),
-			remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
-			expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
-			loginName = approval.config.jobNum.value;
+		if (approval.flag) {
+			var imageUrlArr = [],
+				expenseTotal = approval.config.expenseTotal.value,
+				bankAccount = approval.config.bankAccount.value,
+				accountName = approval.config.accountName.value,
+				accounNumber = approval.config.accounNumber.value,
+				departmentID = approval.config.departWrapID.dataset["departmentinputid"],
+				producttypeIDs = [],
+				itemAlltotals = [],
+				remarks = [],
+				expensesUserID = [],
+				cashierUserID = approval.config.cashierWrap.querySelector("li.cashier").dataset["cashieruserid"],
+				producttypeDomArr = approval.config.inWrap.querySelectorAll(".product"),
+				itemAlltotalDomArr = approval.config.inWrap.querySelectorAll(".itemAlltotals"),
+				remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
+				expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
+				loginName = approval.config.jobNum.value;
 
-		producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
-		itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
-		remarksDomArr = Array.prototype.slice.apply(remarksDomArr);
+			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
+			itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
+			remarksDomArr = Array.prototype.slice.apply(remarksDomArr);
 
-		Array.prototype.forEach.call(expensesUserDomArr, function(item) {
-			expensesUserID.push(item.dataset["userid"]);
-		})
+			Array.prototype.forEach.call(expensesUserDomArr, function(item) {
+				expensesUserID.push(item.dataset["userid"]);
+			})
 
-		for (var i = 0, len = producttypeDomArr.length; i < len; i++) {
-			if (producttypeDomArr[i].dataset["productid"] == "") {
-				$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
-
-			if (itemAlltotalDomArr[i].value == "") {
-				$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
-
-			producttypeIDs.push(producttypeDomArr[i].dataset["productid"]);
-			itemAlltotals.push(itemAlltotalDomArr[i].value);
-			remarks.push(remarksDomArr[i].value);
-		};
-
-		if (departmentID == "") {
-			$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (bankAccount == "" || accountName == "" || accounNumber == "") {
-			$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (expenseTotal == "") {
-			$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (approval.expenseImageUrl.length === 0) {
-			$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (expensesUserID.length === 0) {
-			$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (cashierUserID == "") {
-			$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		};
-
-		if (loginName == "") {
-			$my.messageInfo.html("请完善报销人工号").fadeIn("fast").delay("1000").fadeOut("slow");
-			return;
-		} else {
-			var reg = /^\d{7}$/;
-			if (!reg.test(loginName)) {
-				$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
-		};
-
-		producttypeIDs = producttypeIDs.join();
-		itemAlltotals = itemAlltotals.join();
-		remarks = remarks.join();
-		expensesUserID = expensesUserID.join();
-
-		for (var i = 0, len = approval.expenseImageUrl.length; i < len; i++) { //拼接图片域名
-			imageUrlArr.push(clouddnImgStr + "/" + approval.expenseImageUrl[i]);
-		};
-
-		$.ajax({
-			url: getRoothPath + '/ddExpenses/expense/save.do',
-			// async: false, //同步
-			data: {
-				"departmentID": departmentID,
-				"expenseTotal": expenseTotal,
-				"submitUserID": $my.userID,
-				"bankAccount": bankAccount,
-				"accountName": accountName,
-				"accounNumber": accounNumber,
-				"producttypeIDs": producttypeIDs,
-				"itemAlltotals": itemAlltotals,
-				"remarks": remarks,
-				"expensesUserIDs": expensesUserID,
-				"cashierUserID": cashierUserID,
-				"expenseImageUrl": imageUrlArr.join(),
-				"expenseImageName": approval.expenseImageName.join(),
-				"loginName": loginName
-			},
-			success: function(data) {
-				console.log(data)
-				if (JSON.stringify(data) !== "{}") {
-					var status = data.status;
-
-					switch (status) {
-						case 1:
-							var timer = null;
-							$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
-
-							! function() {
-								localStorage.removeItem("sessionTouchData_mySponser");
-								localStorage.removeItem("pageNum_mySponser");
-								localStorage.removeItem("dataCount_mySponser");
-								localStorage.removeItem("sessionTouchData_myApproval");
-								localStorage.removeItem("pageNum_myApproval");
-								localStorage.removeItem("dataCount_myApproval");
-							}();
-
-							clearTimeout(timer);
-							timer = setTimeout(function() {
-								window.location.href = "index.html";
-							}, 1200);
-							break;
-						case 0:
-							$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow");
-							break;
-						default:
-							break;
-					}
-				} else {
-					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-					return false;
+			for (var i = 0, len = producttypeDomArr.length; i < len; i++) {
+				if (producttypeDomArr[i].dataset["productid"] == "") {
+					$my.messageInfo.html("请完善报销类型").fadeIn("fast").delay("1000").fadeOut("slow");
+					return;
 				};
-			}
-		})
 
-		+ function() { // 释放内存
-			imageUrlArr = null;
-			producttypeIDs = null;
-			itemAlltotals = null;
-			remarks = null;
-			expensesUserID = null;
-		}();
+				if (itemAlltotalDomArr[i].value == "") {
+					$my.messageInfo.html("请完善报销金额").fadeIn("fast").delay("1000").fadeOut("slow");
+					return;
+				};
+
+				producttypeIDs.push(producttypeDomArr[i].dataset["productid"]);
+				itemAlltotals.push(itemAlltotalDomArr[i].value);
+				remarks.push(remarksDomArr[i].value);
+			};
+
+			if (departmentID == "") {
+				$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (bankAccount == "" || accountName == "" || accounNumber == "") {
+				$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (expenseTotal == "") {
+				$my.messageInfo.html("报销总金额为空").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (approval.expenseImageUrl.length === 0) {
+				$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (expensesUserID.length === 0) {
+				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (cashierUserID == "") {
+				$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (loginName == "") {
+				$my.messageInfo.html("请完善报销人工号").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			} else {
+				var reg = /^\d{7}$/;
+				if (!reg.test(loginName)) {
+					$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
+					return;
+				};
+			};
+
+			producttypeIDs = producttypeIDs.join();
+			itemAlltotals = itemAlltotals.join();
+			remarks = remarks.join();
+			expensesUserID = expensesUserID.join();
+
+			for (var i = 0, len = approval.expenseImageUrl.length; i < len; i++) { //拼接图片域名
+				imageUrlArr.push(clouddnImgStr + "/" + approval.expenseImageUrl[i]);
+			};
+
+			$.ajax({
+				url: getRoothPath + '/ddExpenses/expense/save.do',
+				// async: false, //同步
+				data: {
+					"departmentID": departmentID,
+					"expenseTotal": expenseTotal,
+					"submitUserID": $my.userID,
+					"bankAccount": bankAccount,
+					"accountName": accountName,
+					"accounNumber": accounNumber,
+					"producttypeIDs": producttypeIDs,
+					"itemAlltotals": itemAlltotals,
+					"remarks": remarks,
+					"expensesUserIDs": expensesUserID,
+					"cashierUserID": cashierUserID,
+					"expenseImageUrl": imageUrlArr.join(),
+					"expenseImageName": approval.expenseImageName.join(),
+					"loginName": loginName
+				},
+				beforeSend: function() {
+					approval.flag = false;
+				},
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
+
+						switch (status) {
+							case 1:
+								var timer = null;
+								$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
+
+								! function() {
+									localStorage.removeItem("sessionTouchData_mySponser");
+									localStorage.removeItem("pageNum_mySponser");
+									localStorage.removeItem("dataCount_mySponser");
+									localStorage.removeItem("sessionTouchData_myApproval");
+									localStorage.removeItem("pageNum_myApproval");
+									localStorage.removeItem("dataCount_myApproval");
+								}();
+
+								clearTimeout(timer);
+								timer = setTimeout(function() {
+									window.location.href = "index.html";
+								}, 1200);
+								break;
+							case 0:
+								approval.flag = true;
+								$my.messageInfo.html("保存失败").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
+			})
+
+			+ function() { // 释放内存
+				imageUrlArr = null;
+				producttypeIDs = null;
+				itemAlltotals = null;
+				remarks = null;
+				expensesUserID = null;
+			}();
+		};
 	},
 	addImage: function() { //添加图片
 		var self = this;
