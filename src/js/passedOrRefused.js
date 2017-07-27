@@ -2,7 +2,7 @@
  * @Author: Administrator
  * @Date:   2017-06-08 10:24:12
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-07-25 18:30:47
+ * @Last Modified time: 2017-07-27 16:39:12
  */
 
 'use strict';
@@ -10,6 +10,7 @@
 function Approval() {
 	this.expenseID = ""; //报销id
 	this.expenseReviewID = ""; //审核明细id
+	this.flag = true; //防重提交标志位
 
 	this.config = {
 		passedBtn: document.querySelector("#passedBtn"),
@@ -67,21 +68,13 @@ Approval.prototype = {
 								var timer = null;
 								$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
-								! function() {
-									localStorage.removeItem("sessionTouchData_mySponser");
-									localStorage.removeItem("pageNum_mySponser");
-									localStorage.removeItem("dataCount_mySponser");
-									localStorage.removeItem("sessionTouchData_myApproval");
-									localStorage.removeItem("pageNum_myApproval");
-									localStorage.removeItem("dataCount_myApproval");
-								}();
-
 								clearTimeout(timer);
 								timer = setTimeout(function() {
 									window.location.href = "index.html";
 								}, 1200);
 								break;
 							case 0:
+								approval.flag = true;
 								$my.messageInfo.html("提交失败").fadeIn("fast").delay("1500").fadeOut("slow");
 								break;
 							default:
@@ -101,12 +94,14 @@ Approval.prototype = {
 	},
 	submitEvent: function() {
 		var self = this;
-
 		self.config.passedBtn.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
-			self.throttle(self._passedFn, this);
+			if (self.flag) {
+				self.flag = false;
+				self.throttle(self._passedFn, this);
+			};
 		}, false);
 	}
 }
