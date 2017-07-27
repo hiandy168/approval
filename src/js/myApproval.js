@@ -1,4 +1,4 @@
-function Approval(){
+function Approval() {
 	this.dataCount = ""; //分页总条数
 	this.sessionArr_myApproval = []; //获取数据存session
 }
@@ -10,7 +10,7 @@ Approval.prototype = {
 			method.call(context);
 		}, 200);
 	},
-	touchThrottle: function(method,delay,duration){ //滑动节流
+	touchThrottle: function(method, delay, duration) { //滑动节流
 		var timer = null,
 			begin = new Date();
 		return function() {
@@ -28,65 +28,63 @@ Approval.prototype = {
 			}
 		}
 	},
-	getData: function(userID,pageNum,pageSize){
+	getData: function(userID, pageNum, pageSize) {
 		var self = this;
 		$.ajax({
-		    url: getRoothPath+'/ddExpenses/expenseInfo/myExpenseList.do',
-		    data: { 
-		        "userID": userID, //用户ID
-		        "pageNum": pageNum,//页码(首页为0）
-		        "pageSize": pageSize,//页大小
-		    },
-		    success:function(data){
-		        console.log(data);
-    	        if (JSON.stringify(data) !== "{}") 
-    	        {
-    	            var status = data.status;
+			url: getRoothPath + '/ddExpenses/expenseInfo/myExpenseList.do',
+			data: {
+				"userID": userID, //用户ID
+				"pageNum": pageNum, //页码(首页为0）
+				"pageSize": pageSize, //页大小
+			},
+			success: function(data) {
+				console.log(data);
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
 
-    	            switch(status){
-    	                case "true":
-                       		var info = data.info;
-                       		self.dataCount = info.dataCount; //总条数
-                       		localStorage.setItem("dataCount_myApproval",info.dataCount);
+					switch (status) {
+						case "true":
+							var info = data.info;
+							self.dataCount = info.dataCount; //总条数
+							localStorage.setItem("dataCount_myApproval", info.dataCount);
 
-    						if (JSON.stringify(info) !== "{}") {
-    							var dataArr = info.data;
-    							if (dataArr.length) {
-					        		if (dataArr.length < pageSize) {
-						    			$(".loading").hide();
-						    			$my.lodingText.classList.add("lodingText_show");
-						    		};
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									if (dataArr.length < pageSize) {
+										$(".loading").hide();
+										$my.lodingText.classList.add("lodingText_show");
+									};
 
-						    		Array.prototype.push.apply(self.sessionArr_myApproval,dataArr);
-						    		localStorage.setItem("sessionTouchData_myApproval",JSON.stringify(self.sessionArr_myApproval));
+									Array.prototype.push.apply(self.sessionArr_myApproval, dataArr);
+									localStorage.setItem("sessionTouchData_myApproval", JSON.stringify(self.sessionArr_myApproval));
 
-    								self.renderElement(dataArr);
-    							}else{
-    								$(".loading").hide();
-    								$my.messageInfo.html("暂无信息").fadeIn("fast").delay("1000").fadeOut("slow");
-    								return;
-    							};
+									self.renderElement(dataArr);
+								} else {
+									$(".loading").hide();
+									$my.messageInfo.html("暂无信息").fadeIn("fast").delay("1000").fadeOut("slow");
+									return;
+								};
 
-    						} else{
-    							$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow"); 
-    							return;
-    						};
-    	                	break;
-    	                case "failure":
-    	                	$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow"); 
-    	                	break;
-    	                default:
-    	                    break;
-    	            }           
-    	        } else
-    	        {
-    	            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-    	            return false;
-    	        };
-		    }
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
 		})
 	},
-	renderElement: function(data){
+	renderElement: function(data) {
 		var str = "";
 		var judgeStr = "";
 		var judgeIcon = "";
@@ -154,18 +152,22 @@ Approval.prototype = {
 			var status = data[i].expenseState;
 			var backlogStatus = data[i].reviewType;
 
-			switch(status){
+			switch (status) {
 				case "审核中":
-					judgeStr = '<li class="underReview" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="glyphicon glyphicon-exclamation-sign my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					judgeStr = '<li class="underReview" data-detailid=' + data[i].id + ' data-reviewid=' + data[i].reviewID + '>';
+					judgeIcon = '<p class="status"><span class="glyphicon glyphicon-exclamation-sign my-icon"></span>&nbsp;&nbsp;<span>' + status + '</span></p>';
+					break;
+				case "待出款":
+					judgeStr = '<li class="underReview" data-detailid=' + data[i].id + ' data-reviewid=' + data[i].reviewID + '>';
+					judgeIcon = '<p class="status"><span class="glyphicon glyphicon-exclamation-sign my-icon"></span>&nbsp;&nbsp;<span>' + status + '</span></p>';
 					break;
 				case "已通过":
-					judgeStr = '<li class="passed" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="iconfont icon-tongguo my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					judgeStr = '<li class="passed" data-detailid=' + data[i].id + ' data-reviewid=' + data[i].reviewID + '>';
+					judgeIcon = '<p class="status"><span class="iconfont icon-tongguo my-icon"></span>&nbsp;&nbsp;<span>' + status + '</span></p>';
 					break;
 				case "已拒绝":
-					judgeStr = '<li class="refused" data-detailid='+data[i].id+' data-reviewid='+data[i].reviewID+'>';
-					judgeIcon = '<p class="status"><span class="iconfont icon-ttpodicon my-icon"></span>&nbsp;&nbsp;<span>'+status+'</span></p>';
+					judgeStr = '<li class="refused" data-detailid=' + data[i].id + ' data-reviewid=' + data[i].reviewID + '>';
+					judgeIcon = '<p class="status"><span class="iconfont icon-ttpodicon my-icon"></span>&nbsp;&nbsp;<span>' + status + '</span></p>';
 					break;
 				default:
 					judgeStr = '<li>';
@@ -173,7 +175,7 @@ Approval.prototype = {
 					break;
 			}
 
-			switch(backlogStatus){
+			switch (backlogStatus) {
 				case "待我审批":
 					backlogClass = "backlog";
 					break;
@@ -185,70 +187,65 @@ Approval.prototype = {
 					break;
 			}
 
-			str += ''+judgeStr+'';
+			str += '' + judgeStr + '';
 			str += '<div class="container-fluid myContainer">';
 			str += '<div class="row my-row">';
-			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col '+backlogClass+'">';
-			str += '<span class="peopleName nowrap text-center">'+data[i].ExpenseUserName+'</span>';
+			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col ' + backlogClass + '">';
+			str += '<span class="peopleName nowrap text-center">' + data[i].ExpenseUserName + '</span>';
 			str += '</div>';
 			str += '<div class="col-xs-6 col-sm-6 col-md-6 my-col">';
 			str += '<div class="inTop">';
-			str += '<p class="nowrap">'+data[i].itemName+'&nbsp;</p>';
+			str += '<p class="nowrap">' + data[i].itemName + '&nbsp;</p>';
 			str += '</div>';
 			str += '<div class="inBottom">';
-			str += '<p class="count">￥<span>'+data[i].expenseTotal+'</span></p>';
+			str += '<p class="count">￥<span>' + data[i].expenseTotal + '</span></p>';
 			str += '</div>';
 			str += '</div>';
 			str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
 			str += '<div class="inTop">';
-			str += ''+judgeIcon+'';
+			str += '' + judgeIcon + '';
 			str += '</div>';
 			str += '<div class="inBottom">';
-			str += '<span>'+data[i].updateTime.substring(6)+' <span></span></span>';
+			str += '<span>' + data[i].updateTime.substring(6) + ' <span></span></span>';
 			str += '</div></div></div></div></li>';
-		};	
+		};
 
 		$($my.inWrap).append(str);
 		$my.flag = false;
 	},
-	scrollEvent: function(){ //滑动事件
+	scrollEvent: function() { //滑动事件
 		var rect = $my.loadingWrap.getBoundingClientRect();
 
-		if (!$my.flag) 
-		{
-			if (rect.top < $my.vpHeight && rect.bottom >= 0) 
-			{
+		if (!$my.flag) {
+			if (rect.top < $my.vpHeight && rect.bottom >= 0) {
 				$my.flag = true;
 				$my.num++;
-				if ($my.num > parseInt(approval.dataCount/pageSize) || ($my.num == parseInt(approval.dataCount/pageSize) && approval.dataCount % pageSize == 0)) 
-				{
+				if ($my.num > parseInt(approval.dataCount / pageSize) || ($my.num == parseInt(approval.dataCount / pageSize) && approval.dataCount % pageSize == 0)) {
 					$(".loading").hide();
 					$my.lodingText.classList.add("lodingText_show");
 					return false;
-				} else
-				{
-					localStorage.setItem("pageNum_myApproval",$my.num);
-					approval.getData($my.userID,$my.num,pageSize);					
-				};	
-			}else
-			{
+				} else {
+					localStorage.setItem("pageNum_myApproval", $my.num);
+					approval.getData($my.userID, $my.num, pageSize);
+				};
+			} else {
 				return;
 			}
-		}	
+		}
 	},
-	viewDetail: function(){
-		var _getDetailid = function(){
+	viewDetail: function() {
+		var _getDetailid = function() {
 			var detailid = this.dataset["detailid"];
 			var reviewid = this.dataset["reviewid"];
 			var status = "";
 
 			if (this.querySelector(".backlog")) {
 				status = "1";
-			} else{
+			} else {
 				status = "0";
 			};
 
-			window.location.href = "bbsp.html?detailid="+detailid+"&reviewid="+reviewid+"&status="+status;
+			window.location.href = "bbsp.html?detailid=" + detailid + "&reviewid=" + reviewid + "&status=" + status;
 		}
 
 		$($my.inWrap).on('click', 'li', function(event) {
@@ -271,7 +268,7 @@ $(function() {
 		inWrap: document.querySelector(".inWrap"),
 		wrap: document.querySelector(".wrap"),
 		vpHeight: document.documentElement.clientHeight, //获取设备高度
-		num:0, //页码
+		num: 0, //页码
 		flag: false //滑动标志位，未滑入加载区
 	}
 
@@ -280,26 +277,21 @@ $(function() {
 	var pageNum_myApproval = localStorage.getItem("pageNum_myApproval");
 	var dataCount_myApproval = localStorage.getItem("dataCount_myApproval");
 
-	if (sessionTouchData_myApproval != null 
-		&& sessionTouchData_myApproval != "null" 
-		&& pageNum_myApproval != null 
-		&& pageNum_myApproval != "null"
-		&& dataCount_myApproval != null
-		&& dataCount_myApproval != "null") {
- 		sessionTouchData_myApproval = JSON.parse(sessionTouchData_myApproval);
+	if (sessionTouchData_myApproval != null && sessionTouchData_myApproval != "null" && pageNum_myApproval != null && pageNum_myApproval != "null" && dataCount_myApproval != null && dataCount_myApproval != "null") {
+		sessionTouchData_myApproval = JSON.parse(sessionTouchData_myApproval);
 
 		$my.num = pageNum_myApproval;
 		approval.dataCount = dataCount_myApproval;
 		approval.sessionArr_myApproval = sessionTouchData_myApproval;
- 		approval.renderElement(sessionTouchData_myApproval);
-	}else{	
-		console.log("x")	
-		approval.getData($my.userID,0,pageSize);
-		localStorage.setItem("pageNum_myApproval",$my.num);
+		approval.renderElement(sessionTouchData_myApproval);
+	} else {
+		console.log("x")
+		approval.getData($my.userID, 0, pageSize);
+		localStorage.setItem("pageNum_myApproval", $my.num);
 	};
 
 	//下滑加载更多事件
-	window.addEventListener("touchmove",approval.touchThrottle(approval.scrollEvent, 500,1000));
+	window.addEventListener("touchmove", approval.touchThrottle(approval.scrollEvent, 500, 1000));
 
 	approval.viewDetail(); //查看详细
 
