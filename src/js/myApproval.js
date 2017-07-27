@@ -16,7 +16,7 @@ Approval.prototype = {
 		return function() {
 			var context = this,
 				args = arguments,
-				current = new Date();;
+				current = new Date();
 			clearTimeout(timer);
 			if (current - begin >= duration) {
 				method.apply(context, args);
