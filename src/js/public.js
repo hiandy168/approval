@@ -2,12 +2,12 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-07-26 10:21:27
+ * @Last Modified time: 2017-07-27 15:57:46
  */
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.174:8080";
+var getRoothPath = "http://192.168.1.37:8080";
 // var getRoothPath = "http://192.168.1.58:8080";
 // var getRoothPath = "http://192.168.1.58:8080";
 
