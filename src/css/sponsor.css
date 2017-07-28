@@ -484,6 +484,24 @@ body {
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p.nowrap > .commentName {
   color: #1E98FF;
 }
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent {
+  padding: 0.1rem 0.8rem 0.1rem 1rem;
+}
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent > li,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent > li {
+  float: left;
+}
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent > li > img,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent > li > img {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-bottom: 0.4rem;
+}
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent > li:nth-child(2n+1),
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent > li:nth-child(2n+1) {
+  margin-right: 0.4rem;
+}
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > .time {
   color: #999;
   font-size: 0.2rem;

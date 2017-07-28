@@ -126,17 +126,34 @@ Approval.prototype = {
 			var str = "";
 
 			for (var i = 0, len = this.expenseLog.length; i < len; i++) {
+				var imgStr = "";
+				var logImgArr = null;
+				var logImgNameArr = null;
 				var time = this.expenseLog[i].creatTime;
 				time = time.substring(5);
 
+				logImgArr = this.expenseLog[i].url.split(",");
+				logImgNameArr = this.expenseLog[i].fileName.split(",");
+
+				if (logImgArr != null && logImgArr.length) {
+					for (var s = 0, length = logImgArr.length; s < length; s++) {
+						imgStr += '<li><img src=' + logImgArr[s] + ' alt=' + logImgNameArr[s] + '></li>';
+					};
+				};
+
 				str += '<div class="row my-row">';
-				str += '<div class="col-xs-8 col-sm-8 col-md-8">';
+				str += '<div class="col-xs-9 col-sm-9 col-md-9">';
 				str += '<p class="nowrap">';
 				str += '<span class="commentName">' + this.expenseLog[i].expenseName + '</span>:&nbsp;&nbsp;<span class="commentContent">' + this.expenseLog[i].expenselog + '</span>';
 				str += '</p>';
 				str += '</div>';
-				str += '<div class="col-xs-4 col-sm-4 col-md-4 text-right nowrap time">';
+				str += '<div class="col-xs-3 col-sm-3 col-md-3 text-right nowrap time">';
 				str += '<span>' + time + '</span>';
+				str += '</div>';
+				str += '<div class="col-xs-12 col-sm-12 col-md-12">';
+				str += '<ul class="imgContent clearfix">';
+				str += imgStr;
+				str += '</ul>';
 				str += '</div>';
 				str += '</div>';
 			};
