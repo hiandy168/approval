@@ -137,7 +137,7 @@ Approval.prototype = {
 
 				if (logImgArr != null && logImgArr.length) {
 					for (var s = 0, length = logImgArr.length; s < length; s++) {
-						imgStr += '<li><img src=' + logImgArr[s] + ' alt=' + logImgNameArr[s] + '></li>';
+						imgStr += '<li class="logimg"><img data-src=' + logImgArr[s] + ' src=' + logImgArr[s] + '?imageView2/1/w/200/h/200 alt=' + logImgNameArr[s] + '></li>';
 					};
 				};
 
@@ -372,6 +372,41 @@ Approval.prototype = {
 			console.log(error)
 			$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
 		});
+	},
+	logLargeImg: function() { //评论查看大图
+		var asyncFunction = function(ms) {
+			return new Promise(function(resolve, reject) {
+				setTimeout(function() {
+					resolve(document.querySelectorAll('.imgContent'));
+				}, ms);
+			});
+		};
+
+		asyncFunction(1500).then(function(data) {
+			Array.prototype.forEach.call(data, function(item, index) {
+				var liArr = null;
+				liArr = item.querySelectorAll("li");
+				Array.prototype.forEach.call(liArr, function(val, key) {
+					val.addEventListener("click", function(event) {
+						event.stopPropagation();
+						event.preventDefault();
+						var urlList = [];
+
+						var newArr = Array.prototype.slice.call(this.parentNode.querySelectorAll("img"));
+						for (var i = 0, len = newArr.length; i < len; i++) {
+							var src = '';
+							src = newArr[i].dataset["src"];
+							urlList.push(src);
+						};
+						urlList = JSON.stringify(urlList);
+						sessionStorage.setItem("urlList", urlList);
+						window.location.href = "zoomImg.html?index=" + key;
+					})
+				})
+			})
+		}).catch(function(err) {
+			$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
+		})
 	}
 }
 
@@ -393,5 +428,5 @@ $(function() {
 	approval.getData();
 	approval.bindEvents();
 	approval.viewLargeImg();
-
+	approval.logLargeImg();
 });
