@@ -1,16 +1,16 @@
 /*
-* @Author: Administrator
-* @Date:   2017-05-24 14:52:53
-* @Last Modified by:   Administrator
-* @Last Modified time: 2017-06-21 17:34:47
-*/
+ * @Author: Administrator
+ * @Date:   2017-05-24 14:52:53
+ * @Last Modified by:   Administrator
+ * @Last Modified time: 2017-07-28 18:18:34
+ */
 
 'use strict';
-function Expenses(){               
-}
+
+function Expenses() {}
 
 Expenses.prototype = {
-    get_ddUserID: function(){ //获取ddUserID
+    get_ddUserID: function() { //获取ddUserID
         var url = window.location.href;
 
         if (url.indexOf("ddUserID") != -1) {
@@ -20,24 +20,25 @@ Expenses.prototype = {
         } else {
             $my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
             throw new Error("url错误");
-        };  
+        };
     },
-    verification: function(ddUserID){
-    	if (ddUserID != null && ddUserID != "null") {
-    		$.ajax({
-    		    url: getRoothPath+'/ddExpenses/userController/login.do',
-    		    data: { "ddUserID":ddUserID},
-    		    // async: false, //同步
-    		    success:function(data){
-    		        console.log(data)
-    		        if (JSON.stringify(data) !== "{}") 
-    		        {
-    		            var status = data.status;
+    verification: function(ddUserID) {
+        if (ddUserID != null && ddUserID != "null") {
+            $.ajax({
+                url: getRoothPath + '/ddExpenses/userController/login.do',
+                data: {
+                    "ddUserID": ddUserID
+                },
+                // async: false, //同步
+                success: function(data) {
+                    console.log(data)
+                    if (JSON.stringify(data) !== "{}") {
+                        var status = data.status;
 
                         switch (status) {
                             case "true":
-                                var info,userID;
-                                
+                                var info, userID;
+
                                 info = data.info;
                                 if (info.length) {
                                     userID = info[0].userID;
@@ -57,17 +58,16 @@ Expenses.prototype = {
                             default:
                                 break;
                         }
-    		        } else
-    		        {
-    		            $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-    		            return false;
-    		        };
-    		    }
-    		})
-    	} else{
-    		$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
-    		return;
-    	};
+                    } else {
+                        $my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+                        return false;
+                    };
+                }
+            })
+        } else {
+            $my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
+            return;
+        };
     }
 }
 
@@ -78,7 +78,7 @@ $(function() {
         messageInfo: $(".messageInfo")
     }
 
-    !function(){
+    ! function() {
         localStorage.removeItem("sessionTouchData_mySponser");
         localStorage.removeItem("pageNum_mySponser");
         localStorage.removeItem("dataCount_mySponser");

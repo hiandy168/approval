@@ -142,12 +142,14 @@ Approval.prototype = {
 				var time = this.expenseLog[i].creatTime;
 				time = time.substring(5);
 
-				logImgArr = this.expenseLog[i].url.split(",");
-				logImgNameArr = this.expenseLog[i].fileName.split(",");
+				if (this.expenseLog[i].url) {
+					logImgArr = this.expenseLog[i].url.split(",");
+					logImgNameArr = this.expenseLog[i].fileName.split(",");
 
-				if (logImgArr != null && logImgArr.length) {
-					for (var s = 0, length = logImgArr.length; s < length; s++) {
-						imgStr += '<li class="logimg"><img data-src=' + logImgArr[s] + ' src=' + logImgArr[s] + '?imageView2/1/w/200/h/200 alt=' + logImgNameArr[s] + '></li>';
+					if (logImgArr != null && logImgArr.length) {
+						for (var s = 0, length = logImgArr.length; s < length; s++) {
+							imgStr += '<li class="logimg"><img data-src=' + logImgArr[s] + ' src=' + logImgArr[s] + '?imageView2/1/w/200/h/200 alt=' + logImgNameArr[s] + '></li>';
+						};
 					};
 				};
 
