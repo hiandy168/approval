@@ -561,7 +561,9 @@ Approval.prototype = {
 				});
 				// this.querySelector(".my-icon").classList.add("hasselect");
 				approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
-				self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
+				// self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
+				self.config.addApprover.insertAdjacentHTML('beforeBegin', approverStr);
+
 				slideout.close();
 			};
 
@@ -623,7 +625,8 @@ Approval.prototype = {
 			});
 
 			approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
-			self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
+			// self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
+			self.config.addApprover.insertAdjacentHTML('beforeBegin', approverStr);
 			slideout.close();
 		});
 	},
