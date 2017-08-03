@@ -6,6 +6,7 @@ function Approval() {
 	Object.defineProperty(this, "mySponsoredCount", {
 		get: function() {
 			var reg = /^[0-9]*$/;
+			console.log(reg.test(mySponsoredCount))
 			if (reg.test(mySponsoredCount) && mySponsoredCount != "") {
 				return mySponsoredCount;
 			} else {
@@ -55,16 +56,24 @@ Approval.prototype = {
 		}, 200);
 	},
 	get_ddUserID: function() { //获取ddUserID
-		var url = window.location.href;
-
-		if (url.indexOf("ddUserID") != -1) {
-			var ddUserID = window.location.search;
-			ddUserID = ddUserID.split("=")[1];
-			// $my.ddUserID = ddUserID;
-			this.ddUserID = ddUserID;
+		var loginid = sessionStorage.getItem("loginid"); //ddUserID
+		console.log(loginid)
+		if (loginid) {
+			this.ddUserID = loginid;
 		} else {
-			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
-			throw new Error("url错误");
+			var url = window.location.href;
+
+			if (url.indexOf("ddUserID") != -1) {
+				var ddUserID = window.location.search;
+				ddUserID = ddUserID.split("=")[1];
+				// $my.ddUserID = ddUserID;
+				this.ddUserID = ddUserID;
+
+				sessionStorage.setItem("loginid", ddUserID); //ddUserID
+			} else {
+				$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+				throw new Error("url错误");
+			};
 		};
 	},
 	verification: function() { //验证登录
