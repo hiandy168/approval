@@ -1,6 +1,7 @@
 function Approval() {
 	this.mySponsoredCount = ""; //我发起的数量
 	this.myExpenseCount = ""; //我审批的数量
+	this.ddUserID = ""; //ddUserID
 
 	Object.defineProperty(this, "mySponsoredCount", {
 		get: function() {
@@ -53,17 +54,79 @@ Approval.prototype = {
 			method.call(context);
 		}, 200);
 	},
+	get_ddUserID: function() { //获取ddUserID
+		var url = window.location.href;
+
+		if (url.indexOf("ddUserID") != -1) {
+			var ddUserID = window.location.search;
+			ddUserID = ddUserID.split("=")[1];
+			// $my.ddUserID = ddUserID;
+			this.ddUserID = ddUserID;
+		} else {
+			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+			throw new Error("url错误");
+		};
+	},
+	verification: function() { //验证登录
+		var self = this;
+		if (self.ddUserID != "" && self.ddUserID != null && self.ddUserID != "null") {
+			$.ajax({
+				url: getRoothPath + '/ddExpenses/userController/login.do',
+				data: {
+					"ddUserID": self.ddUserID
+				},
+				// async: false, //同步
+				success: function(data) {
+					console.log(data)
+					if (JSON.stringify(data) !== "{}") {
+						var status = data.status;
+
+						switch (status) {
+							case "true":
+								var info, userID;
+
+								info = data.info;
+								if (info.length) {
+									userID = info[0].userID;
+									sessionStorage.setItem("ddUserID", userID);
+
+									self._getUnreadNum(userID);
+									// window.location.href = "dist/html/index.html"; //正式;
+									// window.location.href = "src/html/index.html"; //测试
+								} else {
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									return;
+								};
+
+								break;
+							case "failure":
+								$my.messageInfo.html("登录错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								break;
+							default:
+								break;
+						}
+					} else {
+						$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+						return false;
+					};
+				}
+			})
+		} else {
+			$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1000").fadeOut("slow");
+			return;
+		};
+	},
 	bindDom: function() { //绑定DOM
 		this.config.mySponsoredCount.innerHTML = this.mySponsoredCount;
 		this.config.myExpenseCount.innerHTML = this.myExpenseCount;
 	},
-	getUnreadNum: function(ddUserID) { //获取“未读消息”数量
+	_getUnreadNum: function(userID) { //获取“未读消息”数量
 		var self = this;
-		if (ddUserID != null && ddUserID != "null") {
+		if (userID != "" && userID != null && userID != "null") {
 			$.ajax({
 				url: getRoothPath + '/ddExpenses/expenseInfo/sum.do',
 				data: {
-					"userID": ddUserID
+					"userID": userID
 				},
 				// async: false, //同步
 				success: function(data) {
@@ -134,6 +197,12 @@ Approval.prototype = {
 
 			self.throttle(turnSponsorPage, this);
 		}, false);
+	},
+	init: function() {
+		this.get_ddUserID();
+		this.verification();
+		// this.getUnreadNum();
+		this.bindEvents();
 	}
 }
 
@@ -141,13 +210,10 @@ var approval = new Approval(); //实例化approval
 
 $(function() {
 	window.$my = {
-		messageInfo: $(".messageInfo"),
-		ddUserID: sessionStorage.getItem("ddUserID")
+		messageInfo: $(".messageInfo")
 	}
 
-	approval.getUnreadNum($my.ddUserID); //获取“未读信息”数量
-
-	approval.bindEvents(); // 绑定点击事件
+	approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
