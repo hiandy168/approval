@@ -728,6 +728,10 @@ Approval.prototype = {
 
 				producttypeIDs.push(producttypeDomArr[i].dataset["productid"]);
 				itemAlltotals.push(itemAlltotalDomArr[i].value);
+
+				if (remarksDomArr[i].value == "") {
+					remarksDomArr[i].value = " ";
+				};
 				remarks.push(remarksDomArr[i].value);
 			};
 

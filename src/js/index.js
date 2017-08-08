@@ -6,7 +6,6 @@ function Approval() {
 	Object.defineProperty(this, "mySponsoredCount", {
 		get: function() {
 			var reg = /^[0-9]*$/;
-			console.log(reg.test(mySponsoredCount))
 			if (reg.test(mySponsoredCount) && mySponsoredCount != "") {
 				return mySponsoredCount;
 			} else {
