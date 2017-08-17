@@ -89,6 +89,10 @@
 								<ol id="breadcrumb" class="breadcrumb my-breadcrumb responsiveBox">
 								  <li data-departmentID="0"><a href="javascript:;">全部联系人</a></li>
 								</ol>
+								<div class="input-group searchApproval">
+								 	<span class="input-group-addon"><i class="glyphicon glyphicon-search my-icon"></i></span>
+								  	<input type="text" id="searchApprovalInput" class="form-control searchApprovalInput" placeholder="检索" autocorrect="off" autocapitalize="off">
+								</div>
 								<div id="departmentWrap" class="container-fluid myContainer inputFile">
 									<!-- <div class="row my-row">
 										<div class="col-xs-4 col-sm-4 col-md-4 my-col">
@@ -114,7 +118,7 @@
 		    		<p id="closeBtn_depart" class="closeBtn" title="取消">取消</p>
 		    		<div class="input-group">
 		    		 	<span class="input-group-addon" id="sizing-addon2"><i class="glyphicon glyphicon-search my-icon"></i></span>
-		    		  	<input type="text" id="departSearch" class="form-control" placeholder="搜索" aria-describedby="sizing-addon2" autocorrect="off" autocapitalize="off" autofocus="autofocus">
+		    		  	<input type="text" id="departSearch" class="form-control" placeholder="搜索" aria-describedby="sizing-addon2" autocorrect="off" autocapitalize="off">
 		    		</div>
 		    		<div class="group myContainer">
 			    		<div class="appendChild">
@@ -259,6 +263,30 @@
 				<div class="inWrap">
 					<div class="appendChild">
 						<p class="titleMessage">报销人信息</p>
+						<div class="container-fluid myContainer inputFile">
+							<div class="row my-row">
+								<div class="col-xs-3 col-sm-3 col-md-3 my-col">
+									<span>所属公司</span>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-9 my-col">
+									<input type="text" id="" data-toggle="modal" data-target="#companyModal" readonly="readonly" placeholder="请输入">
+								</div>
+								<!-- modal start -->
+								<div class="modal fade bs-example-modal-sm container mymodalbgc" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								    <div class="modal-dialog modal-sm modal-center">
+								        <div class="modal-content">
+								            <div class="modal-body modal-body-mine">
+								                <ul id="productType" class="list-group">
+								                    <li class="list-group-item">上海轩天实业有限公司</li>
+								                    <li class="list-group-item">上海易好房网络有限公司</li>
+								                </ul>  
+								            </div>
+								        </div>
+								    </div>
+								</div>
+								<!-- modal end -->
+							</div>
+						</div>
 						<div class="container-fluid myContainer inputFile">
 							<div class="row my-row">
 								<div class="col-xs-3 col-sm-3 col-md-3 my-col">

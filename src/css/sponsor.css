@@ -763,6 +763,38 @@ body {
   color: #ccc;
   content: "〉";
 }
+.menu > .content > .inContent > .group .searchApproval {
+  height: 0.6rem;
+  padding: 0 0.3rem;
+  margin: 0.4rem 0 0.1rem;
+}
+.menu > .content > .inContent > .group .searchApproval > .input-group-addon {
+  border: 0;
+  background-color: #F4F3F4;
+  padding-right: 0.1rem;
+}
+.menu > .content > .inContent > .group .searchApproval > .input-group-addon > .my-icon {
+  color: #999;
+  font-weight: lighter;
+  font-size: 0.24rem;
+  position: relative;
+  top: 0.06rem;
+}
+.menu > .content > .inContent > .group .searchApproval > .searchApprovalInput {
+  border: 0;
+  padding-left: 0;
+  background-color: #F4F3F4;
+  -webkit-box-shadow: inset 0 1px 1px #F4F3F4;
+  -moz-box-shadow: inset 0 1px 1px #F4F3F4;
+  -ms-box-shadow: inset 0 1px 1px #F4F3F4;
+  -o-box-shadow: inset 0 1px 1px #F4F3F4;
+  box-shadow: inset 0 1px 1px #F4F3F4;
+}
+.menu > .content > .inContent > .group .searchApproval > .searchApprovalInput::-webkit-input-placeholder {
+  color: #999;
+  font-size: 0.28rem;
+  font-weight: normal;
+}
 .menu > .content > .inContent > .input-group {
   margin-top: 0.2rem;
   padding: 0.1rem 0;
