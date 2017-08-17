@@ -39,7 +39,8 @@ function Approval() {
 		departSearch: document.querySelector("#departSearch"),
 		departmentContent: document.querySelector("#departmentContent"),
 		jobNum: document.querySelector("#jobNum"),
-		groupWrap: document.querySelector("#groupWrap")
+		groupWrap: document.querySelector("#groupWrap"),
+		searchApprovalInput: document.querySelector("#searchApprovalInput")
 	}
 }
 
@@ -1431,6 +1432,15 @@ Approval.prototype = {
 			})
 		});
 	},
+	searchApprovalEvent: function() { //审核人模糊查询
+		var self = this;
+		var _searchApprovalBuffer = function() {
+			console.log(this.value)
+		}
+
+		self.config.searchApprovalInput.addEventListener("input", self.throttleInput(_searchApprovalBuffer, 500, 1000), false);
+
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1454,6 +1464,7 @@ Approval.prototype = {
 		this.expenseAName(); //检索开户名
 		this.expenseANameEvent(); //开户名检索账号
 		this._renderDepart('', ''); //页面主动加载报销部门
+		this.searchApprovalEvent(); //审核人模糊查询
 	}
 }
 
