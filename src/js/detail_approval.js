@@ -417,9 +417,9 @@ $(function() {
 
 	approval.getDetailid(); //获取详情id和status
 
-	if ($my.status === "2") { //底部修改按钮显示		
-		footer.classList.remove("hide");
-		footer.classList.add("show");
+	if ($my.status === "2") { //底部修改按钮显示
+		var refusedBtn = footer.querySelector(".refusedBtn");
+		refusedBtn.classList.remove("hide");
 	};
 
 	approval.getData();
