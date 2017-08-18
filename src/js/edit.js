@@ -592,7 +592,7 @@ Approval.prototype = {
 				departUserName = this.querySelector(".departUserName").innerHTML;
 
 				if (departUserName.indexOf("-") >= 0) {
-					departUserName = departUserName.substr(departUserName.lastIndexOf("-") + 1);
+					departUserName = departUserName.substring(0, departUserName.indexOf("-"));
 				};
 
 				var approverList = self.config.approverWrap.querySelectorAll("li");
@@ -1504,7 +1504,7 @@ Approval.prototype = {
 												for (var i = 0, len = dataArr.length; i < len; i++) {
 													str += '<div class="row my-row" data-departuserid=' + dataArr[i].id + '>';
 													str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col nowrap">';
-													str += '<span class="departUserName">' + dataArr[i].departName + '-' + dataArr[i].userName + '</span>';
+													str += '<span class="departUserName">' + dataArr[i].userName + '-' + dataArr[i].departName + '</span>';
 													str += '</div>';
 													// str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
 													// str += '<p></p>';
