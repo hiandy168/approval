@@ -590,6 +590,7 @@ body {
 			>.btn-group-justified{
 				height: 100%;
 				>.submitBtn{
+					color: #fff;
 					border: 0;
 					background: #1E98FF;
 					-webkit-box-shadow: 0 -2px 8px 0 rgba(74,144,226,.1);
@@ -597,12 +598,11 @@ body {
 					-ms-box-shadow: 0 -2px 8px 0 rgba(74,144,226,.1);
 					-o-box-shadow: 0 -2px 8px 0 rgba(74,144,226,.1);
 					box-shadow: 0 -2px 8px 0 rgba(74,144,226,.1);
-					color: #fff;
 				}
 				>.passedBtn{
 					font-weight: bold;
-					background-color: @mainbgc;
-					color: #1E98FF;
+					background-color: @blue;
+					color: @mainbgc;
 					.broderRadius(0);
 					border: 0;
 					-webkit-box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
@@ -622,6 +622,23 @@ body {
 					-ms-box-shadow: 0 2px 0 0 rgba(255,85,85,1);
 					-o-box-shadow: 0 2px 0 0 rgba(255,85,85,1);
 					box-shadow: 0 2px 0 0 rgba(255,85,85,1);
+				}
+				>.commentBtn{
+					font-weight: bold;
+					color: @blue;
+					.broderRadius(0);
+					border: 0;
+					-webkit-box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
+					-moz-box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
+					-ms-box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
+					-o-box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
+					box-shadow: 0 -2px 8px 0 rgba(255,255,255,1);
+				}
+				>.commentBtn:hover,
+				>.commentBtn:active,
+				>.commentBtn:focus,
+				>.commentBtn:visited{
+					background-color: #fff;
 				}
 			}
 		}
