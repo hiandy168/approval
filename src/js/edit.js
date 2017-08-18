@@ -45,7 +45,8 @@ function Approval() {
 		departSearch: document.querySelector("#departSearch"),
 		departmentContent: document.querySelector("#departmentContent"),
 		jobNum: document.querySelector("#jobNum"),
-		groupWrap: document.querySelector("#groupWrap")
+		groupWrap: document.querySelector("#groupWrap"),
+		searchApprovalInput: document.querySelector("#searchApprovalInput")
 	}
 }
 
@@ -587,8 +588,12 @@ Approval.prototype = {
 				var userid = ""; //选择审批人id
 				var approverStr = "";
 
-				departUserName = this.querySelector(".departUserName").innerHTML;
 				userid = this.dataset["departuserid"];
+				departUserName = this.querySelector(".departUserName").innerHTML;
+
+				if (departUserName.indexOf("-") >= 0) {
+					departUserName = departUserName.substr(departUserName.lastIndexOf("-") + 1);
+				};
 
 				var approverList = self.config.approverWrap.querySelectorAll("li");
 
@@ -1473,6 +1478,79 @@ Approval.prototype = {
 			})
 		});
 	},
+	searchApprovalEvent: function() { //审核人模糊查询
+		var self = this,
+			flag = true;
+		var _searchApprovalBuffer = function() {
+			var val = this.value.trim();
+
+			if (flag) {
+				if (val) {
+					$.post(getRoothPath + '/ddExpenses/userController/userLike.do', {
+							"name": val
+						},
+						function(data) {
+							console.log(data)
+							if (JSON.stringify(data) !== "{}") {
+								var status = data.status;
+								switch (status) {
+									case "true":
+										var info = data.info;
+										if (JSON.stringify(info) !== "{}") {
+											var dataArr = info.data;
+											if (dataArr.length) {
+												console.log(dataArr)
+												var str = '';
+												for (var i = 0, len = dataArr.length; i < len; i++) {
+													str += '<div class="row my-row" data-departuserid=' + dataArr[i].id + '>';
+													str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col nowrap">';
+													str += '<span class="departUserName">' + dataArr[i].departName + '-' + dataArr[i].userName + '</span>';
+													str += '</div>';
+													// str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
+													// str += '<p></p>';
+													// str += '</div>';
+													str += '</div>';
+												};
+
+												self.config.departmentWrap.innerHTML = str;
+
+											} else {
+												$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+												return;
+											};
+
+										} else {
+											$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+											return;
+										};
+										break;
+									case "failure":
+										$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+										break;
+									default:
+										break;
+								}
+							} else {
+								$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+								return false;
+							};
+						});
+				} else {
+					self.getDepart(0);
+				}
+			};
+		}
+
+		self.config.searchApprovalInput.addEventListener('compositionstart', function() {
+			flag = false;
+		})
+
+		self.config.searchApprovalInput.addEventListener('compositionend', function() {
+			flag = true;
+		})
+
+		self.config.searchApprovalInput.addEventListener("input", self.throttle(_searchApprovalBuffer, 1000), false);
+	},
 	init: function() { //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
@@ -1496,6 +1574,7 @@ Approval.prototype = {
 		this.expenseAName(); //检索开户名
 		this.expenseANameEvent(); //开户名检索账号
 		this._renderDepart('', ''); //页面主动加载报销部门
+		this.searchApprovalEvent(); //审核人模糊查询
 	}
 }
 
