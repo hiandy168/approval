@@ -544,8 +544,12 @@ Approval.prototype = {
 				var userid = ""; //选择审批人id
 				var approverStr = "";
 
-				departUserName = this.querySelector(".departUserName").innerHTML;
 				userid = this.dataset["departuserid"];
+				departUserName = this.querySelector(".departUserName").innerHTML;
+
+				if (departUserName.indexOf("-") >= 0) {
+					departUserName = departUserName.substr(departUserName.lastIndexOf("-") + 1);
+				};
 
 				var approverList = self.config.approverWrap.querySelectorAll("li");
 
@@ -1456,7 +1460,7 @@ Approval.prototype = {
 												console.log(dataArr)
 												var str = '';
 												for (var i = 0, len = dataArr.length; i < len; i++) {
-													str += '<div class="row my-row" data-departUserid=' + dataArr[i].id + '>';
+													str += '<div class="row my-row" data-departuserid=' + dataArr[i].id + '>';
 													str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col nowrap">';
 													str += '<span class="departUserName">' + dataArr[i].departName + '-' + dataArr[i].userName + '</span>';
 													str += '</div>';
