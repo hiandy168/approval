@@ -422,15 +422,13 @@ $(function() {
 
 	approval.getDetailid(); //获取详情id和status
 
-	if ($my.status !== "1") { //底部按钮显示
+	if ($my.status === "1") { //底部按钮显示
 		var approvalBtn = footer.querySelectorAll(".approvalBtn");
 
 		Array.prototype.forEach.call(approvalBtn, function(item) {
-				item.classList.remove("show");
-				item.classList.add("hide");
-			})
-			// footer.classList.remove("hide");
-			// footer.classList.add("show");
+			item.classList.remove("hide");
+			// item.classList.add("show");
+		})
 	};
 
 	approval.getData();
