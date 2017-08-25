@@ -110,6 +110,8 @@ Approval.prototype = {
 			bankAccount = sessionStorage.getItem("bankAccount"), //开户行
 			expenseTotal = sessionStorage.getItem("expenseTotal"), //总计金额
 			jobNum = sessionStorage.getItem("jobNum"), //报销人工号
+			companyName = sessionStorage.getItem("companyName"), //所属公司名
+			reimbursementid = sessionStorage.getItem("reimbursementid"), //所属公司id
 			imgArr = sessionStorage.getItem("imgArr"), //图片数组
 			imageNameArr = sessionStorage.getItem("imageNameArr"), //图片名集合
 			str = "",
@@ -124,6 +126,8 @@ Approval.prototype = {
 		this.config.bankAccount.value = bankAccount;
 		this.config.expenseTotal.value = expenseTotal;
 		this.config.jobNum.value = jobNum;
+		this.config.companyID.value = companyName;
+		this.config.companyID.dataset.reimbursementid = reimbursementid;
 
 		if (productType) {
 			$my.productTypeLength = productType.length - 1;

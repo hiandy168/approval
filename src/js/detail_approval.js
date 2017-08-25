@@ -12,6 +12,8 @@ function Approval() {
 	this.productType = []; //报销类型集合
 	this.cashier = {}; //出纳人
 	this.jobNum = ''; //报销人工号
+	this.companyName = ''; //公司名
+	this.reimbursementid = ''; //所属公司id
 
 	this.config = {
 		expenseLogWrap: document.querySelector("#expenseLogWrap"),
@@ -24,7 +26,8 @@ function Approval() {
 		expenseTotal: document.querySelector("#expenseTotal"),
 		cashier: document.querySelector("#cashier"),
 		departName: document.querySelector("#departName"),
-		jobNum: document.querySelector("#jobNum")
+		jobNum: document.querySelector("#jobNum"),
+		companyID: document.querySelector("#companyID")
 	}
 }
 
@@ -72,6 +75,8 @@ Approval.prototype = {
 									self.departName = expenseInfoData[0].departName;
 									self.departmentID = expenseInfoData[0].departmentID;
 									self.jobNum = expenseInfoData[0].loginName;
+									self.companyName = expenseInfoData[0].companyName;
+									self.reimbursementid = expenseInfoData[0].reimbursementID;
 
 									if (expenseInfoData[0].imageUrl != null && expenseInfoData[0].imageUrl != "null") {
 										self.imgArr = expenseInfoData[0].imageUrl.split(",");
@@ -110,6 +115,8 @@ Approval.prototype = {
 									sessionStorage.setItem("bankAccount", self.bankAccount);
 									sessionStorage.setItem("jobNum", self.jobNum);
 									sessionStorage.setItem("expenseTotal", self.expenseTotal);
+									sessionStorage.setItem("companyName", self.companyName);
+									sessionStorage.setItem("reimbursementid", self.reimbursementid);
 									sessionStorage.setItem("imgArr", self.imgArr);
 									sessionStorage.setItem("imageNameArr", self.imageNameArr);
 								}
@@ -261,6 +268,8 @@ Approval.prototype = {
 		this.config.departName.value = this.departName;
 		this.config.jobNum.value = this.jobNum;
 		this.config.departName.dataset.departmentid = this.departmentID;
+		this.config.companyID.value = this.companyName;
+		this.config.companyID.dataset.reimbursementid = this.reimbursementid;
 	},
 	_renderImg: function() { //render报销凭证
 		var str = "";
