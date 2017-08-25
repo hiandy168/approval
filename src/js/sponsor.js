@@ -654,7 +654,8 @@ Approval.prototype = {
 				itemAlltotalDomArr = approval.config.inWrap.querySelectorAll(".itemAlltotals"),
 				remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
 				expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
-				loginName = approval.config.jobNum.value;
+				loginName = approval.config.jobNum.value,
+				reimbursementID = approval.config.companyID.dataset['reimbursementid'];
 
 			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 			itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
@@ -701,6 +702,11 @@ Approval.prototype = {
 
 			if (approval.expenseImageUrl.length === 0) {
 				$my.messageInfo.html("请完善报销凭证").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (reimbursementID == '') {
+				$my.messageInfo.html("请完善所属公司").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -751,7 +757,8 @@ Approval.prototype = {
 					"cashierUserID": cashierUserID,
 					"expenseImageUrl": imageUrlArr.join(),
 					"expenseImageName": approval.expenseImageName.join(),
-					"loginName": loginName
+					"loginName": loginName,
+					"reimbursementID": reimbursementID
 				},
 				beforeSend: function() {
 					approval.flag = false;
