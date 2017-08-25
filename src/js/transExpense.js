@@ -1,10 +1,13 @@
 function TransExpense() {
 	this.switchStr = true; //面包屑点击switch
+	this.expenseReviewID = "";
+
 	this.config = {
 		breadcrumb: document.querySelector("#breadcrumb"),
 		departmentWrap: document.querySelector("#departmentWrap"),
 		searchApprovalInput: document.querySelector("#searchApprovalInput"),
-		imgModal: document.querySelector('#imgModal')
+		imgModal: document.querySelector('#imgModal'),
+		confirmBtn: document.querySelector("#confirmBtn")
 	}
 }
 
@@ -54,6 +57,24 @@ TransExpense.prototype = {
 
 		this.config.departmentWrap.innerHTML = str;
 		this.switchStr = true;
+	},
+	getArg: function() { //获取详情id和status
+		var url = window.location.href;
+		var getParam = function(name) {
+			var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		}
+
+		if (url.indexOf("expenseReviewID") != -1) {
+			this.expenseReviewID = getParam("expenseReviewID");
+		} else {
+			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
+			throw new Error("url错误");
+		};
 	},
 	getDepart: function(departmentID) { //获取部门及联系人
 		var self = this;
@@ -147,9 +168,8 @@ TransExpense.prototype = {
 					departUserName = departUserName.substring(0, departUserName.indexOf("-"));
 				};
 
+				self.transEvent(userid);
 				$(self.config.imgModal).modal('show');
-				console.log(departUserName)
-				console.log(userid)
 			};
 
 			var breadcrumbList = self.config.breadcrumb.querySelectorAll("li");
@@ -234,11 +254,23 @@ TransExpense.prototype = {
 
 		self.config.searchApprovalInput.addEventListener("input", self.throttle(_searchApprovalBuffer, 1000), false);
 	},
+	transEvent: function(transUserID) { //移交事件
+		var self = this;
+		console.log(transUserID)
+			// self.config.confirmBtn.addEventListener("click", function(event) {
+			// 	event.stopPropagation();
+			// 	event.preventDefault();
+			// 	console.log(transUserID);
+			// }, false)
+
+	},
 	init: function() {
+		this.getArg();
 		this.getDepart(0);
 		this.asyncGetDepart();
 		this.searchApprovalEvent();
 		this.crumbsEvent();
+		this.transEvent();
 	}
 }
 
