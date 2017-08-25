@@ -1,0 +1,164 @@
+@import url("public.less");
+.menu{
+	width: 100%;
+	>.content{
+		width: 100%;
+		.boxSizing();
+		>.inContent{
+			>.closeBtn{
+				font-size: 0.32rem;
+				font-weight: normal;
+				padding: 0.4rem 0 0 0.3rem;
+				color: @blue;
+				cursor: pointer;
+			}
+			>.title{
+				padding: 0.4rem 0.3rem 0.2rem 0.3rem;
+				font-size: 0.24rem;
+			}
+			>.commonUse{
+				width: 100%;
+				padding: 0.2rem 0.3rem;
+				background-color: @mainbgc;
+				>li{
+					width: 1.2rem;
+					height: 1.2rem;
+					color: @mainbgc;
+					font-size: 0.28rem;
+					line-height: 1.2rem;
+					background-color: #1E98FF;
+					display: inline-block;
+					border-radius: 50%;
+					.broderRadius();
+					margin-right: 0.2rem;
+					cursor: pointer;
+				}
+			}
+			>.group{
+				background-color: @mainbgc;
+				// padding:0 1.5rem 0 0;
+				.inputFile{
+					background-color: @mainbgc;
+					>.my-row{
+						.padding();
+						height: 1.12rem;
+						margin: 0; 
+						cursor: pointer;
+						>.my-col{
+							height: 100%;
+							padding: 0; 
+							border-bottom: 1px solid #f5f5f5; 
+							>span,>p{
+								line-height: 1rem;
+							}
+							>p{
+								font-size: 0.24rem;
+								color: #999;
+								font-weight: normal;
+								>i{
+									font-style: normal;
+									position: relative;
+									top: -0.04rem;
+								}
+								>.glyphicon-menu-right{
+									font-size: 0.32rem;
+									font-weight: lighter;
+								}
+								>.hasselect{
+									color: @safe;
+								}
+							}
+						}
+					}
+				}
+				.my-breadcrumb{
+					margin: 0.2rem 0 0 0;
+					>li{
+						font-size: 0.24rem;
+						>a{
+							color: #999;
+						}
+					}
+					>li.active{
+						>a{
+							color: #1E98FF;
+						}
+					}
+				}
+				.my-breadcrumb>li+li:before {
+				    padding: 0 5px;
+				    color: #ccc;
+				    content: "〉";
+				}
+				.searchApproval{
+					height: 0.6rem;
+					padding: 0 0.3rem;
+					margin: 0.4rem 0 0.1rem;
+					>.input-group-addon{
+						border: 0;
+						background-color: #F4F3F4;
+						padding-right: 0.1rem;
+						>.my-icon{
+							color: #999;
+							font-weight: lighter;
+							font-size: 0.24rem;
+							position: relative;
+							top: 0.06rem;
+						}
+					}
+					>.searchApprovalInput{
+						border: 0;
+						padding-left: 0;
+						background-color: #F4F3F4;
+						-webkit-box-shadow: inset 0 1px 1px #F4F3F4;
+						-moz-box-shadow: inset 0 1px 1px #F4F3F4;
+						-ms-box-shadow: inset 0 1px 1px #F4F3F4;
+						-o-box-shadow: inset 0 1px 1px #F4F3F4;
+						box-shadow: inset 0 1px 1px #F4F3F4;
+					}
+					>.searchApprovalInput::-webkit-input-placeholder{
+						color: #999;
+						font-size: 0.28rem;
+						font-weight: normal;
+					}
+				}
+			}
+			>.input-group{
+				margin-top: 0.2rem;
+				padding: 0.1rem 0;
+				background-color: @mainbgc;
+				>.input-group-addon{
+					background-color: @mainbgc;
+					border: 0;
+					padding-right: 0.1rem;
+					>.my-icon{
+						font-size: 0.24rem;
+						color: #bcbcbc;
+						font-weight: lighter;
+					}
+				}
+				>.form-control{
+					border: 1px solid @mainbgc;
+					.broderRadius(0);
+				    -webkit-box-shadow: inset 0 1px 1px @mainbgc;
+				    -moz-box-shadow: inset 0 1px 1px @mainbgc;
+				    -ms-box-shadow: inset 0 1px 1px @mainbgc;
+				    -o-box-shadow: inset 0 1px 1px @mainbgc;
+				    box-shadow: inset 0 1px 1px @mainbgc;
+				    padding-left: 0;
+				}
+				>.form-control::-webkit-input-placeholder{
+					color: #bcbcbc;
+					font-size: 0.30rem;
+					font-weight: normal;
+				}
+			}
+		}
+	}
+	>.depart{
+		display: none;
+		.glyphicon-ok{
+			border: 1px solid #ccc;
+		}
+	}
+}

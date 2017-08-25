@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <title>发起审批</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">  
+        <link rel="shortcut icon" href="../../favicon.ico"/>
+        <link rel="bookmark" href="../../favicon.ico"/>
+        <link rel="stylesheet" type="text/css" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../css/base.css">
+        <link rel="stylesheet" type="text/css" href="../css/transExpense.css">
+        <script type="text/javascript" src="../js/fontSize.js"></script>
+    </head>
+    <body>
+    	<div class="messageInfo"></div>
+    	<nav id="menu" class="menu">
+		    <div class="content">
+		    	<div class="inContent">
+		    		<p id="closeBtn" class="closeBtn" title="取消">取消<!-- <i class="glyphicon glyphicon-remove"></i> --></p>
+		    	</div>
+		    	<div class="inContent">
+		    		<!-- <p class="title">全部联系人</p> -->
+		    		<div class="group myContainer">
+						<div class="inWrap">
+							<div class="appendChild">
+								<!-- <p class="titleMessage">全部联系人</p> -->
+								<ol id="breadcrumb" class="breadcrumb my-breadcrumb responsiveBox">
+								  <li data-departmentID="0"><a href="javascript:;">全部联系人</a></li>
+								</ol>
+								<div class="input-group searchApproval">
+								 	<span class="input-group-addon"><i class="glyphicon glyphicon-search my-icon"></i></span>
+								  	<input type="text" id="searchApprovalInput" class="form-control searchApprovalInput" placeholder="检索" autocorrect="off" autocapitalize="off">
+								</div>
+								<div id="departmentWrap" class="container-fluid myContainer inputFile">
+									<!-- <div class="row my-row">
+										<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+											<span>董事会</span>
+										</div>
+										<div class="col-xs-8 col-sm-8 col-md-8 my-col text-right">
+											<p><i>333</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>	
+										</div>
+									</div>
+									<div class="row my-row">
+										<div class="col-xs-4 col-sm-4 col-md-4 my-col">
+											<span>马云</span>
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div>
+		    		</div>
+		    	</div>
+		    </div>
+    	</nav>
+    	  	
+		<script type="text/javascript" src="../../node_modules/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="../../node_modules/slideout/dist/slideout.min.js"></script>
+		<script type="text/javascript" src="../js/public.js"></script>
+		<script type="text/javascript" src="../js/transExpense.js"></script>
+    </body>
+</html>
