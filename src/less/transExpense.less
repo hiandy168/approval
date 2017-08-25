@@ -162,3 +162,34 @@
 		}
 	}
 }
+
+.deleteApprover{
+	.modal-footer{
+		border-top: 0;
+		padding: 0;
+		>.btn-group{
+			>.btn{
+				border: 0;
+				padding: 0;
+				padding: 0.25rem 0;
+				-webkit-tap-highlight-color: rbga(0,0,0,0);
+				background-color: @mainbgc;
+				-webkit-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+			    -moz-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+			    -ms-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+			    -o-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+			    box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+			}
+			>.cancleBtn{
+				color: @danger;
+				border-top: 1px solid @danger;
+				border-top-left-radius: 0;
+			}
+			>.confirmBtn{
+				color: @mainbgc;
+				background-color: @danger;
+				border-top-right-radius: 0;
+			}
+		}
+	}
+}

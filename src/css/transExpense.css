@@ -168,3 +168,29 @@
 .menu > .depart .glyphicon-ok {
   border: 1px solid #ccc;
 }
+.deleteApprover .modal-footer {
+  border-top: 0;
+  padding: 0;
+}
+.deleteApprover .modal-footer > .btn-group > .btn {
+  border: 0;
+  padding: 0;
+  padding: 0.25rem 0;
+  -webkit-tap-highlight-color: rbga(0, 0, 0, 0);
+  background-color: #fff;
+  -webkit-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  -moz-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  -ms-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  -o-box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+}
+.deleteApprover .modal-footer > .btn-group > .cancleBtn {
+  color: #FF5555;
+  border-top: 1px solid #FF5555;
+  border-top-left-radius: 0;
+}
+.deleteApprover .modal-footer > .btn-group > .confirmBtn {
+  color: #fff;
+  background-color: #FF5555;
+  border-top-right-radius: 0;
+}

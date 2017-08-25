@@ -3,7 +3,8 @@ function TransExpense() {
 	this.config = {
 		breadcrumb: document.querySelector("#breadcrumb"),
 		departmentWrap: document.querySelector("#departmentWrap"),
-		searchApprovalInput: document.querySelector("#searchApprovalInput")
+		searchApprovalInput: document.querySelector("#searchApprovalInput"),
+		imgModal: document.querySelector('#imgModal')
 	}
 }
 
@@ -138,7 +139,6 @@ TransExpense.prototype = {
 			} else { //选择审批人
 				var departUserName = ""; //选择审批人名
 				var userid = ""; //选择审批人id
-				var approverStr = "";
 
 				userid = this.dataset["departuserid"];
 				departUserName = this.querySelector(".departUserName").innerHTML;
@@ -147,24 +147,9 @@ TransExpense.prototype = {
 					departUserName = departUserName.substring(0, departUserName.indexOf("-"));
 				};
 
-				var approverList = self.config.approverWrap.querySelectorAll("li");
-
-				if (approverList.length >= 10) {
-					$my.messageInfo.html("审批人最多添加9名").fadeIn("fast").delay("1000").fadeOut("slow");
-					return;
-				};
-
-				Array.prototype.forEach.call(approverList, function(item) {
-					if (userid == item.dataset["userid"]) {
-						$my.messageInfo.html("该审批人已在列表中").fadeIn("fast").delay("1000").fadeOut("slow");
-						throw new Error("该审批人已在列表中");
-					};
-				});
-				// this.querySelector(".my-icon").classList.add("hasselect");
-				approverStr = '<li class="nowrap addPeople" data-userid=' + userid + '>' + departUserName + '</li>';
-				// self.config.approverWrap.insertAdjacentHTML('afterBegin', approverStr);
-				self.config.addApprover.insertAdjacentHTML('beforeBegin', approverStr);
-
+				$(self.config.imgModal).modal('show');
+				console.log(departUserName)
+				console.log(userid)
 			};
 
 			var breadcrumbList = self.config.breadcrumb.querySelectorAll("li");
