@@ -1,1 +1,1 @@
-"use strict";var deviceWidth=document.documentElement.clientWidth;deviceWidth>750?deviceWidth=750:deviceWidth<320&&(deviceWidth=320),document.documentElement.style.fontSize=deviceWidth/7.5+"px";
+"use strict";!function(n,e){var t=n.documentElement,i="orientationchange"in window?"orientationchange":"resize",d=function(){var n=t.clientWidth;n>=750?n=750:n<320&&(n=320),n&&(t.style.fontSize=n/750*100+"px")};n.addEventListener&&(e.addEventListener(i,d,!1),n.addEventListener("DOMContentLoaded",d,!1))}(document,window);
