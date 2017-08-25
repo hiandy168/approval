@@ -32,7 +32,8 @@ function Approval() {
 		cashier: document.querySelector("#cashier"),
 		departName: document.querySelector("#departName"),
 		jobNum: document.querySelector("#jobNum"),
-		companyID: document.querySelector("#companyID")
+		companyID: document.querySelector("#companyID"),
+		transExpenseBtn: document.querySelector("#transExpenseBtn")
 	}
 }
 
@@ -360,7 +361,14 @@ Approval.prototype = {
 			event.stopPropagation();
 
 			window.location.href = "comment.html?expenseID=" + self.detailid;
-		})
+		}, false);
+
+		self.config.transExpenseBtn.addEventListener('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			window.location.href = 'transExpense.html?expenseReviewID=' + self.reviewid;
+		}, false)
 	},
 	viewLargeImg: function() { //查看大图
 		var self = this;
