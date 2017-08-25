@@ -26,6 +26,7 @@ function Approval() {
 		expenseTotal: document.querySelector("#expenseTotal"),
 		passedBtn: document.querySelector("#passedBtn"),
 		refusedBtn: document.querySelector("#refusedBtn"),
+		commentBtn: document.querySelector("#commentBtn"),
 		cashier: document.querySelector("#cashier"),
 		departName: document.querySelector("#departName"),
 		jobNum: document.querySelector("#jobNum")
@@ -346,6 +347,13 @@ Approval.prototype = {
 
 			window.location.href = "passed.html?expenseID=" + self.detailid + "&expenseReviewID=" + self.reviewid;
 		}, false);
+
+		self.config.commentBtn.addEventListener('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			window.location.href = "comment.html?expenseID=" + self.detailid;
+		})
 	},
 	viewLargeImg: function() { //查看大图
 		var self = this;
