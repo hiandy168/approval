@@ -46,7 +46,9 @@ function Approval() {
 		departmentContent: document.querySelector("#departmentContent"),
 		jobNum: document.querySelector("#jobNum"),
 		groupWrap: document.querySelector("#groupWrap"),
-		searchApprovalInput: document.querySelector("#searchApprovalInput")
+		searchApprovalInput: document.querySelector("#searchApprovalInput"),
+		companyList: document.querySelector("#companyList"),
+		companyID: document.querySelector("#companyID")
 	}
 }
 
@@ -699,7 +701,8 @@ Approval.prototype = {
 				oldImgDomArr = approval.config.uploadWrap.querySelectorAll(".myImg"),
 				oldImageUrlArr = [],
 				oldImageNameArr = [],
-				loginName = approval.config.jobNum.value;
+				loginName = approval.config.jobNum.value,
+				reimbursementID = approval.config.companyID.dataset['reimbursementid'];
 
 			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 			itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
@@ -755,6 +758,11 @@ Approval.prototype = {
 				return;
 			};
 
+			if (reimbursementID == '') {
+				$my.messageInfo.html("请完善所属公司").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
 			if (expensesUserID.length === 0) {
 				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
@@ -803,7 +811,8 @@ Approval.prototype = {
 					"cashierUserID": cashierUserID,
 					"expenseImageUrl": imageUrlArr.concat(oldImageUrlArr).join(),
 					"expenseImageName": approval.expenseImageName.concat(oldImageNameArr).join(),
-					"loginName": loginName
+					"loginName": loginName,
+					"reimbursementID": reimbursementID
 				},
 				beforeSend: function() {
 					approval.flag = false;
@@ -1551,6 +1560,65 @@ Approval.prototype = {
 
 		self.config.searchApprovalInput.addEventListener("input", self.throttle(_searchApprovalBuffer, 1000), false);
 	},
+	getCompany: function() { //获取公司
+		var self = this;
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/company.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+
+					switch (status) {
+						case "true":
+							var info = data.info;
+
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="list-group-item nowrap" data-reimbursementid=' + dataArr[i].reimbursementID + '>' + dataArr[i].companyName + '</li>'
+									};
+
+									self.config.companyList.innerHTML = str;
+								} else {
+									self.config.companyList.innerHTML = "<span style='font-weight:normal'>暂无公司信息</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	selectCompany: function() { //选择公司
+		var self = this;
+		self.config.companyList.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+
+			if (target.tagName.toLowerCase() === 'li') {
+				self.config.companyID.value = target.innerHTML;
+				self.config.companyID.dataset.reimbursementid = target.dataset.reimbursementid;
+				$('#companyModal').modal('hide');
+			}
+		})
+	},
 	init: function() { //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
@@ -1575,6 +1643,8 @@ Approval.prototype = {
 		this.expenseANameEvent(); //开户名检索账号
 		this._renderDepart('', ''); //页面主动加载报销部门
 		this.searchApprovalEvent(); //审核人模糊查询
+		this.getCompany(); //获取公司
+		this.selectCompany(); //选择公司
 	}
 }
 
