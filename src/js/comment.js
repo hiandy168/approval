@@ -56,7 +56,7 @@ Approval.prototype = {
 					url: getRoothPath + '/ddExpenses/review/comment.do',
 					data: {
 						"expenseID": approval.expenseID,
-						"userID": this.userID,
+						"userID": approval.userID,
 						"expenselog": expenselog,
 						"expenseImageUrl": imageUrlArr.join(),
 						"expenseImageName": approval.expenseImageName.join()
@@ -261,8 +261,12 @@ Approval.prototype = {
 		self.config.passedBtn.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
-
-			self.throttle(self._passedFn, this);
+			if (self.userID) {
+				self.throttle(self._passedFn, this);
+			} else {
+				$my.messageInfo.html("用户ID丢失").fadeIn("fast").delay("1500").fadeOut("slow");
+				return;
+			};
 		}, false);
 	},
 	init: function() {
