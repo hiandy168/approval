@@ -434,4 +434,13 @@ $(function() {
 
 		window.location.href = "edit.html?detailid=" + $my.detailid;
 	}, false);
+
+	// 跳转评论页面
+	var commentBtn = document.querySelector("#commentBtn");
+	commentBtn.addEventListener('click', function(event) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		window.location.href = 'comment.html?expenseID=' + $my.detailid;
+	});
 });
