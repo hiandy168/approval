@@ -282,7 +282,7 @@ TransExpense.prototype = {
 									$my.messageInfo.html("移交成功").fadeIn("fast").delay("1000").fadeOut("slow");
 									setTimeout(function() {
 										window.location.href = 'index.html';
-									}, 1000);
+									}, 1300);
 									break;
 								case 0:
 									$my.messageInfo.html("移交失败").fadeIn("fast").delay("1000").fadeOut("slow");
