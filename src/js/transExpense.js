@@ -1,13 +1,15 @@
 function TransExpense() {
 	this.switchStr = true; //面包屑点击switch
 	this.expenseReviewID = "";
+	this.transUserID = '';
 
 	this.config = {
 		breadcrumb: document.querySelector("#breadcrumb"),
 		departmentWrap: document.querySelector("#departmentWrap"),
 		searchApprovalInput: document.querySelector("#searchApprovalInput"),
 		imgModal: document.querySelector('#imgModal'),
-		confirmBtn: document.querySelector("#confirmBtn")
+		confirmBtn: document.querySelector("#confirmBtn"),
+		cancleBtn: document.querySelector("#cancleBtn")
 	}
 }
 
@@ -167,8 +169,8 @@ TransExpense.prototype = {
 				if (departUserName.indexOf("-") >= 0) {
 					departUserName = departUserName.substring(0, departUserName.indexOf("-"));
 				};
-
-				self.transEvent(userid);
+				self.transUserID = userid;
+				// self.transEvent();
 				$(self.config.imgModal).modal('show');
 			};
 
@@ -254,15 +256,58 @@ TransExpense.prototype = {
 
 		self.config.searchApprovalInput.addEventListener("input", self.throttle(_searchApprovalBuffer, 1000), false);
 	},
-	transEvent: function(transUserID) { //移交事件
+	transEvent: function() { //移交事件
 		var self = this;
-		console.log(transUserID)
-			// self.config.confirmBtn.addEventListener("click", function(event) {
-			// 	event.stopPropagation();
-			// 	event.preventDefault();
-			// 	console.log(transUserID);
-			// }, false)
 
+		self.config.confirmBtn.addEventListener("click", function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+
+			if (self.transUserID) {
+				$.ajax({
+					url: getRoothPath + '/ddExpenses/review/transExpense.do',
+					// async: false, //同步
+					data: {
+						"expenseReviewID": self.expenseReviewID,
+						"userID": $my.userID,
+						"transUserID": self.transUserID
+					},
+					success: function(data) {
+						console.log(data)
+						if (JSON.stringify(data) !== "{}") {
+							var status = data.status;
+
+							switch (status) {
+								case 1:
+									$my.messageInfo.html("移交成功").fadeIn("fast").delay("1000").fadeOut("slow");
+									setTimeout(function() {
+										window.location.href = 'index.html';
+									}, 1000);
+									break;
+								case 0:
+									$my.messageInfo.html("移交失败").fadeIn("fast").delay("1000").fadeOut("slow");
+									break;
+								default:
+									break;
+							}
+						} else {
+							$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+							return false;
+						};
+					}
+				})
+			} else {
+				$my.messageInfo.html("移交人ID获取异常").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+		})
+
+		self.config.cancleBtn.addEventListener('click', function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+
+			$(self.config.imgModal).modal('hide');
+		})
 	},
 	init: function() {
 		this.getArg();
