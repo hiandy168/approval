@@ -367,7 +367,7 @@ Approval.prototype = {
 			event.preventDefault();
 			event.stopPropagation();
 
-			window.location.href = 'transExpense.html?expenseReviewID=' + self.reviewid;
+			window.location.href = 'transExpense.html?expenseReviewID=' + self.reviewid + '&expenseTotal=' + self.expenseTotal;
 		}, false)
 	},
 	viewLargeImg: function() { //查看大图
