@@ -1,6 +1,7 @@
 function TransExpense() {
 	this.switchStr = true; //面包屑点击switch
 	this.expenseReviewID = "";
+	this.expenseTotal = '';
 	this.transUserID = '';
 
 	this.config = {
@@ -60,7 +61,7 @@ TransExpense.prototype = {
 		this.config.departmentWrap.innerHTML = str;
 		this.switchStr = true;
 	},
-	getArg: function() { //获取详情id和status
+	getArg: function() { //获取url参数
 		var url = window.location.href;
 		var getParam = function(name) {
 			var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
@@ -71,8 +72,9 @@ TransExpense.prototype = {
 			return null;
 		}
 
-		if (url.indexOf("expenseReviewID") != -1) {
+		if (url.indexOf("expenseReviewID") != -1 && url.indexOf("expenseTotal")) {
 			this.expenseReviewID = getParam("expenseReviewID");
+			this.expenseTotal = getParam("expenseTotal");
 		} else {
 			$my.messageInfo.html("url错误").fadeIn("fast").delay("1000").fadeOut("slow");
 			throw new Error("url错误");
@@ -270,7 +272,8 @@ TransExpense.prototype = {
 					data: {
 						"expenseReviewID": self.expenseReviewID,
 						"userID": $my.userID,
-						"transUserID": self.transUserID
+						"transUserID": self.transUserID,
+						"money": self.expenseTotal
 					},
 					success: function(data) {
 						console.log(data)
