@@ -26,6 +26,10 @@ body {
 .slideout-open .slideout-menu {
   display: block;
 }
+.logimg,
+.responseImg {
+  cursor: pointer;
+}
 .wrap {
   width: 100%;
 }
