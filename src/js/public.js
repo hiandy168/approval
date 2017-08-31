@@ -2,13 +2,13 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-08-29 11:18:12
+ * @Last Modified time: 2017-08-31 09:45:56
  */
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.48:8080";
-// var getRoothPath = "http://www.ehaofangwang.com";
+// var getRoothPath = "http://192.168.1.63:8080";
+var getRoothPath = "http://www.ehaofangwang.com";
 // var getRoothPath = "http://192.168.1.58:8080";
 
 var pageSize = 10; //分页大小
