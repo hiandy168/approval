@@ -351,68 +351,39 @@ Approval.prototype = {
 			this.config.productTypeWrap.innerHTML = str;
 		};
 	},
-	viewLargeImg: function() { //查看大图
+	viewLargeImg: function(str) { //查看大图
 		var self = this;
-		var urlList = [];
-		var asyncFunction = function(ms) {
-			return new Promise(function(resolve, reject) {
-				setTimeout(function() {
-					resolve(self.config.uploadWrap.querySelectorAll("li"));
-				}, ms);
-			});
-		};
+		var targetDom = '';
+		targetDom = str === "uploadWrap" ? self.config.uploadWrap : self.config.expenseLogWrap;
 
-		asyncFunction(1500).then(function(data) {
-			[].forEach.call(data, function(item, index) {
-				urlList.push(item.querySelector("img").dataset["src"]);
-				item.addEventListener("click", function(event) {
-					event.stopPropagation();
-					event.preventDefault();
+		targetDom.addEventListener("click", function() {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
 
-					urlList = JSON.stringify(urlList);
-					sessionStorage.setItem("urlList", urlList);
-					window.location.href = "zoomImg.html?index=" + index;
-				}, false);
-			});
-		}).catch(function(error) {
-			console.log(error)
-			$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
-		});
-	},
-	logLargeImg: function() { //评论查看大图
-		var asyncFunction = function(ms) {
-			return new Promise(function(resolve, reject) {
-				setTimeout(function() {
-					resolve(document.querySelectorAll('.imgContent'));
-				}, ms);
-			});
-		};
+			event.preventDefault();
+			if (target.nodeName.toLowerCase() === "img") {
+				var key = '',
+					targetDataset = target.dataset["src"],
+					urlList = [],
+					newArr = target.parentNode.parentNode.querySelectorAll("img");
+				newArr = Array.prototype.slice.call(newArr);
 
-		asyncFunction(1500).then(function(data) {
-			Array.prototype.forEach.call(data, function(item, index) {
-				var liArr = null;
-				liArr = item.querySelectorAll("li");
-				Array.prototype.forEach.call(liArr, function(val, key) {
-					val.addEventListener("click", function(event) {
-						event.stopPropagation();
-						event.preventDefault();
-						var urlList = [];
+				for (var i = 0, len = newArr.length; i < len; i++) {
+					var src = '';
+					src = newArr[i].dataset["src"];
 
-						var newArr = Array.prototype.slice.call(this.parentNode.querySelectorAll("img"));
-						for (var i = 0, len = newArr.length; i < len; i++) {
-							var src = '';
-							src = newArr[i].dataset["src"];
-							urlList.push(src);
-						};
-						urlList = JSON.stringify(urlList);
-						sessionStorage.setItem("urlList", urlList);
-						window.location.href = "zoomImg.html?index=" + key;
-					})
-				})
-			})
-		}).catch(function(err) {
-			$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
-		})
+					if (src === targetDataset) {
+						key = i;
+					};
+					urlList.push(src);
+				};
+
+				urlList = JSON.stringify(urlList);
+				sessionStorage.setItem("urlList", urlList);
+				window.location.href = "zoomImg.html?index=" + key;
+				urlList = null;
+			}
+		}, false);
 	}
 }
 
@@ -433,7 +404,8 @@ $(function() {
 
 	approval.getData();
 	approval.viewLargeImg();
-	approval.logLargeImg();
+	approval.viewLargeImg("uploadWrap");
+	approval.viewLargeImg("expenseLogWrap");
 
 	// 跳转修改页面
 	var editBtn = footer.querySelector("#editBtn");
