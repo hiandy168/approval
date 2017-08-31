@@ -399,39 +399,69 @@ Approval.prototype = {
 		});
 	},
 	logLargeImg: function() { //评论查看大图
-		var asyncFunction = function(ms) {
-			return new Promise(function(resolve, reject) {
-				setTimeout(function() {
-					resolve(document.querySelectorAll('.imgContent'));
-				}, ms);
-			});
-		};
+		var self = this;
 
-		asyncFunction(1500).then(function(data) {
-			Array.prototype.forEach.call(data, function(item, index) {
-				var liArr = null;
-				liArr = item.querySelectorAll("li");
-				Array.prototype.forEach.call(liArr, function(val, key) {
-					val.addEventListener("click", function(event) {
-						event.stopPropagation();
-						event.preventDefault();
-						var urlList = [];
+		self.config.expenseLogWrap.addEventListener("click", function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+			if (target.nodeName.toLowerCase() === "img") {
+				var key = '',
+					targetDataset = target.dataset["src"],
+					urlList = [],
+					newArr = target.parentNode.parentNode.querySelectorAll("img");
+				newArr = Array.prototype.slice.call(newArr);
 
-						var newArr = Array.prototype.slice.call(this.parentNode.querySelectorAll("img"));
-						for (var i = 0, len = newArr.length; i < len; i++) {
-							var src = '';
-							src = newArr[i].dataset["src"];
-							urlList.push(src);
-						};
-						urlList = JSON.stringify(urlList);
-						sessionStorage.setItem("urlList", urlList);
-						window.location.href = "zoomImg.html?index=" + key;
-					})
-				})
-			})
-		}).catch(function(err) {
-			$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
-		})
+				for (var i = 0, len = newArr.length; i < len; i++) {
+					var src = '';
+					src = newArr[i].dataset["src"];
+
+					if (src === targetDataset) {
+						key = i;
+					};
+					urlList.push(src);
+				};
+
+				urlList = JSON.stringify(urlList);
+				sessionStorage.setItem("urlList", urlList);
+				window.location.href = "zoomImg.html?index=" + key;
+				urlList = null;
+			};
+		}, false);
+
+		// var asyncFunction = function(ms) {
+		// 	return new Promise(function(resolve, reject) {
+		// 		setTimeout(function() {
+		// 			resolve(document.querySelectorAll('.imgContent'));
+		// 		}, ms);
+		// 	});
+		// };
+
+		// asyncFunction(1500).then(function(data) {
+		// 	Array.prototype.forEach.call(data, function(item, index) {
+		// 		var liArr = null;
+		// 		liArr = item.querySelectorAll("li");
+		// 		Array.prototype.forEach.call(liArr, function(val, key) {
+		// 			val.addEventListener("click", function(event) {
+		// 				event.stopPropagation();
+		// 				event.preventDefault();
+
+		// 				var urlList = [];
+
+		// 				var newArr = Array.prototype.slice.call(this.parentNode.querySelectorAll("img"));
+		// 				for (var i = 0, len = newArr.length; i < len; i++) {
+		// 					var src = '';
+		// 					src = newArr[i].dataset["src"];
+		// 					urlList.push(src);
+		// 				};
+		// 				urlList = JSON.stringify(urlList);
+		// 				sessionStorage.setItem("urlList", urlList);
+		// 				window.location.href = "zoomImg.html?index=" + key;
+		// 			})
+		// 		})
+		// 	})
+		// }).catch(function(err) {
+		// 	$my.messageInfo.html(error).fadeIn("fast").delay("1000").fadeOut("slow");
+		// })
 	}
 }
 
