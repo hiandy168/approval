@@ -1579,7 +1579,7 @@ Approval.prototype = {
 			}
 		})
 	},
-	selectBusiness: function() { //获取事业部
+	getBusiness: function() { //获取事业部
 		var self = this;
 		$.ajax({
 			url: getRoothPath + '/ddExpenses/userController/business.do',
@@ -1625,6 +1625,19 @@ Approval.prototype = {
 			}
 		})
 	},
+	selectBusiness: function() { //选择事业部
+		var self = this;
+		self.config.businessList.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+
+			if (target.tagName.toLowerCase() === 'li') {
+				self.config.business.value = target.innerHTML;
+				self.config.business.dataset.businessid = target.dataset.businessid;
+				$('#businessModal').modal('hide');
+			}
+		})
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1651,7 +1664,8 @@ Approval.prototype = {
 		this.searchApprovalEvent(); //审核人模糊查询
 		this.getCompany(); //获取公司
 		this.selectCompany(); //选择公司
-		this.selectBusiness(); //获取事业部
+		this.getBusiness(); //获取事业部
+		this.selectBusiness(); //选择事业部
 	}
 }
 
