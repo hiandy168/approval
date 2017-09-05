@@ -47,7 +47,9 @@ function Approval() {
 		business: document.querySelector("#business"),
 		subDepartID: document.querySelector("#subDepartID"),
 		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart"),
-		subDepartWrap: document.querySelector("#subDepartWrap")
+		subDepartWrap: document.querySelector("#subDepartWrap"),
+		subDepartWrapID: document.querySelector("#subDepartWrapID"),
+		subDepartInput: document.querySelector("#subDepartInput")
 	}
 }
 
@@ -1737,6 +1739,84 @@ Approval.prototype = {
 			}
 		}, false);
 	},
+	subDepartList: function(search, pageNum) { //获取部门/项目分页数据
+		var self = this;
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/subDepartList.do',
+			data: {
+				"search": search,
+				"pageNum": pageNum,
+				"pageSize": pageSize
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + '>';
+										str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col">';
+										str += '<span>' + dataArr[i].departmentSubName + '</span>';
+										str += '</div>';
+										str += '</div>';
+									};
+
+									self.config.subDepartWrapID.innerHTML = str;
+								} else {
+									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal'>暂无项目/部门</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	searchSubDepart: function() { //部门/项目分页搜索
+		var self = this,
+			flag = true;
+		var _searchsubDepartBuffer = function() {
+			var val = this.value.trim();
+			if (flag) {
+				if (val) {
+					self.subDepartList(val, 0);
+				} else {
+					self.subDepartList('', 0);
+				};
+			};
+		}
+
+
+		self.config.subDepartInput.addEventListener('compositionstart', function() {
+			flag = false;
+		})
+
+		self.config.subDepartInput.addEventListener('compositionend', function() {
+			flag = true;
+		})
+
+		self.config.subDepartInput.addEventListener("input", self.throttle(_searchsubDepartBuffer, 1000), false);
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1767,6 +1847,8 @@ Approval.prototype = {
 		this.selectBusiness(); //选择事业部
 		this.commonSubDepart(); //常用项目
 		this.sCommonSubDepart(); //选择事业部
+		this.subDepartList('', 0); //默认获取部门/项目分页数据
+		this.searchSubDepart(); //部门/项目分页搜索
 	}
 }
 
