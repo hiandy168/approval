@@ -34,10 +34,10 @@ function Approval() {
 		// departWrapID: document.querySelector("#departWrapID"),
 		addApprover: document.querySelector("#addApprover"),
 		closeBtn: document.querySelector("#closeBtn"),
-		closeBtn_depart: document.querySelector("#closeBtn_depart"),
+		// closeBtn_depart: document.querySelector("#closeBtn_depart"),
 		menu: document.querySelector("#menu"),
-		departSearch: document.querySelector("#departSearch"),
-		departmentContent: document.querySelector("#departmentContent"),
+		// departSearch: document.querySelector("#departSearch"),
+		// departmentContent: document.querySelector("#departmentContent"),
 		jobNum: document.querySelector("#jobNum"),
 		groupWrap: document.querySelector("#groupWrap"),
 		searchApprovalInput: document.querySelector("#searchApprovalInput"),
@@ -649,7 +649,8 @@ Approval.prototype = {
 				bankAccount = approval.config.bankAccount.value,
 				accountName = approval.config.accountName.value,
 				accounNumber = approval.config.accounNumber.value,
-				// departmentID = approval.config.departWrapID.dataset["departmentinputid"],
+				departmentID = approval.config.business.dataset["businessid"], //事业部id
+				departmentSubID = approval.config.subDepartID.dataset["subdepartid "], //项目/部门id
 				producttypeIDs = [],
 				itemAlltotals = [],
 				remarks = [],
@@ -690,11 +691,6 @@ Approval.prototype = {
 				remarks.push(remarksDomArr[i].value);
 			};
 
-			// if (departmentID == "") {
-			// 	$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
-			// 	return;
-			// };
-
 			if (bankAccount == "" || accountName == "" || accounNumber == "") {
 				$my.messageInfo.html("请完善收款信息").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
@@ -712,6 +708,19 @@ Approval.prototype = {
 
 			if (reimbursementID == '') {
 				$my.messageInfo.html("请完善所属公司").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
+				$my.messageInfo.html("请选择事业部").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (departmentSubID == "") {
+				$my.messageInfo.html("请选择项目/部门").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			} else if (departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
+				$my.messageInfo.html("项目/部门不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -749,7 +758,8 @@ Approval.prototype = {
 				url: getRoothPath + '/ddExpenses/expense/save.do',
 				// async: false, //同步
 				data: {
-					// "departmentID": departmentID,
+					"departmentID": departmentID,
+					"departmentSubID": departmentSubID,
 					"expenseTotal": expenseTotal,
 					"submitUserID": $my.userID,
 					"bankAccount": bankAccount,
