@@ -44,7 +44,9 @@ function Approval() {
 		companyList: document.querySelector("#companyList"),
 		companyID: document.querySelector("#companyID"),
 		businessList: document.querySelector("#businessList"),
-		business: document.querySelector("#business")
+		business: document.querySelector("#business"),
+		subDepartID: document.querySelector("#subDepartID"),
+		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart")
 	}
 }
 
@@ -1195,6 +1197,8 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("show");
 			self.config.menu.querySelector(".depart").classList.remove("show");
 			self.config.menu.querySelector(".depart").classList.add("hide");
+			self.config.menu.querySelector(".subDepart").classList.remove("show");
+			self.config.menu.querySelector(".subDepart").classList.add("hide");
 			slideout.open();
 		}, false);
 
@@ -1206,8 +1210,24 @@ Approval.prototype = {
 			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
 			self.config.menu.querySelector(".depart").classList.remove("hide");
 			self.config.menu.querySelector(".depart").classList.add("show");
+			self.config.menu.querySelector(".subDepart").classList.remove("show");
+			self.config.menu.querySelector(".subDepart").classList.add("hide");
 			slideout.open();
 		}, false);
+
+		self.config.subDepartID.addEventListener("click", function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			self.config.menu.getElementsByClassName("content")[0].classList.remove("show");
+			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
+			self.config.menu.querySelector(".depart").classList.remove("show");
+			self.config.menu.querySelector(".depart").classList.add("hide");
+			self.config.menu.querySelector(".subDepart").classList.remove("hide");
+			self.config.menu.querySelector(".subDepart").classList.add("show");
+
+			slideout.open();
+		}, false)
 
 		// close slideout
 		self.config.closeBtn.addEventListener("touchend", function(event) {
@@ -1223,6 +1243,13 @@ Approval.prototype = {
 
 			slideout.close();
 		}, false);
+
+		self.config.closeBtn_subDepart.addEventListener('touchend', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			slideout.close();
+		}, false)
 	},
 	jobNumEvent: function() { //报销人工号输入
 		var self = this,
