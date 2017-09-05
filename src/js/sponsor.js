@@ -42,7 +42,9 @@ function Approval() {
 		groupWrap: document.querySelector("#groupWrap"),
 		searchApprovalInput: document.querySelector("#searchApprovalInput"),
 		companyList: document.querySelector("#companyList"),
-		companyID: document.querySelector("#companyID")
+		companyID: document.querySelector("#companyID"),
+		businessList: document.querySelector("#businessList"),
+		business: document.querySelector("#business")
 	}
 }
 
@@ -1577,6 +1579,52 @@ Approval.prototype = {
 			}
 		})
 	},
+	selectBusiness: function() { //获取事业部
+		var self = this;
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/business.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+
+					switch (status) {
+						case "true":
+							var info = data.info;
+
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="list-group-item nowrap" data-businessid=' + dataArr[i].departmentID + '>' + dataArr[i].departmentName + '</li>'
+									};
+
+									self.config.businessList.innerHTML = str;
+								} else {
+									self.config.businessList.innerHTML = "<span style='font-weight:normal'>暂无事业部信息</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1603,6 +1651,7 @@ Approval.prototype = {
 		this.searchApprovalEvent(); //审核人模糊查询
 		this.getCompany(); //获取公司
 		this.selectCompany(); //选择公司
+		this.selectBusiness(); //获取事业部
 	}
 }
 
