@@ -1739,6 +1739,20 @@ Approval.prototype = {
 			}
 		}, false);
 	},
+	_renderSubDepartList: function(dataArr) { //部门/项目分页数据渲染
+		var str = "",
+			self = this;
+
+		for (var i = 0, len = dataArr.length; i < len; i++) {
+			str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + '>';
+			str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col">';
+			str += '<span>' + dataArr[i].departmentSubName + '</span>';
+			str += '</div>';
+			str += '</div>';
+		};
+
+		self.config.subDepartWrapID.innerHTML = str;
+	},
 	subDepartList: function(search, pageNum) { //获取部门/项目分页数据
 		var self = this;
 		$.ajax({
@@ -1759,17 +1773,7 @@ Approval.prototype = {
 							if (JSON.stringify(info) !== "{}") {
 								var dataArr = info.data;
 								if (dataArr.length) {
-									var str = "";
-
-									for (var i = 0, len = dataArr.length; i < len; i++) {
-										str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + '>';
-										str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col">';
-										str += '<span>' + dataArr[i].departmentSubName + '</span>';
-										str += '</div>';
-										str += '</div>';
-									};
-
-									self.config.subDepartWrapID.innerHTML = str;
+									self._renderSubDepartList(dataArr);
 								} else {
 									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal'>暂无项目/部门</span>";
 								};
