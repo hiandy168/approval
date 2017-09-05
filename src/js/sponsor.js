@@ -13,6 +13,10 @@ function Approval() {
 	this.expenseImageName = []; //报销凭证name
 	this.num = 0; //添加报销num
 	this.flag = true; //防重复提交标志位
+	this.touchflag = false; //滑动标志位，未滑入加载区
+	this.vpHeight = document.documentElement.clientHeight; //获取设备高度
+	this.pagenum = 0; //页码
+	this.dataCount = ''; //项目/部门总页数
 
 	this.config = {
 		productType: document.querySelector("#productType"),
@@ -49,7 +53,8 @@ function Approval() {
 		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart"),
 		subDepartWrap: document.querySelector("#subDepartWrap"),
 		subDepartWrapID: document.querySelector("#subDepartWrapID"),
-		subDepartInput: document.querySelector("#subDepartInput")
+		subDepartInput: document.querySelector("#subDepartInput"),
+		loadingWrap: document.querySelector("#loadingWrap")
 	}
 }
 
@@ -1751,9 +1756,10 @@ Approval.prototype = {
 			str += '</div>';
 		};
 
-		self.config.subDepartWrapID.innerHTML = str;
+		$(self.config.subDepartWrapID).append(str);
+		self.touchflag = false;
 	},
-	subDepartList: function(search, pageNum) { //获取部门/项目分页数据
+	getsubDepartList: function(search, pageNum) { //获取部门/项目分页数据
 		var self = this;
 		$.ajax({
 			url: getRoothPath + '/ddExpenses/userController/subDepartList.do',
@@ -1771,8 +1777,15 @@ Approval.prototype = {
 						case "true":
 							var info = data.info;
 							if (JSON.stringify(info) !== "{}") {
+								self.dataCount = info.dataCount;
 								var dataArr = info.data;
+
 								if (dataArr.length) {
+									if (dataArr.length < pageSize) {
+										$(".loading").hide();
+										self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
+									};
+
 									self._renderSubDepartList(dataArr);
 								} else {
 									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal'>暂无项目/部门</span>";
@@ -1810,7 +1823,6 @@ Approval.prototype = {
 			};
 		}
 
-
 		self.config.subDepartInput.addEventListener('compositionstart', function() {
 			flag = false;
 		})
@@ -1820,6 +1832,32 @@ Approval.prototype = {
 		})
 
 		self.config.subDepartInput.addEventListener("input", self.throttle(_searchsubDepartBuffer, 1000), false);
+	},
+	scrollEvent: function() { //部门/项目分页滑动事件
+		var self = this,
+			rect = self.config.loadingWrap.getBoundingClientRect();
+
+		var _scrollEvent = function() {
+			if (!self.touchflag) {
+				if (rect.top < self.vpHeight && rect.bottom >= 0) {
+					self.touchflag = true;
+					self.pagenum++;
+					if (self.pagenum > parseInt(self.dataCount / pageSize) || (self.pagenum == parseInt(self.dataCount / pageSize) && self.dataCount % pageSize == 0)) {
+						$(".loading").hide();
+						self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
+						return false;
+					} else {
+						localStorage.setItem("pageNum_myApproval", self.pagenum);
+						self.getsubDepartList(self.config.subDepartInput.value, self.pagenum);
+					};
+				} else {
+					return;
+				}
+			}
+		}
+
+
+		self.config.menu.addEventListener("touchmove", self.throttleInput(_scrollEvent, 500, 1000));
 	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
@@ -1851,8 +1889,9 @@ Approval.prototype = {
 		this.selectBusiness(); //选择事业部
 		this.commonSubDepart(); //常用项目
 		this.sCommonSubDepart(); //选择事业部
-		this.subDepartList('', 0); //默认获取部门/项目分页数据
+		this.getsubDepartList('', 0); //默认获取部门/项目分页数据
 		this.searchSubDepart(); //部门/项目分页搜索
+		this.scrollEvent(); //部门/项目分页滑动事件
 	}
 }
 
