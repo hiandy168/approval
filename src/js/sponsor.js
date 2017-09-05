@@ -46,7 +46,8 @@ function Approval() {
 		businessList: document.querySelector("#businessList"),
 		business: document.querySelector("#business"),
 		subDepartID: document.querySelector("#subDepartID"),
-		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart")
+		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart"),
+		subDepartWrap: document.querySelector("#subDepartWrap")
 	}
 }
 
@@ -1665,6 +1666,67 @@ Approval.prototype = {
 			}
 		})
 	},
+	commonSubDepart: function() { //常用项目
+		var self = this;
+
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/commonSubDepart.do',
+			data: {
+				"userID": $my.userID
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="nowrap text-center" data-cdepartmentsubid=' + dataArr[i].cDepartmentSubID + '>' + dataArr[i].cDepartmentSubName + '</li>';
+									};
+
+									self.config.subDepartWrap.innerHTML = str;
+								} else {
+									self.config.subDepartWrap.innerHTML = "<span style='font-weight:normal'>暂无常用审批项目</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	sCommonSubDepart: function() { //常用项目点击
+		var self = this;
+		self.config.subDepartWrap.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+
+			if (target.tagName.toLowerCase() === 'li') {
+				self.config.subDepartID.value = target.innerHTML;
+				self.config.subDepartID.dataset["subdepartid"] = target.dataset["subdepartid"];
+				slideout.close();
+			}
+		}, false);
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1693,6 +1755,8 @@ Approval.prototype = {
 		this.selectCompany(); //选择公司
 		this.getBusiness(); //获取事业部
 		this.selectBusiness(); //选择事业部
+		this.commonSubDepart(); //常用项目
+		this.sCommonSubDepart(); //选择事业部
 	}
 }
 
