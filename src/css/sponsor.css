@@ -854,12 +854,10 @@ body {
   font-size: 0.30rem;
   font-weight: normal;
 }
-.menu > .depart {
-  display: none;
-}
-.menu > .depart .glyphicon-ok {
-  border: 1px solid #ccc;
-}
 .menu > .subDepart {
   display: none;
+}
+.menu #subDepartWrapID {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
