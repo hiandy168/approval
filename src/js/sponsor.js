@@ -1788,7 +1788,8 @@ Approval.prototype = {
 
 									self._renderSubDepartList(dataArr);
 								} else {
-									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal'>暂无项目/部门</span>";
+									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal;display:block;text-align:center;'>暂无项目/部门</span>";
+									$(".loading").hide();
 								};
 
 							} else {
@@ -1816,9 +1817,9 @@ Approval.prototype = {
 			var val = this.value.trim();
 			if (flag) {
 				if (val) {
-					self.subDepartList(val, 0);
+					self.getsubDepartList(val, 0);
 				} else {
-					self.subDepartList('', 0);
+					self.getsubDepartList('', 0);
 				};
 			};
 		}
@@ -1847,7 +1848,6 @@ Approval.prototype = {
 						self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
 						return false;
 					} else {
-						localStorage.setItem("pageNum_myApproval", self.pagenum);
 						self.getsubDepartList(self.config.subDepartInput.value, self.pagenum);
 					};
 				} else {
