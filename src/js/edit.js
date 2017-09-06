@@ -14,6 +14,11 @@ function Approval() {
 	this.detailid = ""; //详情id
 	this.flag = true; //防重复提交标志位
 
+	this.touchflag = false; //滑动标志位，未滑入加载区
+	this.vpHeight = document.documentElement.clientHeight; //获取设备高度
+	this.pagenum = 0; //页码
+	this.dataCount = ''; //项目/部门总页数
+
 	this.config = {
 		productType: document.querySelector("#productType"),
 		myModal: document.querySelector("#myModal"),
@@ -38,17 +43,26 @@ function Approval() {
 		cancleBtn_img: document.querySelector("#cancleBtn_img"),
 		confirmBtn_img: document.querySelector("#confirmBtn_img"),
 		addApprover: document.querySelector("#addApprover"),
-		departWrapID: document.querySelector("#departWrapID"),
+		// departWrapID: document.querySelector("#departWrapID"),
 		closeBtn: document.querySelector("#closeBtn"),
-		closeBtn_depart: document.querySelector("#closeBtn_depart"),
+		// closeBtn_depart: document.querySelector("#closeBtn_depart"),
 		menu: document.querySelector("#menu"),
-		departSearch: document.querySelector("#departSearch"),
-		departmentContent: document.querySelector("#departmentContent"),
+		// departSearch: document.querySelector("#departSearch"),
+		// departmentContent: document.querySelector("#departmentContent"),
 		jobNum: document.querySelector("#jobNum"),
 		groupWrap: document.querySelector("#groupWrap"),
 		searchApprovalInput: document.querySelector("#searchApprovalInput"),
 		companyList: document.querySelector("#companyList"),
-		companyID: document.querySelector("#companyID")
+		companyID: document.querySelector("#companyID"),
+
+		businessList: document.querySelector("#businessList"),
+		business: document.querySelector("#business"),
+		subDepart: document.querySelector("#subDepart"),
+		closeBtn_subDepart: document.querySelector("#closeBtn_subDepart"),
+		subDepartWrap: document.querySelector("#subDepartWrap"),
+		subDepartWrapID: document.querySelector("#subDepartWrapID"),
+		subDepartInput: document.querySelector("#subDepartInput"),
+		loadingWrap: document.querySelector("#loadingWrap")
 	}
 }
 
@@ -103,8 +117,12 @@ Approval.prototype = {
 	getSessionData: function() { //获取session数据
 		var productType = JSON.parse(sessionStorage.getItem("productType")), //获取报销类型信息
 			expenseUser = JSON.parse(sessionStorage.getItem("expenseUser")), //获取审批人
-			departName = sessionStorage.getItem("departName"), //报销部门
-			departmentID = sessionStorage.getItem("departmentID"), //报销部门id
+			// departName = sessionStorage.getItem("departName"), //报销部门
+			// departmentID = sessionStorage.getItem("departmentID"), //报销部门id
+			business = sessionStorage.getItem('business'), //所属事业部
+			businessid = sessionStorage.getItem('businessid'), //所属事业部id
+			subDepart = sessionStorage.getItem('subDepart'), //项目/部门
+			subDepartid = sessionStorage.getItem('subDepartid'), //项目/部门id
 			accountName = sessionStorage.getItem("accountName"), //开户人姓名
 			accounNumber = sessionStorage.getItem("accounNumber"), //开户人账号
 			bankAccount = sessionStorage.getItem("bankAccount"), //开户行
@@ -119,8 +137,13 @@ Approval.prototype = {
 			approverStr = "",
 			imgStr = "";
 
-		this.config.departWrapID.value = departName;
-		this.config.departWrapID.dataset.departmentinputid = departmentID
+		// this.config.departWrapID.value = departName;
+		// this.config.departWrapID.dataset.departmentinputid = departmentID
+		this.config.business.value = business;
+		this.config.business.setAttribute('data-businessid', businessid);
+		this.config.subDepart.value = subDepart;
+		this.config.subDepart.setAttribute('data-subdepartid', subDepartid);
+
 		this.config.accountName.value = accountName;
 		this.config.accounNumber.value = accounNumber;
 		this.config.bankAccount.value = bankAccount;
@@ -692,7 +715,9 @@ Approval.prototype = {
 				bankAccount = approval.config.bankAccount.value,
 				accountName = approval.config.accountName.value,
 				accounNumber = approval.config.accounNumber.value,
-				departmentID = approval.config.departWrapID.dataset["departmentinputid"],
+				// departmentID = approval.config.departWrapID.dataset["departmentinputid"],
+				departmentID = approval.config.business.dataset["businessid"], //事业部id
+				departmentSubID = approval.config.subDepart.dataset["subdepartid"], //项目/部门id
 				producttypeIDs = [],
 				itemAlltotals = [],
 				remarks = [],
@@ -722,10 +747,10 @@ Approval.prototype = {
 				oldImageNameArr.push(oldImgDomArr[i].querySelector("img").getAttribute("alt"));
 			};
 
-			if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
-				$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
+			// if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
+			// 	$my.messageInfo.html("请选择报销部门").fadeIn("fast").delay("1000").fadeOut("slow");
+			// 	return;
+			// };
 
 			for (var i = 0, len = producttypeDomArr.length; i < len; i++) {
 				if (producttypeDomArr[i].dataset["productid"] == "") {
@@ -767,13 +792,13 @@ Approval.prototype = {
 				return;
 			};
 
-			if (expensesUserID.length === 0) {
-				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
+			if (departmentID == "" || departmentID == undefined || departmentID == "undefined") {
+				$my.messageInfo.html("请选择事业部").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
-			if (cashierUserID == "") {
-				$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+			if (departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
+				$my.messageInfo.html("项目/部门不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -786,6 +811,16 @@ Approval.prototype = {
 					$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
+			};
+
+			if (expensesUserID.length === 0) {
+				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (cashierUserID == "") {
+				$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
 			};
 
 			producttypeIDs = producttypeIDs.join();
@@ -802,6 +837,7 @@ Approval.prototype = {
 				// async: false, //同步
 				data: {
 					"departmentID": departmentID,
+					"departmentSubID": departmentSubID,
 					"expenseID": approval.detailid,
 					"expenseTotal": expenseTotal,
 					"submitUserID": $my.userID,
@@ -1083,152 +1119,152 @@ Approval.prototype = {
 			$(this).remove();
 		});
 	},
-	_renderDepart: function(name, parentID) { //render报销部门
-		var self = this;
-		$.ajax({
-			url: getRoothPath + '/ddExpenses/userController/expenseDepartSearch.do',
-			data: {
-				"name": name,
-				"parentID": parentID
-			},
-			// async: false, //同步
-			success: function(data) {
-				console.log(data)
-				if (JSON.stringify(data) !== "{}") {
-					var status = data.status;
+	// _renderDepart: function(name, parentID) { //render报销部门
+	// 	var self = this;
+	// 	$.ajax({
+	// 		url: getRoothPath + '/ddExpenses/userController/expenseDepartSearch.do',
+	// 		data: {
+	// 			"name": name,
+	// 			"parentID": parentID
+	// 		},
+	// 		// async: false, //同步
+	// 		success: function(data) {
+	// 			console.log(data)
+	// 			if (JSON.stringify(data) !== "{}") {
+	// 				var status = data.status;
 
-					switch (status) {
-						case "true":
-							var info = data.info;
+	// 				switch (status) {
+	// 					case "true":
+	// 						var info = data.info;
 
-							if (JSON.stringify(info) !== "{}") {
-								var dataArr = info.data;
-								var str = "";
+	// 						if (JSON.stringify(info) !== "{}") {
+	// 							var dataArr = info.data;
+	// 							var str = "";
 
-								if (dataArr.length && dataArr.length != 0) {
-									for (var i = 0, len = dataArr.length; i < len; i++) {
-										str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + ' data-type=' + dataArr[i].type + '>';
-										str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
-										str += '<span>' + dataArr[i].departName + '</span>';
-										str += '</div>';
-										str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right departConfirmBtn">';
-										str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
-										str += '</div>';
-										str += '</div>';
-									};
-									self.config.departmentContent.innerHTML = str;
-								} else {
-									str += '<div class="row my-row">';
-									str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap">';
-									str += '<span>查询信息为空</span>';
-									str += '</div>';
-									str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
-									str += '<p></p>';
-									str += '</div>';
-									str += '</div>';
+	// 							if (dataArr.length && dataArr.length != 0) {
+	// 								for (var i = 0, len = dataArr.length; i < len; i++) {
+	// 									str += '<div class="row my-row" data-departmentwrapid=' + dataArr[i].departmentID + ' data-type=' + dataArr[i].type + '>';
+	// 									str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap searchDepartName">';
+	// 									str += '<span>' + dataArr[i].departName + '</span>';
+	// 									str += '</div>';
+	// 									str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right departConfirmBtn">';
+	// 									str += '<p><span class="glyphicon glyphicon-ok my-icon" aria-hidden="true"></span></p>';
+	// 									str += '</div>';
+	// 									str += '</div>';
+	// 								};
+	// 								self.config.departmentContent.innerHTML = str;
+	// 							} else {
+	// 								str += '<div class="row my-row">';
+	// 								str += '<div class="col-xs-9 col-sm-9 col-md-9 my-col nowrap">';
+	// 								str += '<span>查询信息为空</span>';
+	// 								str += '</div>';
+	// 								str += '<div class="col-xs-3 col-sm-3 col-md-3 my-col text-right">';
+	// 								str += '<p></p>';
+	// 								str += '</div>';
+	// 								str += '</div>';
 
-									self.config.departmentContent.innerHTML = str;
-								};
-							} else {
-								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
-								return;
-							};
-							break;
-						case "failure":
-							$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
-							break;
-						default:
-							break;
-					}
-				} else {
-					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
-					return false;
-				};
-			},
-			complete: function() {
-				if (self.config.departmentContent.querySelectorAll(".row")) {
-					var rowList = self.config.departmentContent.querySelectorAll(".row");
-				};
-				self.expenseDepartEvent(rowList);
-			}
-		})
-	},
-	expenseDepartSearch: function() { //搜索查询报销部门
-		var self = this;
-		var _searchDepartBuffer = function() {
-			var val = this.value;
-			self._renderDepart(val);
-		};
-		self.config.departSearch.addEventListener("input", self.throttleInput(_searchDepartBuffer, 500, 1000), false);
-	},
-	expenseDepartEvent: function(arr) { //报销部门点击/选择
-		var self = this;
-		var getTarget = function(target, that) { //获取target
-			if (target.className.indexOf('my-col') !== -1) {
-				return target;
-			}
-			if (target == that) {
-				return false;
-			}
-			while (target.className.indexOf('my-col') === -1) {
-				target = target.parentNode;
-			}
-			return target;
-		};
-		var hasClass = function(el, className) { //判断class
-			return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-		};
+	// 								self.config.departmentContent.innerHTML = str;
+	// 							};
+	// 						} else {
+	// 							$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+	// 							return;
+	// 						};
+	// 						break;
+	// 					case "failure":
+	// 						$my.messageInfo.html("报销部门查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+	// 						break;
+	// 					default:
+	// 						break;
+	// 				}
+	// 			} else {
+	// 				$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+	// 				return false;
+	// 			};
+	// 		},
+	// 		complete: function() {
+	// 			if (self.config.departmentContent.querySelectorAll(".row")) {
+	// 				var rowList = self.config.departmentContent.querySelectorAll(".row");
+	// 			};
+	// 			self.expenseDepartEvent(rowList);
+	// 		}
+	// 	})
+	// },
+	// expenseDepartSearch: function() { //搜索查询报销部门
+	// 	var self = this;
+	// 	var _searchDepartBuffer = function() {
+	// 		var val = this.value;
+	// 		self._renderDepart(val);
+	// 	};
+	// 	self.config.departSearch.addEventListener("input", self.throttleInput(_searchDepartBuffer, 500, 1000), false);
+	// },
+	// expenseDepartEvent: function(arr) { //报销部门点击/选择
+	// 	var self = this;
+	// 	var getTarget = function(target, that) { //获取target
+	// 		if (target.className.indexOf('my-col') !== -1) {
+	// 			return target;
+	// 		}
+	// 		if (target == that) {
+	// 			return false;
+	// 		}
+	// 		while (target.className.indexOf('my-col') === -1) {
+	// 			target = target.parentNode;
+	// 		}
+	// 		return target;
+	// 	};
+	// 	var hasClass = function(el, className) { //判断class
+	// 		return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+	// 	};
 
-		if (arr) {
-			[].forEach.call(arr, function(item) {
-				item.addEventListener("click", function(event) {
-					event.preventDefault();
-					event.stopPropagation();
+	// 	if (arr) {
+	// 		[].forEach.call(arr, function(item) {
+	// 			item.addEventListener("click", function(event) {
+	// 				event.preventDefault();
+	// 				event.stopPropagation();
 
-					var type = this.dataset.type; //部门可继续往下层点击type
-					var departmentwrapid = this.dataset.departmentwrapid;
-					var searchDepartNameVal = "";
-					if (this.querySelector(".searchDepartName")) {
-						searchDepartNameVal = this.querySelector(".searchDepartName").querySelector("span").innerHTML;
-					};
+	// 				var type = this.dataset.type; //部门可继续往下层点击type
+	// 				var departmentwrapid = this.dataset.departmentwrapid;
+	// 				var searchDepartNameVal = "";
+	// 				if (this.querySelector(".searchDepartName")) {
+	// 					searchDepartNameVal = this.querySelector(".searchDepartName").querySelector("span").innerHTML;
+	// 				};
 
-					var that = this;
-					var target = event.target;
-					var eleName = getTarget(target, that);
-					if (eleName) {
-						var booleanStr = hasClass(eleName, "searchDepartName");
-						if (booleanStr) {
-							switch (type) {
-								case "0":
-									break;
-								case "1":
-									self._renderDepart("", departmentwrapid);
-									break;
-								default:
-									break;
-							}
-						} else { //选中此部门
-							if (that.querySelector(".departConfirmBtn")) {
-								var departConfirmBtn_NodeList = approval.config.departmentContent.querySelectorAll(".departConfirmBtn");
+	// 				var that = this;
+	// 				var target = event.target;
+	// 				var eleName = getTarget(target, that);
+	// 				if (eleName) {
+	// 					var booleanStr = hasClass(eleName, "searchDepartName");
+	// 					if (booleanStr) {
+	// 						switch (type) {
+	// 							case "0":
+	// 								break;
+	// 							case "1":
+	// 								self._renderDepart("", departmentwrapid);
+	// 								break;
+	// 							default:
+	// 								break;
+	// 						}
+	// 					} else { //选中此部门
+	// 						if (that.querySelector(".departConfirmBtn")) {
+	// 							var departConfirmBtn_NodeList = approval.config.departmentContent.querySelectorAll(".departConfirmBtn");
 
-								[].forEach.call(departConfirmBtn_NodeList, function(item) {
-									item.querySelector(".my-icon").classList.remove("hasselect");
-								})
+	// 							[].forEach.call(departConfirmBtn_NodeList, function(item) {
+	// 								item.querySelector(".my-icon").classList.remove("hasselect");
+	// 							})
 
-								that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
-							};
+	// 							that.querySelector(".departConfirmBtn").querySelector(".my-icon").classList.add("hasselect");
+	// 						};
 
-							if (searchDepartNameVal && departmentwrapid) {
-								self.config.departWrapID.value = searchDepartNameVal;
-								self.config.departWrapID.dataset["departmentinputid"] = departmentwrapid;
-							};
-							slideout.close();
-						};
-					};
-				}, false);
-			});
-		};
-	},
+	// 						if (searchDepartNameVal && departmentwrapid) {
+	// 							self.config.departWrapID.value = searchDepartNameVal;
+	// 							self.config.departWrapID.dataset["departmentinputid"] = departmentwrapid;
+	// 						};
+	// 						slideout.close();
+	// 					};
+	// 				};
+	// 			}, false);
+	// 		});
+	// 	};
+	// },
 	asideEvent: function() { //slideout
 		var self = this;
 		// open slideout
@@ -1238,21 +1274,37 @@ Approval.prototype = {
 
 			self.config.menu.getElementsByClassName("content")[0].classList.remove("hide");
 			self.config.menu.getElementsByClassName("content")[0].classList.add("show");
-			self.config.menu.querySelector(".depart").classList.remove("show");
-			self.config.menu.querySelector(".depart").classList.add("hide");
+			// self.config.menu.querySelector(".depart").classList.remove("show");
+			// self.config.menu.querySelector(".depart").classList.add("hide");
+			self.config.menu.querySelector(".subDepart").classList.remove("show");
+			self.config.menu.querySelector(".subDepart").classList.add("hide");
 			slideout.open();
 		}, false);
 
-		self.config.departWrapID.addEventListener("click", function(event) {
+		// self.config.departWrapID.addEventListener("click", function(event) {
+		// 	event.preventDefault();
+		// 	event.stopPropagation();
+
+		// 	self.config.menu.getElementsByClassName("content")[0].classList.remove("show");
+		// 	self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
+		// 	self.config.menu.querySelector(".depart").classList.remove("hide");
+		// 	self.config.menu.querySelector(".depart").classList.add("show");
+		// 	slideout.open();
+		// }, false);
+
+		self.config.subDepart.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
 			self.config.menu.getElementsByClassName("content")[0].classList.remove("show");
 			self.config.menu.getElementsByClassName("content")[0].classList.add("hide");
-			self.config.menu.querySelector(".depart").classList.remove("hide");
-			self.config.menu.querySelector(".depart").classList.add("show");
+			// self.config.menu.querySelector(".depart").classList.remove("show");
+			// self.config.menu.querySelector(".depart").classList.add("hide");
+			self.config.menu.querySelector(".subDepart").classList.remove("hide");
+			self.config.menu.querySelector(".subDepart").classList.add("show");
+
 			slideout.open();
-		}, false);
+		}, false)
 
 		// close slideout
 		self.config.closeBtn.addEventListener("touchend", function(event) {
@@ -1262,12 +1314,19 @@ Approval.prototype = {
 			slideout.close();
 		}, false);
 
-		self.config.closeBtn_depart.addEventListener("touchend", function(event) {
+		// self.config.closeBtn_depart.addEventListener("touchend", function(event) {
+		// 	event.preventDefault();
+		// 	event.stopPropagation();
+
+		// 	slideout.close();
+		// }, false);
+
+		self.config.closeBtn_subDepart.addEventListener('touchend', function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
 			slideout.close();
-		}, false);
+		}, false)
 	},
 	jobNumEvent: function() { //报销人工号输入
 		var self = this,
@@ -1623,6 +1682,279 @@ Approval.prototype = {
 			}
 		})
 	},
+	getBusiness: function() { //获取事业部
+		var self = this;
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/business.do',
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+
+					switch (status) {
+						case "true":
+							var info = data.info;
+
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="list-group-item nowrap" data-businessid=' + dataArr[i].departmentID + '>' + dataArr[i].departmentName + '</li>'
+									};
+
+									self.config.businessList.innerHTML = str;
+								} else {
+									self.config.businessList.innerHTML = "<span style='font-weight:normal'>暂无事业部信息</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	selectBusiness: function() { //选择事业部
+		var self = this;
+		self.config.businessList.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+
+			if (target.tagName.toLowerCase() === 'li') {
+				self.config.business.value = target.innerHTML;
+				self.config.business.dataset.businessid = target.dataset.businessid;
+				$('#businessModal').modal('hide');
+			}
+		})
+	},
+	commonSubDepart: function() { //常用项目
+		var self = this;
+
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/commonSubDepart.do',
+			data: {
+				"userID": $my.userID
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								var dataArr = info.data;
+								if (dataArr.length) {
+									var str = "";
+
+									for (var i = 0, len = dataArr.length; i < len; i++) {
+										str += '<li class="nowrap text-center" data-cdepartmentsubid=' + dataArr[i].cDepartmentSubID + '>' + dataArr[i].cDepartmentSubName + '</li>';
+									};
+
+									self.config.subDepartWrap.innerHTML = str;
+								} else {
+									self.config.subDepartWrap.innerHTML = "<span style='font-weight:normal'>暂无常用审批项目</span>";
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	sCommonSubDepart: function() { //常用项目点击
+		var self = this;
+		self.config.subDepartWrap.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+
+			if (target.tagName.toLowerCase() === 'li') {
+				self.config.subDepart.value = target.innerHTML;
+				self.config.subDepart.dataset["subdepartid"] = target.dataset["subdepartid"];
+				slideout.close();
+			}
+		}, false);
+	},
+	_renderSubDepartList: function(dataArr) { //部门/项目分页数据渲染
+		var str = "",
+			self = this;
+
+		for (var i = 0, len = dataArr.length; i < len; i++) {
+			str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + ' data-departmentsubname=' + dataArr[i].departmentSubName + '>';
+			str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col">';
+			str += '<span>' + dataArr[i].departmentSubName + '</span>';
+			str += '</div>';
+			str += '</div>';
+		};
+
+		$(self.config.subDepartWrapID).append(str);
+		self.touchflag = false;
+	},
+	getsubDepartList: function(search, pageNum) { //获取部门/项目分页数据
+		var self = this;
+		$.ajax({
+			url: getRoothPath + '/ddExpenses/userController/subDepartList.do',
+			data: {
+				"search": search,
+				"pageNum": pageNum,
+				"pageSize": pageSize
+			},
+			// async: false, //同步
+			success: function(data) {
+				console.log(data)
+				if (JSON.stringify(data) !== "{}") {
+					var status = data.status;
+					switch (status) {
+						case "true":
+							var info = data.info;
+							if (JSON.stringify(info) !== "{}") {
+								self.dataCount = info.dataCount;
+								var dataArr = info.data;
+
+								if (dataArr.length) {
+									if (dataArr.length < pageSize) {
+										$(".loading").hide();
+										self.config.loadingWrap.querySelector('#lodingText').classList.remove("lodingText_hide");
+										self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
+									};
+
+									self._renderSubDepartList(dataArr);
+								} else {
+									self.config.subDepartWrapID.innerHTML = '';
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+									$(".loading").hide();
+								};
+
+							} else {
+								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+								return;
+							};
+							break;
+						case "failure":
+							$my.messageInfo.html("查询错误").fadeIn("fast").delay("1000").fadeOut("slow");
+							break;
+						default:
+							break;
+					}
+				} else {
+					$my.messageInfo.html("暂无数据").fadeIn("fast").delay("1000").fadeOut("slow");
+					return false;
+				};
+			}
+		})
+	},
+	searchSubDepart: function() { //部门/项目分页搜索
+		var self = this,
+			flag = true;
+		var _searchsubDepartBuffer = function() {
+			var val = this.value.trim();
+			if (flag) {
+				self.pagenum = 0;
+				self.config.loadingWrap.querySelector('#lodingText').classList.remove("lodingText_show");
+				self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_hide");
+				$(".loading").show();
+				if (val) {
+					self.getsubDepartList(val, 0);
+				} else {
+					self.getsubDepartList('', 0);
+				};
+			};
+		}
+
+		self.config.subDepartInput.addEventListener('compositionstart', function() {
+			flag = false;
+		})
+
+		self.config.subDepartInput.addEventListener('compositionend', function() {
+			flag = true;
+		})
+
+		self.config.subDepartInput.addEventListener("input", self.throttle(_searchsubDepartBuffer, 1000), false);
+	},
+	scrollEvent: function() { //部门/项目分页滑动事件
+		var self = this,
+			rect = self.config.loadingWrap.getBoundingClientRect();
+
+		var _scrollEvent = function() {
+			if (!self.touchflag) {
+				if (rect.top < self.vpHeight && rect.bottom >= 0) {
+					self.touchflag = true;
+					self.pagenum++;
+					if (self.pagenum > parseInt(self.dataCount / pageSize) || (self.pagenum == parseInt(self.dataCount / pageSize) && self.dataCount % pageSize == 0)) {
+						$(".loading").hide();
+						self.config.loadingWrap.querySelector('#lodingText').classList.remove("hide");
+						self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
+						return false;
+					} else {
+						self.getsubDepartList(self.config.subDepartInput.value, self.pagenum);
+					};
+				} else {
+					return;
+				}
+			}
+		}
+
+
+		self.config.menu.addEventListener("touchmove", self.throttleInput(_scrollEvent, 500, 1000));
+	},
+	_getTarget: function(target, that, className) { //获取target
+		if (target.className.indexOf(className) !== -1) {
+			return target;
+		}
+		if (target == that) {
+			return false;
+		}
+		while (target.className.indexOf(className) === -1) {
+			target = target.parentNode;
+		}
+		return target;
+	},
+	subDepartListEvent: function() { //部门/项目分页点击事件
+		var self = this;
+		self.config.subDepartWrapID.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+			var that = this;
+
+			var targetNode = self._getTarget(target, that, 'my-row');
+			var targetSubDepartID = targetNode.dataset["departmentsubid"];
+			var targetSubDepartName = targetNode.dataset["departmentsubname"];
+
+			self.config.subDepart.value = targetSubDepartName;
+			self.config.subDepart.setAttribute('data-subdepartid', targetSubDepartID);
+
+			slideout.close();
+			event.stopPropagation();
+			event.preventDefault();
+		}, false)
+	},
 	init: function() { //init封装
 		this.getSessionData(); //获取session数据
 		this.getDetailed(); //获取详情id
@@ -1639,16 +1971,25 @@ Approval.prototype = {
 		this.deleteApprover(); //删除审批人
 		this.deleteOldImg(); //删除旧图片
 		this.deleteNewImg(); //删除新图片
-		this.expenseDepartSearch(); //搜索查询报销部门
-		this.expenseDepartEvent(); //报销部门点击事件
+		// this.expenseDepartSearch(); //搜索查询报销部门
+		// this.expenseDepartEvent(); //报销部门点击事件
 		this.asideEvent(); //slideout
 		this.jobNumEvent(); //报销人工号输入
 		this.expenseAName(); //检索开户名
 		this.expenseANameEvent(); //开户名检索账号
-		this._renderDepart('', ''); //页面主动加载报销部门
+		// this._renderDepart('', ''); //页面主动加载报销部门
 		this.searchApprovalEvent(); //审核人模糊查询
 		this.getCompany(); //获取公司
 		this.selectCompany(); //选择公司
+
+		this.getBusiness(); //获取事业部
+		this.selectBusiness(); //选择事业部
+		this.commonSubDepart(); //常用项目
+		this.sCommonSubDepart(); //选择事业部
+		this.getsubDepartList('', 0); //默认获取部门/项目分页数据
+		this.searchSubDepart(); //部门/项目分页搜索
+		this.scrollEvent(); //部门/项目分页滑动事件
+		this.subDepartListEvent(); //部门/项目分页点击事件
 	}
 }
 
