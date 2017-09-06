@@ -1794,10 +1794,10 @@ Approval.prototype = {
 		self.config.subDepartWrap.addEventListener('click', function(event) {
 			var event = event || window.event;
 			var target = event.target || event.srcElement;
-
+			
 			if (target.tagName.toLowerCase() === 'li') {
 				self.config.subDepart.value = target.innerHTML;
-				self.config.subDepart.dataset["subdepartid"] = target.dataset["subdepartid"];
+				self.config.subDepart.dataset["subdepartid"] = target.dataset["cdepartmentsubid"];
 				slideout.close();
 			}
 		}, false);

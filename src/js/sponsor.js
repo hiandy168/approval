@@ -1736,7 +1736,7 @@ Approval.prototype = {
 
 			if (target.tagName.toLowerCase() === 'li') {
 				self.config.subDepartID.value = target.innerHTML;
-				self.config.subDepartID.dataset["subdepartid"] = target.dataset["subdepartid"];
+				self.config.subDepartID.dataset["subdepartid"] = target.dataset["cdepartmentsubid"];
 				slideout.close();
 			}
 		}, false);
