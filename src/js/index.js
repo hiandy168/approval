@@ -191,7 +191,7 @@ Approval.prototype = {
 		}
 
 		Array.prototype.forEach.call(liList, function(item, index) {
-			item.addEventListener("touchend", function(event) {
+			item.addEventListener("click", function(event) {
 				event.preventDefault();
 				event.stopPropagation();
 
@@ -199,7 +199,7 @@ Approval.prototype = {
 			}, false);
 		});
 
-		this.config.footer.addEventListener("touchend", function(event) {
+		this.config.footer.addEventListener("click", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -231,4 +231,9 @@ $(function() {
 		localStorage.removeItem("pageNum_myApproval");
 		localStorage.removeItem("dataCount_myApproval");
 	}();
+});
+
+dd.ready(function() {
+	dd.ui.webViewBounce.disable(); //禁用bounce
+	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
 });
