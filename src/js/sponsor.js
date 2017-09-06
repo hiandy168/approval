@@ -1783,12 +1783,14 @@ Approval.prototype = {
 								if (dataArr.length) {
 									if (dataArr.length < pageSize) {
 										$(".loading").hide();
+										self.config.loadingWrap.querySelector('#lodingText').classList.remove("lodingText_hide");
 										self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
 									};
 
 									self._renderSubDepartList(dataArr);
 								} else {
-									self.config.subDepartWrapID.innerHTML = "<span style='font-weight:normal;display:block;text-align:center;'>暂无项目/部门</span>";
+									self.config.subDepartWrapID.innerHTML = '';
+									$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 									$(".loading").hide();
 								};
 
@@ -1816,6 +1818,10 @@ Approval.prototype = {
 		var _searchsubDepartBuffer = function() {
 			var val = this.value.trim();
 			if (flag) {
+				self.pagenum = 0;
+				self.config.loadingWrap.querySelector('#lodingText').classList.remove("lodingText_show");
+				self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_hide");
+				$(".loading").show();
 				if (val) {
 					self.getsubDepartList(val, 0);
 				} else {
@@ -1845,6 +1851,7 @@ Approval.prototype = {
 					self.pagenum++;
 					if (self.pagenum > parseInt(self.dataCount / pageSize) || (self.pagenum == parseInt(self.dataCount / pageSize) && self.dataCount % pageSize == 0)) {
 						$(".loading").hide();
+						self.config.loadingWrap.querySelector('#lodingText').classList.remove("hide");
 						self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_show");
 						return false;
 					} else {

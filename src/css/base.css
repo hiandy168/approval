@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-05-19 15:13:13
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-08-02 10:04:45
+* @Last Modified time: 2017-09-06 10:50:28
 */
 body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,a,code,em,img,q,small,strong,dd,dl,dt,li,ol,ul,fieldset,form,label,table,tbody,tr,th,td,input{margin:0;padding:0;border:0}
 body,div,ul,li,ol,h1,h2,h3,h4,h5,h6,input,textarea,select,p,b,i,span,dl,dt,dd,a,img,button,form,table,th,tr,td,tbody,article,aside, details,figcaption,figure,footer,header,hgroup, menu,nav,section{ font-family: Tahoma,Arial,Roboto,"Droid Sans","Helvetica Neue","Droid Sans Fallback","Heiti SC", "\5b8b\4f53", sans-serif;}
@@ -162,4 +162,7 @@ textarea,input[type="password"],input[type="text"],input[type="number"]{resize:n
 }
 .lodingText_show {
   display: block;
+}
+.lodingText_hide{
+  display: none;
 }
