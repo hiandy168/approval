@@ -657,7 +657,7 @@ Approval.prototype = {
 				accountName = approval.config.accountName.value,
 				accounNumber = approval.config.accounNumber.value,
 				departmentID = approval.config.business.dataset["businessid"], //事业部id
-				departmentSubID = approval.config.subDepartID.dataset["subdepartid "], //项目/部门id
+				departmentSubID = approval.config.subDepartID.dataset["subdepartid"], //项目/部门id
 				producttypeIDs = [],
 				itemAlltotals = [],
 				remarks = [],
@@ -723,21 +723,8 @@ Approval.prototype = {
 				return;
 			};
 
-			if (departmentSubID == "") {
-				$my.messageInfo.html("请选择项目/部门").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			} else if (departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
+			if (departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
 				$my.messageInfo.html("项目/部门不合法").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
-
-			if (expensesUserID.length === 0) {
-				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
-				return;
-			};
-
-			if (cashierUserID == "") {
-				$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
@@ -750,6 +737,16 @@ Approval.prototype = {
 					$my.messageInfo.html("报销人工号不合法").fadeIn("fast").delay("1000").fadeOut("slow");
 					return;
 				};
+			};
+
+			if (expensesUserID.length === 0) {
+				$my.messageInfo.html("请完善审批人").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
+			};
+
+			if (cashierUserID == "") {
+				$my.messageInfo.html("出纳人信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
+				return;
 			};
 
 			producttypeIDs = producttypeIDs.join();
