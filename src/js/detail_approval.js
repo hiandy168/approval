@@ -1,8 +1,8 @@
 function Approval() {
 	this.expenseLog = []; //评论集合
 	this.expenseUser = []; //审核信息
-	this.departName = ""; //报销部门
-	this.departmentID = ""; //报销部门id
+	// this.departName = ""; //报销部门
+	// this.departmentID = ""; //报销部门id
 	this.accountName = ""; //开户人姓名
 	this.accounNumber = ""; //银行账号
 	this.bankAccount = ""; //开户行
@@ -14,6 +14,10 @@ function Approval() {
 	this.jobNum = ''; //报销人工号
 	this.companyName = ''; //公司名
 	this.reimbursementid = ''; //所属公司id
+	this.business = ''; //所属事业部
+	this.businessid = ''; //所属事业部id
+	this.subDepart = ''; //项目/部门
+	this.subDepartid = ''; //项目/部门id
 
 	this.config = {
 		expenseLogWrap: document.querySelector("#expenseLogWrap"),
@@ -25,9 +29,11 @@ function Approval() {
 		bankAccount: document.querySelector("#bankAccount"),
 		expenseTotal: document.querySelector("#expenseTotal"),
 		cashier: document.querySelector("#cashier"),
-		departName: document.querySelector("#departName"),
+		// departName: document.querySelector("#departName"),
 		jobNum: document.querySelector("#jobNum"),
-		companyID: document.querySelector("#companyID")
+		companyID: document.querySelector("#companyID"),
+		business: document.querySelector("#business"),
+		subDepart: document.querySelector('#subDepart')
 	}
 }
 
@@ -72,11 +78,15 @@ Approval.prototype = {
 									self.accounNumber = expenseInfoData[0].accounNumber;
 									self.bankAccount = expenseInfoData[0].bankAccount;
 									self.expenseTotal = expenseInfoData[0].expenseTotal;
-									self.departName = expenseInfoData[0].departName;
-									self.departmentID = expenseInfoData[0].departmentID;
+									// self.departName = expenseInfoData[0].departName;
+									// self.departmentID = expenseInfoData[0].departmentID;
 									self.jobNum = expenseInfoData[0].loginName;
 									self.companyName = expenseInfoData[0].companyName;
 									self.reimbursementid = expenseInfoData[0].reimbursementID;
+									self.business = expenseInfoData[0].departName;
+									self.businessid = expenseInfoData[0].departmentID;
+									self.subDepart = expenseInfoData[0].departmentSubName;
+								self.subDepartid = expenseInfoData[0].departmentSubID;
 
 									if (expenseInfoData[0].imageUrl != null && expenseInfoData[0].imageUrl != "null") {
 										self.imgArr = expenseInfoData[0].imageUrl.split(",");
@@ -108,8 +118,8 @@ Approval.prototype = {
 									// 存入sessionStorage
 									sessionStorage.setItem("productType", JSON.stringify(info.productType));
 									sessionStorage.setItem("expenseUser", JSON.stringify(info.expenseUser));
-									sessionStorage.setItem("departName", self.departName);
-									sessionStorage.setItem("departmentID", self.departmentID);
+									// sessionStorage.setItem("departName", self.departName);
+									// sessionStorage.setItem("departmentID", self.departmentID);
 									sessionStorage.setItem("accountName", self.accountName);
 									sessionStorage.setItem("accounNumber", self.accounNumber);
 									sessionStorage.setItem("bankAccount", self.bankAccount);
@@ -119,6 +129,11 @@ Approval.prototype = {
 									sessionStorage.setItem("reimbursementid", self.reimbursementid);
 									sessionStorage.setItem("imgArr", self.imgArr);
 									sessionStorage.setItem("imageNameArr", self.imageNameArr);
+
+									sessionStorage.setItem('business', self.business);
+									sessionStorage.setItem('businessid', self.businessid);
+									sessionStorage.setItem('subDepart', self.subDepart);
+									sessionStorage.setItem('subDepartid', self.subDepartid);
 								}
 							} else {
 								$my.messageInfo.html("返回信息为空").fadeIn("fast").delay("1000").fadeOut("slow");
@@ -265,11 +280,15 @@ Approval.prototype = {
 		this.config.accounNumber.value = this.accounNumber;
 		this.config.bankAccount.value = this.bankAccount;
 		this.config.expenseTotal.value = this.expenseTotal;
-		this.config.departName.value = this.departName;
+		// this.config.departName.value = this.departName;
 		this.config.jobNum.value = this.jobNum;
-		this.config.departName.dataset.departmentid = this.departmentID;
+		// this.config.departName.dataset.departmentid = this.departmentID;
 		this.config.companyID.value = this.companyName;
 		this.config.companyID.dataset.reimbursementid = this.reimbursementid;
+		this.config.business.value = this.business;
+		this.config.business.setAttribute('data-businessid', this.businessid);
+		this.config.subDepart.value = this.subDepart;
+		this.config.subDepart.setAttribute('data-subDepartid', this.subDepartid);
 	},
 	_renderImg: function() { //render报销凭证
 		var str = "";
