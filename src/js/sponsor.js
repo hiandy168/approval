@@ -1749,7 +1749,7 @@ Approval.prototype = {
 			self = this;
 
 		for (var i = 0, len = dataArr.length; i < len; i++) {
-			str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + '>';
+			str += '<div class="row my-row" data-departmentsubid=' + dataArr[i].departmentSubID + ' data-departmentsubname=' + dataArr[i].departmentSubName + '>';
 			str += '<div class="col-xs-12 col-sm-12 col-md-12 my-col">';
 			str += '<span>' + dataArr[i].departmentSubName + '</span>';
 			str += '</div>';
@@ -1859,6 +1859,37 @@ Approval.prototype = {
 
 		self.config.menu.addEventListener("touchmove", self.throttleInput(_scrollEvent, 500, 1000));
 	},
+	_getTarget: function(target, that, className) { //获取target
+		if (target.className.indexOf(className) !== -1) {
+			return target;
+		}
+		if (target == that) {
+			return false;
+		}
+		while (target.className.indexOf(className) === -1) {
+			target = target.parentNode;
+		}
+		return target;
+	},
+	subDepartListEvent: function() { //部门/项目分页点击事件
+		var self = this;
+		self.config.subDepartWrapID.addEventListener('click', function(event) {
+			var event = event || window.event;
+			var target = event.target || event.srcElement;
+			var that = this;
+
+			var targetNode = self._getTarget(target, that, 'my-row');
+			var targetSubDepartID = targetNode.dataset["departmentsubid"];
+			var targetSubDepartName = targetNode.dataset["departmentsubname"];
+
+			self.config.subDepartID.value = targetSubDepartName;
+			self.config.subDepartID.setAttribute('data-subdepartid', targetSubDepartID);
+
+			slideout.close();
+			event.stopPropagation();
+			event.preventDefault();
+		}, false)
+	},
 	init: function() { //init封装
 		this.getProductType(); //获取报销类型
 		this.getCashierUser(); //获取出纳人	
@@ -1892,6 +1923,7 @@ Approval.prototype = {
 		this.getsubDepartList('', 0); //默认获取部门/项目分页数据
 		this.searchSubDepart(); //部门/项目分页搜索
 		this.scrollEvent(); //部门/项目分页滑动事件
+		this.subDepartListEvent(); //部门/项目分页点击事件
 	}
 }
 
