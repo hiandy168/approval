@@ -1880,6 +1880,7 @@ Approval.prototype = {
 				self.config.loadingWrap.querySelector('#lodingText').classList.remove("lodingText_show");
 				self.config.loadingWrap.querySelector('#lodingText').classList.add("lodingText_hide");
 				$(".loading").show();
+				self.config.subDepartWrapID.innerHTML = '';
 				if (val) {
 					self.getsubDepartList(val, 0);
 				} else {
