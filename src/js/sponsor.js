@@ -656,8 +656,8 @@ Approval.prototype = {
 				bankAccount = approval.config.bankAccount.value,
 				accountName = approval.config.accountName.value,
 				accounNumber = approval.config.accounNumber.value,
-				departmentID = approval.config.business.dataset["businessid"], //事业部id
-				departmentSubID = approval.config.subDepartID.dataset["subdepartid"], //项目/部门id
+				departmentID = approval.config.business.value, //事业部value
+				departmentSubID = approval.config.subDepartID.value, //项目/部门value
 				producttypeIDs = [],
 				itemAlltotals = [],
 				remarks = [],
@@ -668,7 +668,7 @@ Approval.prototype = {
 				remarksDomArr = approval.config.inWrap.querySelectorAll(".remarks"),
 				expensesUserDomArr = approval.config.approverWrap.querySelectorAll(".nowrap"),
 				loginName = approval.config.jobNum.value,
-				reimbursementID = approval.config.companyID.dataset['reimbursementid'];
+				reimbursementID = approval.config.companyID.value; //所属公司value
 
 			producttypeDomArr = Array.prototype.slice.apply(producttypeDomArr);
 			itemAlltotalDomArr = Array.prototype.slice.apply(itemAlltotalDomArr);
@@ -713,7 +713,7 @@ Approval.prototype = {
 				return;
 			};
 
-			if (reimbursementID == '') {
+			if (reimbursementID == '' || reimbursementID == undefined || reimbursementID == "undefined") {
 				$my.messageInfo.html("请完善所属公司").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
@@ -723,8 +723,8 @@ Approval.prototype = {
 				return;
 			};
 
-			if (departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
-				$my.messageInfo.html("项目/部门不合法").fadeIn("fast").delay("1000").fadeOut("slow");
+			if (departmentSubID == "" || departmentSubID == undefined || departmentSubID == "undefined" || departmentSubID == "null" || departmentSubID == null) {
+				$my.messageInfo.html("请选择项目/部门").fadeIn("fast").delay("1000").fadeOut("slow");
 				return;
 			};
 
