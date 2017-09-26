@@ -2,7 +2,7 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-09-22 13:44:00
+ * @Last Modified time: 2017-09-26 14:05:06
  */
 
 'use strict';
@@ -30,3 +30,13 @@ $.ajaxSetup({
 		}　　
 	}
 });
+
+if (/Android [4-6]/.test(navigator.appVersion)) {
+	window.addEventListener('resize', function() {
+		if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+			window.setTimeout(function() {
+				document.activeElement.scrollIntoViewIfNeeded()
+			}, 0)
+		}
+	})
+}
