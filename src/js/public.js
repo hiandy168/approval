@@ -2,12 +2,12 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-09-26 14:05:06
+ * @Last Modified time: 2017-10-10 10:30:59
  */
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.30:8080";
+var getRoothPath = "http://192.168.1.75:8080";
 // var getRoothPath = "http://www.ehaofangwang.com";
 // var getRoothPath = "http://192.168.1.58:8080";
 
@@ -31,7 +31,7 @@ $.ajaxSetup({
 	}
 });
 
-if (/Android [4-6]/.test(navigator.appVersion)) {
+if (/Android [4-6]/.test(navigator.appVersion)) { // 解决软键盘弹出遮盖bug
 	window.addEventListener('resize', function() {
 		if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
 			window.setTimeout(function() {
