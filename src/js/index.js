@@ -108,7 +108,30 @@ Approval.prototype = {
 
 								break;
 							case "failure":
-								$my.messageInfo.html("登录错误").fadeIn("fast").delay("1000").fadeOut("slow");
+								// alert('登录错误');
+								// dd.biz.navigation.close(); // 关闭当前页
+								dd.device.notification.vibrate({
+									duration: 300, //震动时间，android可配置 iOS忽略
+									onSuccess: function(result) {},
+									onFail: function(err) {
+										console.log(err);
+									}
+								})
+								dd.device.notification.alert({ // dd弹窗
+									message: "登录错误",
+									title: "提示", //可传空
+									buttonName: "确定",
+									close: false,
+									onSuccess: function() {
+										// onSuccess将在点击button之后回调
+										dd.biz.navigation.close(); // 关闭当前页
+									},
+									onFail: function(err) {
+										dd.biz.navigation.close(); // 关闭当前页
+										console.log(err);
+									}
+								});
+								// $my.messageInfo.html("登录错误").fadeIn("fast").delay("1000").fadeOut("slow");
 								break;
 							default:
 								break;
@@ -221,7 +244,7 @@ $(function() {
 		messageInfo: $(".messageInfo")
 	}
 
-	approval.init();
+	// approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
@@ -234,6 +257,7 @@ $(function() {
 });
 
 dd.ready(function() {
+	approval.init();
 	dd.ui.webViewBounce.disable(); //禁用bounce
 	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
 });
