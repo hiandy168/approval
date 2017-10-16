@@ -183,7 +183,7 @@ Approval.prototype = {
 			str += '' + judgeIcon + '';
 			str += '</div>';
 			str += '<div class="inBottom">';
-			str += '<span>' + data[i].updateTime.substring(6) + ' <span></span></span>';
+			str += '<span>' + data[i].updateTime.substring(5) + ' <span></span></span>';
 			str += '</div></div></div></div></li>';
 		};
 
