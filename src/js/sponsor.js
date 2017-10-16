@@ -1934,6 +1934,7 @@ Approval.prototype = {
 
 var approval = new Approval();
 
+
 $(function() {
 	window.$my = {
 		messageInfo: $(".messageInfo"),
@@ -1964,4 +1965,5 @@ $(function() {
 	// }, false);
 
 	submitBtn.addEventListener("click", approval.throttle(approval.submitEvent, 200), false);
+
 });
