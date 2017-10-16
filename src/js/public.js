@@ -2,12 +2,12 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-10-12 15:11:51
+ * @Last Modified time: 2017-10-16 09:58:33
  */
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.72:8080";
+var getRoothPath = "http://192.168.1.78:8080";
 // var getRoothPath = "http://www.ehaofangwang.com";
 // var getRoothPath = "http://192.168.1.58:8080";
 
@@ -72,6 +72,6 @@ function control(BankNo) { // 开户账号输入模拟银行卡输入效果
 
 function paste(e) { // 开户账号监测粘贴内容
 	setTimeout(function() {
-		e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/[^\d]/g, '').replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+		e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/[\s]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
 	}, 0)
 }
