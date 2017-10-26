@@ -1965,5 +1965,38 @@ $(function() {
 	// }, false);
 
 	submitBtn.addEventListener("click", approval.throttle(approval.submitEvent, 200), false);
+});
 
+dd.ready(function() {
+	// 安卓控制返回按钮
+	document.addEventListener('backbutton', function(e) {
+		var isOpen = slideout.isOpen();
+		// 在这里处理你的业务逻辑
+		if (isOpen) {
+			slideout.close();
+			e.preventDefault(); //backbutton事件的默认行为是回退历史记录，如果你想阻止默认的回退行为，那么可以通过preventDefault()实现
+		}
+	});
+
+	// ios控制返回按钮
+	dd.biz.navigation.setLeft({
+		control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
+		text: '', //控制显示文本，空字符串表示显示默认文本
+		onSuccess: function(result) {
+			var isOpen = slideout.isOpen();
+			if (isOpen) {
+				slideout.close();
+			} else {
+				dd.biz.navigation.goBack({
+					onSuccess: function(result) {
+
+					},
+					onFail: function(err) {}
+				})
+			}
+		},
+		onFail: function(err) {
+			alert(err)
+		}
+	});
 });
