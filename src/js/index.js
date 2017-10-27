@@ -244,20 +244,22 @@ $(function() {
 		messageInfo: $(".messageInfo")
 	}
 
-	approval.init();
+	// approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
 		localStorage.removeItem("pageNum_mySponser");
 		localStorage.removeItem("dataCount_mySponser");
+		localStorage.removeItem("isEnd_mySponser");
 		localStorage.removeItem("sessionTouchData_myApproval");
 		localStorage.removeItem("pageNum_myApproval");
 		localStorage.removeItem("dataCount_myApproval");
+		localStorage.removeItem("isEnd_myApproval");
 	}();
 });
 
-// dd.ready(function() {
-// 	approval.init();
-// 	dd.ui.webViewBounce.disable(); //禁用bounce
-// 	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
-// });
+dd.ready(function() {
+	approval.init();
+	dd.ui.webViewBounce.disable(); //禁用bounce
+	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
+});

@@ -1,6 +1,7 @@
 function Approval() {
 	this.dataCount = ""; //分页总条数
 	this.sessionArr_mySponser = []; //获取数据存session
+	this.isEnd = 0; // 首次加载数据，是否到底
 }
 
 Approval.prototype = {
@@ -54,10 +55,13 @@ Approval.prototype = {
 									if (dataArr.length < pageSize) {
 										$(".loading").hide();
 										$my.lodingText.classList.add("lodingText_show");
+									} else {
+										self.isEnd = 1;
 									};
 
 									Array.prototype.push.apply(self.sessionArr_mySponser, dataArr);
 									localStorage.setItem("sessionTouchData_mySponser", JSON.stringify(self.sessionArr_mySponser));
+									localStorage.setItem('isEnd_mySponser', self.isEnd);
 
 									self.renderElement(dataArr);
 								} else {
@@ -199,10 +203,14 @@ Approval.prototype = {
 				if ($my.num > parseInt(approval.dataCount / pageSize) || ($my.num == parseInt(approval.dataCount / pageSize) && approval.dataCount % pageSize == 0)) {
 					$(".loading").hide();
 					$my.lodingText.classList.add("lodingText_show");
+					self.isEnd = 0;
+					localStorage.setItem('isEnd_mySponser', self.isEnd);
 					return false;
 				} else {
 					localStorage.setItem("pageNum_mySponser", $my.num);
 					approval.getData($my.userID, $my.num, pageSize);
+					self.isEnd = 1;
+					localStorage.setItem('isEnd_mySponser', self.isEnd);
 				};
 			} else {
 				return;
@@ -244,6 +252,7 @@ $(function() {
 	var sessionTouchData_mySponser = localStorage.getItem("sessionTouchData_mySponser");
 	var pageNum_mySponser = localStorage.getItem("pageNum_mySponser");
 	var dataCount_mySponser = localStorage.getItem("dataCount_mySponser");
+	var isEnd_mySponser = localStorage.getItem("isEnd_mySponser");
 
 	if (sessionTouchData_mySponser != null && sessionTouchData_mySponser != "null" && pageNum_mySponser != null && pageNum_mySponser != "null" && dataCount_mySponser != null && dataCount_mySponser != "null") {
 		sessionTouchData_mySponser = JSON.parse(sessionTouchData_mySponser);
@@ -257,7 +266,12 @@ $(function() {
 		localStorage.setItem("pageNum_mySponser", $my.num);
 	};
 
-
+	if (isEnd_mySponser != null && isEnd_mySponser != "null") {
+		if (isEnd_mySponser == '0') {
+			$(".loading").hide();
+			$my.lodingText.classList.add("lodingText_show");
+		}
+	}
 
 	// 默认数据加载
 	// approval.getData($my.userID,0,pageSize);

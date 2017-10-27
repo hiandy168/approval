@@ -1,6 +1,7 @@
 function Approval() {
 	this.dataCount = ""; //分页总条数
 	this.sessionArr_myApproval = []; //获取数据存session
+	this.isEnd = 0; // 首次加载数据，是否到底
 }
 
 Approval.prototype = {
@@ -54,10 +55,13 @@ Approval.prototype = {
 									if (dataArr.length < pageSize) {
 										$(".loading").hide();
 										$my.lodingText.classList.add("lodingText_show");
+									} else {
+										self.isEnd = 1;
 									};
 
 									Array.prototype.push.apply(self.sessionArr_myApproval, dataArr);
 									localStorage.setItem("sessionTouchData_myApproval", JSON.stringify(self.sessionArr_myApproval));
+									localStorage.setItem('isEnd_myApproval', self.isEnd);
 
 									self.renderElement(dataArr);
 								} else {
@@ -214,6 +218,7 @@ Approval.prototype = {
 		$my.flag = false;
 	},
 	scrollEvent: function() { //滑动事件
+		var self = this;
 		var rect = $my.loadingWrap.getBoundingClientRect();
 
 		if (!$my.flag) {
@@ -223,10 +228,14 @@ Approval.prototype = {
 				if ($my.num > parseInt(approval.dataCount / pageSize) || ($my.num == parseInt(approval.dataCount / pageSize) && approval.dataCount % pageSize == 0)) {
 					$(".loading").hide();
 					$my.lodingText.classList.add("lodingText_show");
+					self.isEnd = 0;
+					localStorage.setItem('isEnd_myApproval', self.isEnd);
 					return false;
 				} else {
 					localStorage.setItem("pageNum_myApproval", $my.num);
 					approval.getData($my.userID, $my.num, pageSize);
+					self.isEnd = 1;
+					localStorage.setItem('isEnd_myApproval', self.isEnd);
 				};
 			} else {
 				return;
@@ -276,6 +285,7 @@ $(function() {
 	var sessionTouchData_myApproval = localStorage.getItem("sessionTouchData_myApproval");
 	var pageNum_myApproval = localStorage.getItem("pageNum_myApproval");
 	var dataCount_myApproval = localStorage.getItem("dataCount_myApproval");
+	var isEnd_myApproval = localStorage.getItem("isEnd_myApproval");
 
 	if (sessionTouchData_myApproval != null && sessionTouchData_myApproval != "null" && pageNum_myApproval != null && pageNum_myApproval != "null" && dataCount_myApproval != null && dataCount_myApproval != "null") {
 		sessionTouchData_myApproval = JSON.parse(sessionTouchData_myApproval);
@@ -289,6 +299,13 @@ $(function() {
 		approval.getData($my.userID, 0, pageSize);
 		localStorage.setItem("pageNum_myApproval", $my.num);
 	};
+
+	if (isEnd_myApproval != null && isEnd_myApproval != "null") {
+		if (isEnd_myApproval == '0') {
+			$(".loading").hide();
+			$my.lodingText.classList.add("lodingText_show");
+		}
+	}
 
 	//下滑加载更多事件
 	window.addEventListener("touchmove", approval.touchThrottle(approval.scrollEvent, 500, 1000));
