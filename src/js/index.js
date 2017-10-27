@@ -262,4 +262,12 @@ dd.ready(function() {
 	approval.init();
 	dd.ui.webViewBounce.disable(); //禁用bounce
 	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
+
+	// ios控制返回按钮
+	dd.biz.navigation.setLeft({
+		control: false, //是否控制点击事件，true 控制，false 不控制， 默认false
+		text: '', //控制显示文本，空字符串表示显示默认文本
+		onSuccess: function(result) {},
+		onFail: function(err) {}
+	});
 });
