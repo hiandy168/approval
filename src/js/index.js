@@ -244,7 +244,7 @@ $(function() {
 		messageInfo: $(".messageInfo")
 	}
 
-	// approval.init();
+	approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
@@ -256,8 +256,8 @@ $(function() {
 	}();
 });
 
-dd.ready(function() {
-	approval.init();
-	dd.ui.webViewBounce.disable(); //禁用bounce
-	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
-});
+// dd.ready(function() {
+// 	approval.init();
+// 	dd.ui.webViewBounce.disable(); //禁用bounce
+// 	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
+// });
