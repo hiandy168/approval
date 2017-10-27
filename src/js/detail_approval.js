@@ -86,7 +86,7 @@ Approval.prototype = {
 									self.business = expenseInfoData[0].departName;
 									self.businessid = expenseInfoData[0].departmentID;
 									self.subDepart = expenseInfoData[0].departmentSubName;
-								self.subDepartid = expenseInfoData[0].departmentSubID;
+									self.subDepartid = expenseInfoData[0].departmentSubID;
 
 									if (expenseInfoData[0].imageUrl != null && expenseInfoData[0].imageUrl != "null") {
 										self.imgArr = expenseInfoData[0].imageUrl.split(",");
@@ -326,7 +326,7 @@ Approval.prototype = {
 						break;
 				}
 
-				str += '<div class="appendChild">';
+				str += '<div class="appendChild compactWrap">';
 				str += '<p class="titleMessage clearfix">';
 				str += '<span class="pull-left">' + indexStr + '</span>';
 				str += '' + statusStr + '';

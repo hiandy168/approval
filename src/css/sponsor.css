@@ -500,7 +500,7 @@ body {
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent > li > img {
   width: 2.2rem;
   height: 2.2rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
 }
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent > li:nth-child(2n+1),
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent > li:nth-child(2n+1) {
@@ -571,6 +571,46 @@ body {
     transform: scaleY(1);
     -webkit-transform: scaleY(1);
   }
+}
+.wrap .inWrap > .compactWrap > .inputFile > .my-row {
+  height: 0.7rem;
+}
+.wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col {
+  border-bottom: 0;
+}
+.wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col > input {
+  line-height: 0.7rem;
+}
+.wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col > span {
+  line-height: 0.7rem;
+}
+.wrap .inWrap > .compactWrap > .inputFile > .special-row > .my-col > textarea {
+  padding-top: 0.1rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .my-row {
+  height: 0.7rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .my-row > .my-col {
+  border-bottom: 0;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .my-row > .my-col > input {
+  line-height: 0.7rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .my-row > .my-col > span {
+  line-height: 0.7rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .imgUpload {
+  height: auto;
+  padding: 0.1rem 0.3rem 0.1rem 0.3rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .imgUpload > .uploadWrap > li {
+  margin: 0 0.2rem 0.2rem 0;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .imgUpload > .schedule {
+  padding-bottom: 0.2rem;
+}
+.wrap .inWrap > .specialCompactWrap > .inputFile > .imgUpload > .schedule > li > .wating {
+  margin-top: 0;
 }
 .wrap .last-inWrap {
   margin-bottom: 2rem;

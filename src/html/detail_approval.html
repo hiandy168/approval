@@ -16,81 +16,10 @@
     </head>
     <body>
         <div class="wrap">
-            <section>
-            <!-- 添加报销开始 --> 
-            <div id="productTypeWrap" class="inWrap">
-                <!-- <div class="appendChild">
-                    <p class="titleMessage clearfix">
-                        <span class="pull-left">报销一</span>
-                        <span class="pull-right passed"><i class="iconfont icon-tongguo my-icon"></i>&nbsp;<b>已通过</b></span> 
-                        <span class="pull-right refused"><i class="iconfont icon-ttpodicon my-icon"></i>&nbsp;<b>已拒绝</b></span> 
-                        <span class="pull-right checking"><i class="glyphicon glyphicon-exclamation-sign my-icon"></i>&nbsp;<b>审核中</b></span> 
-                    </p>
-                    <div class="container-fluid myContainer inputFile">
-                        <div class="row my-row">
-                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
-                                <span>报销类型</span>
-                            </div>
-                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
-                                <input type="text" readonly="readonly" placeholder="请输入" value="办公费用">
-                            </div>
-                        </div>
-                        <div class="row my-row">
-                            <div class="col-xs-4 col-sm-4 col-md-4 my-col">
-                                <span>报销金额(￥)</span>
-                            </div>
-                            <div class="col-xs-8 col-sm-8 col-md-8 my-col redColor lighter">
-                                <input type="text" readonly="readonly" placeholder="请输入" value="2345">
-                            </div>
-                        </div>
-                        <div class="row my-row special-row">
-                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
-                                <span>费用说明</span>
-                            </div>
-                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
-                                <textarea readonly="readonly" placeholder="请输入">购买电脑内存条、购买女朋友、购买同事等。</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-            <!-- 添加报销结束 -->
-            </section>
-
-            <section>
-            <!-- 总计&报销凭证开始 -->
-            <div class="inWrap">
-                <div class="appendChild">
-                    <p class="titleMessage">总计&报销凭证</p>
-                    <div class="container-fluid myContainer inputFile">
-                        <div class="row my-row">
-                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
-                                <span>总计金额</span>
-                            </div>
-                            <div class="col-xs-9 col-sm-9 col-md-9 my-col redColor lighter">
-                                <input type="text" id="expenseTotal" readonly="readonly" value="">
-                            </div>
-                        </div>
-                        <div class="row my-row imgUpload">
-                            <div class="col-xs-12 col-sm-12 col-md-12 my-col">
-                                <p>报销凭证</p>
-                            </div>
-                            <ul id="uploadWrap" class="uploadWrap clearfix">
-                                <!-- <li class="responseImg">
-                                    <img src="http://img06.tooopen.com/images/20160712/tooopen_sy_170083325566.jpg" alt="">
-                                </li> -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>  
-            <!-- 总计&报销凭证结束 -->
-            </section>
-
             <!-- 报销部门开始 -->
             <section>
             <div class="inWrap">
-                <div class="appendChild">
+                <div class="appendChild compactWrap">
                     <p class="titleMessage">报销人信息</p>
                     <div class="container-fluid myContainer inputFile">
                         <div class="row my-row">
@@ -148,9 +77,80 @@
             <!-- 报销部门结束 -->
 
             <section>
+            <!-- 添加报销开始 --> 
+            <div id="productTypeWrap" class="inWrap">
+                <!-- <div class="appendChild">
+                    <p class="titleMessage clearfix">
+                        <span class="pull-left">报销一</span>
+                        <span class="pull-right passed"><i class="iconfont icon-tongguo my-icon"></i>&nbsp;<b>已通过</b></span> 
+                        <span class="pull-right refused"><i class="iconfont icon-ttpodicon my-icon"></i>&nbsp;<b>已拒绝</b></span> 
+                        <span class="pull-right checking"><i class="glyphicon glyphicon-exclamation-sign my-icon"></i>&nbsp;<b>审核中</b></span> 
+                    </p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>报销类型</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
+                                <input type="text" readonly="readonly" placeholder="请输入" value="办公费用">
+                            </div>
+                        </div>
+                        <div class="row my-row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 my-col">
+                                <span>报销金额(￥)</span>
+                            </div>
+                            <div class="col-xs-8 col-sm-8 col-md-8 my-col redColor lighter">
+                                <input type="text" readonly="readonly" placeholder="请输入" value="2345">
+                            </div>
+                        </div>
+                        <div class="row my-row special-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>费用说明</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col lighter">
+                                <textarea readonly="readonly" placeholder="请输入">购买电脑内存条、购买女朋友、购买同事等。</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <!-- 添加报销结束 -->
+            </section>
+
+            <section>
+            <!-- 总计&报销凭证开始 -->
+            <div class="inWrap">
+                <div class="appendChild specialCompactWrap">
+                    <p class="titleMessage">总计&报销凭证</p>
+                    <div class="container-fluid myContainer inputFile">
+                        <div class="row my-row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 my-col">
+                                <span>总计金额</span>
+                            </div>
+                            <div class="col-xs-9 col-sm-9 col-md-9 my-col redColor lighter">
+                                <input type="text" id="expenseTotal" readonly="readonly" value="">
+                            </div>
+                        </div>
+                        <div class="row my-row imgUpload">
+                            <div class="col-xs-12 col-sm-12 col-md-12 my-col">
+                                <p>报销凭证</p>
+                            </div>
+                            <ul id="uploadWrap" class="uploadWrap clearfix">
+                                <!-- <li class="responseImg">
+                                    <img src="http://img06.tooopen.com/images/20160712/tooopen_sy_170083325566.jpg" alt="">
+                                </li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <!-- 总计&报销凭证结束 -->
+            </section>
+
+            <section>
             <!-- 收款信息开始 -->
             <div class="inWrap">
-                <div class="appendChild">
+                <div class="appendChild compactWrap">
                     <p class="titleMessage">收款信息</p>
                     <div class="container-fluid myContainer inputFile">
                         <div class="row my-row">
@@ -185,8 +185,8 @@
 
             <section>
             <!-- 审批人结构开始 -->
-            <div class="inWrap">
-                <div class="appendChild">
+            <div class="inWrap ">
+                <div class="appendChild specialCompactWrap">
                     <p class="titleMessage">审批人</p>
                     <div class="container-fluid myContainer inputFile">
                         <div class="row my-row imgUpload">

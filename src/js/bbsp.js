@@ -306,7 +306,7 @@ Approval.prototype = {
 						break;
 				}
 
-				str += '<div class="appendChild">';
+				str += '<div class="appendChild compactWrap">';
 				str += '<p class="titleMessage clearfix">';
 				str += '<span class="pull-left">' + indexStr + '</span>';
 				str += '';
