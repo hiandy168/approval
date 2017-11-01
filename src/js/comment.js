@@ -156,7 +156,7 @@ Approval.prototype = {
 
 					if (files.length != 0) {
 						$.ajax({
-							url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',
+							url: imgUploadURL,
 							type: 'POST',
 							data: formdata,
 							timeout: "",
@@ -211,6 +211,7 @@ Approval.prototype = {
 								$("#imgModalWrap").modal("hide");
 							},
 							error: function(returndata) {
+								$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("2000").fadeOut("slow");
 								$("#imgModalWrap").modal("hide");
 								formdata = null;
 								$(self.config.uploadWrap).find('li.newUploadImg').remove();

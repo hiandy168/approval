@@ -2,7 +2,7 @@
  * @Author: Administrator
  * @Date:   2017-06-08 10:24:12
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-07-28 13:25:39
+ * @Last Modified time: 2017-11-01 10:24:47
  */
 
 'use strict';
@@ -168,7 +168,7 @@ Approval.prototype = {
 
 					if (files.length != 0) {
 						$.ajax({
-							url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',
+							url: imgUploadURL,
 							type: 'POST',
 							data: formdata,
 							timeout: "",
@@ -223,6 +223,7 @@ Approval.prototype = {
 								$("#imgModalWrap").modal("hide");
 							},
 							error: function(returndata) {
+								$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("2000").fadeOut("slow");
 								$("#imgModalWrap").modal("hide");
 								formdata = null;
 								$(self.config.uploadWrap).find('li.newUploadImg').remove();

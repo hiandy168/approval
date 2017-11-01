@@ -11,12 +11,14 @@ body {
   right: 0;
   z-index: 0;
   width: 256px;
+  background-color: #e3e3e3;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   display: none;
 }
 .slideout-panel {
   position: relative;
+  background-color: #F5F5F5;
 }
 .slideout-open,
 .slideout-open body,
@@ -813,6 +815,9 @@ body {
 }
 .menu > .content > .inContent > .group .my-breadcrumb {
   margin: 0.2rem 0 0 0;
+  background-color: #e3e3e3;
+  -webkit-border-radius: 0;
+  border-radius: 0;
 }
 .menu > .content > .inContent > .group .my-breadcrumb > li {
   font-size: 0.24rem;

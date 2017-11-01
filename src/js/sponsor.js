@@ -3,8 +3,8 @@ var slideout = new Slideout({
 	'panel': document.getElementById('panel'),
 	'menu': document.getElementById('menu'),
 	'padding': 256,
-	'tolerance': 70,
-	'touch': false
+	'tolerance': 100,
+	'touch': true
 });
 
 function Approval() {
@@ -148,7 +148,7 @@ Approval.prototype = {
 		var productTypeList = this.config.productType.querySelectorAll("li");
 		productTypeList = Array.prototype.slice.apply(productTypeList);
 
-		$(self.config.inWrap).on('touchend', ".product", function(event) {
+		$(self.config.inWrap).on('click', ".product", function(event) {
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -437,7 +437,7 @@ Approval.prototype = {
 				str += '<span class="departName">' + listDepartArr[i].departName + '</span>';
 				str += '</div>';
 				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-				str += '<p><i>' + listDepartArr[i].userCount + '</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
+				str += '<p><i></i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
 				str += '</div>';
 				str += '</div>';
 			};
@@ -496,7 +496,7 @@ Approval.prototype = {
 				totalCount += parseFloat(item.dataset["count"]);
 			});
 
-			self.config.expenseTotal.value = totalCount.toFixed(4);
+			self.config.expenseTotal.value = totalCount.toFixed(2);
 		});
 	},
 	getDepart: function(departmentID) { //获取部门及联系人
@@ -886,7 +886,7 @@ Approval.prototype = {
 
 					if (files.length != 0) {
 						$.ajax({
-							url: 'http://www.ehaofangwang.com/publicshow/qiniuUtil/fileToQiniu.do',
+							url: imgUploadURL,
 							type: 'POST',
 							data: formdata,
 							timeout: "",
@@ -941,6 +941,7 @@ Approval.prototype = {
 								$("#imgModalWrap").modal("hide");
 							},
 							error: function(returndata) {
+								$my.messageInfo.html("上传失败,请重新上传").fadeIn("fast").delay("1500").fadeOut("slow");
 								$("#imgModalWrap").modal("hide");
 								formdata = null;
 								$(self.config.uploadWrap).find('li.newUploadImg').remove();
@@ -1943,6 +1944,23 @@ $(function() {
 
 	approval.init(); //调用init
 
+	$(".modal").on('show.bs.modal', function() { // 模态框打开，禁止通过触摸事件打开slideout
+		slideout.disableTouch();
+	})
+
+	$(".modal").on('hidden.bs.modal', function() { // 模态框关闭后，启用slideout的touch
+		slideout.enableTouch();
+	})
+
+	var footerEle = document.getElementsByClassName("footer")[0];
+	slideout.on('beforeopen', function() {
+		$(footerEle).hide();
+	});
+
+	slideout.on('close', function() {
+		$(footerEle).show();
+	});
+
 	// 加载进度模态框居中
 	var $modal = $('#imgModalWrap');
 	$modal.on('show.bs.modal', function() {
@@ -1971,10 +1989,33 @@ dd.ready(function() {
 	// 安卓控制返回按钮
 	document.addEventListener('backbutton', function(e) {
 		var isOpen = slideout.isOpen();
-		// 在这里处理你的业务逻辑
 		if (isOpen) {
 			slideout.close();
 			e.preventDefault(); //backbutton事件的默认行为是回退历史记录，如果你想阻止默认的回退行为，那么可以通过preventDefault()实现
+		} else {
+			dd.device.notification.confirm({
+				message: "您确定要退出吗",
+				title: "提示",
+				buttonLabels: ['取消', '确定'],
+				onSuccess: function(result) {
+					var buttonIndex = result.buttonIndex;
+					switch (buttonIndex) {
+						case 1:
+							dd.biz.navigation.goBack({
+								onSuccess: function(result) {},
+								onFail: function(err) {}
+							})
+							break;
+						case 0:
+							break;
+						default:
+							break;
+					}
+
+				},
+				onFail: function(err) {}
+			});
+			e.preventDefault();
 		}
 	});
 
@@ -1987,12 +2028,27 @@ dd.ready(function() {
 			if (isOpen) {
 				slideout.close();
 			} else {
-				dd.biz.navigation.goBack({
+				dd.device.notification.confirm({
+					message: "您确定要退出吗",
+					title: "提示",
+					buttonLabels: ['取消', '确定'],
 					onSuccess: function(result) {
-
+						var buttonIndex = result.buttonIndex;
+						switch (buttonIndex) {
+							case 1:
+								dd.biz.navigation.goBack({
+									onSuccess: function(result) {},
+									onFail: function(err) {}
+								})
+								break;
+							case 0:
+								break;
+							default:
+								break;
+						}
 					},
 					onFail: function(err) {}
-				})
+				});
 			}
 		},
 		onFail: function(err) {
