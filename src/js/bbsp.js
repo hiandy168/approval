@@ -165,7 +165,7 @@ Approval.prototype = {
 				str += '<div class="row my-row">';
 				str += '<div class="col-xs-9 col-sm-9 col-md-9">';
 				str += '<p class="nowrap">';
-				str += '<span class="commentName">' + this.expenseLog[i].expenseName + '</span>:&nbsp;&nbsp;<span class="commentContent">' + this.expenseLog[i].expenselog + '</span>';
+				str += '<span class="commentName">' + this.expenseLog[i].expenseName + ':</span>&nbsp;&nbsp;<textarea readonly=readonly class="commentContent">' + this.expenseLog[i].expenselog + '</textarea>';
 				str += '</p>';
 				str += '</div>';
 				str += '<div class="col-xs-3 col-sm-3 col-md-3 text-right nowrap time">';

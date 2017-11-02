@@ -486,9 +486,21 @@ body {
   padding: 0;
   font-weight: normal;
 }
-.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > p.nowrap > .commentName,
-.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p.nowrap > .commentName {
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > p,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p {
+  width: 100%;
+}
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > p > .commentName,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p > .commentName {
   color: #1E98FF;
+  vertical-align: top;
+}
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > p > .commentContent,
+.wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p > .commentContent {
+  width: 75%;
+  height: 20px;
+  border: 0;
+  vertical-align: top;
 }
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > .imgContent,
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > .imgContent {

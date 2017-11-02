@@ -477,9 +477,19 @@ body {
 					>[class^="col-"],>[class*=" col-"]{
 						padding: 0;
 						font-weight: normal;
-						>p.nowrap{
+						>p{
+							width: 100%;
 							>.commentName{
+								// display: block;
+								// width: 30%;
 								color: #1E98FF;
+								vertical-align: top;
+							}
+							>.commentContent{
+								width: 75%;
+								height: 20px;
+								border: 0;
+								vertical-align: top;
 							}
 						}
 						>.imgContent{
