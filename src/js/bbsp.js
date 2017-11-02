@@ -14,6 +14,7 @@ function Approval() {
 	this.productType = []; //报销类型集合
 	this.cashier = {}; //出纳人
 	this.jobNum = ''; //报销人工号
+	this.userName = ''; //报销人姓名
 	this.companyName = ''; //公司名
 	this.reimbursementid = ''; //所属公司id
 	this.business = ''; //所属事业部
@@ -91,6 +92,7 @@ Approval.prototype = {
 									// self.departName = expenseInfoData[0].departName;
 									// self.departmentID = expenseInfoData[0].departmentID;
 									self.jobNum = expenseInfoData[0].loginName;
+									self.userName = expenseInfoData[0].userName;
 									self.companyName = expenseInfoData[0].companyName;
 									self.reimbursementid = expenseInfoData[0].reimbursementID;
 									self.business = expenseInfoData[0].departName;
@@ -263,7 +265,7 @@ Approval.prototype = {
 		this.config.bankAccount.value = this.bankAccount;
 		this.config.expenseTotal.value = this.expenseTotal;
 		// this.config.departName.value = this.departName;
-		this.config.jobNum.value = this.jobNum;
+		this.config.jobNum.value = this.userName;
 		// this.config.departName.dataset.departmentid = this.departmentID;
 		this.config.companyID.value = this.companyName;
 		this.config.companyID.dataset.reimbursementid = this.reimbursementid;
@@ -470,9 +472,4 @@ $(function() {
 	approval.bindEvents();
 	approval.viewLargeImg("uploadWrap");
 	approval.viewLargeImg("expenseLogWrap");
-
-	// setTimeout(function() {
-	// 	autosize($('textarea'));
-	// 	autosize.update($('textarea'));
-	// }, 0);
 });
