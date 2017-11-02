@@ -369,6 +369,8 @@ Approval.prototype = {
 
 			this.config.productTypeWrap.innerHTML = str;
 		};
+
+		autosize($('textarea')); // textarea自适应高度
 	},
 	viewLargeImg: function(str) { //查看大图
 		var self = this;

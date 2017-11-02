@@ -575,18 +575,22 @@ body {
   }
 }
 .wrap .inWrap > .compactWrap > .inputFile > .my-row {
-  height: 0.7rem;
+  height: 0.6rem;
 }
 .wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col {
   border-bottom: 0;
 }
 .wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col > input {
-  line-height: 0.7rem;
+  line-height: 0.6rem;
 }
 .wrap .inWrap > .compactWrap > .inputFile > .my-row > .my-col > span {
-  line-height: 0.7rem;
+  line-height: 0.6rem;
+}
+.wrap .inWrap > .compactWrap > .inputFile > .special-row {
+  height: auto;
 }
 .wrap .inWrap > .compactWrap > .inputFile > .special-row > .my-col > textarea {
+  vertical-align: top;
   padding-top: 0.1rem;
 }
 .wrap .inWrap > .specialCompactWrap > .inputFile > .my-row {

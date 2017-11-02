@@ -353,6 +353,8 @@ Approval.prototype = {
 
 			this.config.productTypeWrap.innerHTML = str;
 		};
+
+		autosize($('textarea')); // textarea自适应高度
 	},
 	bindEvents: function() {
 		var self = this;
@@ -468,4 +470,9 @@ $(function() {
 	approval.bindEvents();
 	approval.viewLargeImg("uploadWrap");
 	approval.viewLargeImg("expenseLogWrap");
+
+	// setTimeout(function() {
+	// 	autosize($('textarea'));
+	// 	autosize.update($('textarea'));
+	// }, 0);
 });

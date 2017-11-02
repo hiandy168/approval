@@ -2,12 +2,12 @@
  * @Author: Administrator
  * @Date:   2017-05-24 13:45:39
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-11-01 10:53:13
+ * @Last Modified time: 2017-11-02 11:22:30
  */
 
 'use strict';
 
-var getRoothPath = "http://192.168.1.114:8080";
+var getRoothPath = "http://192.168.1.116:8080";
 // var getRoothPath = "http://www.ehaofangwang.com";
 // var getRoothPath = "http://192.168.1.58:8080";
 
