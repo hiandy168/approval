@@ -360,14 +360,14 @@ Approval.prototype = {
 	},
 	bindEvents: function() {
 		var self = this;
-		self.config.refusedBtn.addEventListener("click", function(event) {
+		self.config.refusedBtn.addEventListener("click", function(event) { // 驳回
 			event.preventDefault();
 			event.stopPropagation();
 
 			window.location.href = "refused.html?expenseID=" + self.detailid + "&expenseReviewID=" + self.reviewid;
 		}, false);
 
-		self.config.passedBtn.addEventListener("click", function(event) {
+		self.config.passedBtn.addEventListener("click", function(event) { // 通过
 			event.preventDefault();
 			event.stopPropagation();
 
@@ -381,7 +381,7 @@ Approval.prototype = {
 			window.location.href = "comment.html?expenseID=" + self.detailid;
 		}, false);
 
-		self.config.transExpenseBtn.addEventListener('click', function(event) {
+		self.config.transExpenseBtn.addEventListener('click', function(event) { //转交
 			event.preventDefault();
 			event.stopPropagation();
 

@@ -39,7 +39,7 @@ TransExpense.prototype = {
 				str += '<span class="departName">' + listDepartArr[i].departName + '</span>';
 				str += '</div>';
 				str += '<div class="col-xs-4 col-sm-4 col-md-4 my-col text-right">';
-				str += '<p><i>' + listDepartArr[i].userCount + '</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
+				str += '<p><i></i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></p>';
 				str += '</div>';
 				str += '</div>';
 			};
@@ -284,7 +284,7 @@ TransExpense.prototype = {
 								case 1:
 									$my.messageInfo.html("移交成功").fadeIn("fast").delay("1000").fadeOut("slow");
 									setTimeout(function() {
-										window.location.href = 'index.html';
+										window.location.href = 'index.html?control=true';
 									}, 1300);
 									break;
 								case 0:

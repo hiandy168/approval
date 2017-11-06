@@ -313,3 +313,13 @@ $(function() {
 	approval.viewDetail(); //查看详细
 
 });
+
+dd.ready(function() {
+	// ios控制返回按钮
+	dd.biz.navigation.setLeft({
+		control: false, //是否控制点击事件，true 控制，false 不控制， 默认false
+		text: '', //控制显示文本，空字符串表示显示默认文本
+		onSuccess: function(result) {},
+		onFail: function(err) {}
+	});
+})

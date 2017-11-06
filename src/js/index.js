@@ -54,6 +54,14 @@ Approval.prototype = {
 			method.call(context);
 		}, 200);
 	},
+	getParam: function(name) {
+		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) {
+			return unescape(r[2]);
+		}
+		return null;
+	},
 	get_ddUserID: function() { //获取ddUserID
 		var loginid = sessionStorage.getItem("loginid"); //ddUserID
 		console.log(loginid)
@@ -244,7 +252,7 @@ $(function() {
 		messageInfo: $(".messageInfo")
 	}
 
-	// approval.init();
+	approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
@@ -263,11 +271,41 @@ dd.ready(function() {
 	dd.ui.webViewBounce.disable(); //禁用bounce
 	dd.ui.pullToRefresh.disable(); //禁用下拉刷新
 
-	// ios控制返回按钮
-	dd.biz.navigation.setLeft({
-		control: false, //是否控制点击事件，true 控制，false 不控制， 默认false
-		text: '', //控制显示文本，空字符串表示显示默认文本
-		onSuccess: function(result) {},
-		onFail: function(err) {}
-	});
+	var control = approval.getParam('control');
+	if (control) {
+		document.addEventListener('backbutton', function(e) { // 安卓控制返回
+			e.preventDefault();
+			dd.device.notification.alert({
+				message: "当前不可回退操作",
+				title: "提示", //可传空
+				buttonName: "确定",
+				onSuccess: function() {},
+				onFail: function(err) {}
+			});
+		});
+
+		dd.biz.navigation.setLeft({ // ios控制返回
+			control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
+			text: '', //控制显示文本，空字符串表示显示默认文本
+			onSuccess: function(result) {
+				dd.device.notification.alert({
+					message: "当前不可回退操作",
+					title: "提示", //可传空
+					buttonName: "收到",
+					onSuccess: function() {},
+					onFail: function(err) {}
+				});
+			},
+			onFail: function(err) {}
+		});
+	} else {
+		// ios控制返回按钮
+		dd.biz.navigation.setLeft({
+			control: false, //是否控制点击事件，true 控制，false 不控制， 默认false
+			text: '', //控制显示文本，空字符串表示显示默认文本
+			onSuccess: function(result) {},
+			onFail: function(err) {}
+		});
+	}
+
 });

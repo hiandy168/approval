@@ -2,7 +2,7 @@
  * @Author: Administrator
  * @Date:   2017-06-08 10:24:12
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-11-01 10:24:47
+ * @Last Modified time: 2017-11-06 17:20:32
  */
 
 'use strict';
@@ -88,7 +88,7 @@ Approval.prototype = {
 
 									clearTimeout(timer);
 									timer = setTimeout(function() {
-										window.location.href = "index.html";
+									window.location.href = "index.html?control=true";
 									}, 1200);
 									break;
 								case 0:

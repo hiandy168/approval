@@ -76,7 +76,7 @@ Approval.prototype = {
 
 									clearTimeout(timer);
 									timer = setTimeout(function() {
-										window.location.href = "index.html";
+										window.location.href = "index.html?control=true";
 									}, 1200);
 									break;
 								case 0:
