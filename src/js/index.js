@@ -276,7 +276,7 @@ dd.ready(function() {
 		document.addEventListener('backbutton', function(e) { // 安卓控制返回
 			e.preventDefault();
 			dd.device.notification.alert({
-				message: "当前不可回退操作",
+				message: "当前不可返回操作",
 				title: "提示", //可传空
 				buttonName: "确定",
 				onSuccess: function() {},
@@ -289,7 +289,7 @@ dd.ready(function() {
 			text: '', //控制显示文本，空字符串表示显示默认文本
 			onSuccess: function(result) {
 				dd.device.notification.alert({
-					message: "当前不可回退操作",
+					message: "当前不可返回操作",
 					title: "提示", //可传空
 					buttonName: "收到",
 					onSuccess: function() {},
