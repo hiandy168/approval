@@ -231,7 +231,7 @@ Approval.prototype = {
 			switch (this.cashier.reviewState) {
 				case 0:
 					str += "<li class='cashier text-center refused' data-expenseuserid=" + this.cashier.expenseUserID + ">";
-					str += "<p class='time'>" + this.cashier.expenseTime + "&nbsp;</p>";
+					str += "<p class='time'>" + this.cashier.expenseTime.substring(0, 10) + "&nbsp;</p>";
 					str += "<div class='wating text-center progressBar'><span class='iconfont icon-ttpodicon my-icon'></span></div>";
 					break;
 				case 1:
@@ -241,7 +241,7 @@ Approval.prototype = {
 					break;
 				case 2:
 					str += "<li class='cashier text-center passed' data-expenseuserid=" + this.cashier.expenseUserID + ">";
-					str += "<p class='time'>" + this.cashier.expenseTime + "&nbsp;</p>";
+					str += "<p class='time'>" + this.cashier.expenseTime.substring(0, 10) + "&nbsp;</p>";
 					str += "<div class='wating text-center progressBar'><span class='iconfont icon-tongguo my-icon'></span></div>";
 					break;
 				default:
