@@ -252,7 +252,7 @@ $(function() {
 		messageInfo: $(".messageInfo")
 	}
 
-	approval.init();
+	// approval.init();
 
 	! function() {
 		localStorage.removeItem("sessionTouchData_mySponser");
