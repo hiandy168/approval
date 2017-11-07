@@ -2,7 +2,7 @@
  * @Author: Administrator
  * @Date:   2017-06-08 10:24:12
  * @Last Modified by:   Administrator
- * @Last Modified time: 2017-11-06 17:20:32
+ * @Last Modified time: 2017-11-07 10:40:24
  */
 
 'use strict';
@@ -82,13 +82,19 @@ Approval.prototype = {
 							var status = data.status;
 
 							switch (status) {
+								case 2:
+									$my.messageInfo.html("你已提交过该审批").fadeIn("fast").delay("1000").fadeOut("slow");
+									setTimeout(function() {
+										window.location.href = 'index.html?control=true';
+									}, 1300);
+									break;
 								case 1:
 									var timer = null;
 									$my.messageInfo.html(data.msg).fadeIn("fast").delay("1000").fadeOut("slow");
 
 									clearTimeout(timer);
 									timer = setTimeout(function() {
-									window.location.href = "index.html?control=true";
+										window.location.href = "index.html?control=true";
 									}, 1200);
 									break;
 								case 0:
