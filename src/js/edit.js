@@ -62,7 +62,8 @@ function Approval() {
 		subDepartWrap: document.querySelector("#subDepartWrap"),
 		subDepartWrapID: document.querySelector("#subDepartWrapID"),
 		subDepartInput: document.querySelector("#subDepartInput"),
-		loadingWrap: document.querySelector("#loadingWrap")
+		loadingWrap: document.querySelector("#loadingWrap"),
+		subDepartContent: document.querySelector("#subDepartContent")
 	}
 }
 
@@ -84,21 +85,35 @@ Approval.prototype = {
 			}, delay);
 		}
 	},
-	throttleInput: function(method, delay, duration) { //input节流
-		var timer = null,
-			begin = new Date();
+	// throttleInput: function(method, delay, duration) { //input节流
+	// 	var timer = null,
+	// 		begin = new Date();
+	// 	return function() {
+	// 		var context = this,
+	// 			args = arguments,
+	// 			current = new Date();;
+	// 		clearTimeout(timer);
+	// 		if (current - begin >= duration) {
+	// 			method.apply(context, args);
+	// 			begin = current;
+	// 		} else {
+	// 			timer = setTimeout(function() {
+	// 				method.apply(context, args);
+	// 			}, delay);
+	// 		}
+	// 	}
+	// },
+	throttleInput: function(func, wait) {
+		var context, args;
+		var previous = 0;
+
 		return function() {
-			var context = this,
-				args = arguments,
-				current = new Date();;
-			clearTimeout(timer);
-			if (current - begin >= duration) {
-				method.apply(context, args);
-				begin = current;
-			} else {
-				timer = setTimeout(function() {
-					method.apply(context, args);
-				}, delay);
+			var now = +new Date();
+			context = this;
+			args = arguments;
+			if (now - previous > wait) {
+				func.apply(context, args);
+				previous = now;
 			}
 		}
 	},
@@ -1930,7 +1945,8 @@ Approval.prototype = {
 		}
 
 
-		self.config.menu.addEventListener("touchmove", self.throttleInput(_scrollEvent, 500, 1000));
+		// self.config.menu.addEventListener("touchmove", self.throttleInput(_scrollEvent, 500, 1000));
+		self.config.subDepartContent.addEventListener("touchmove", self.throttleInput(_scrollEvent, 800));
 	},
 	_getTarget: function(target, that, className) { //获取target
 		if (target.className.indexOf(className) !== -1) {
