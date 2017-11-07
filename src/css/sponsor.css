@@ -479,7 +479,7 @@ body {
   padding-top: 0.4rem;
 }
 .wrap .inWrap > .appendChild > .commentWrap > .my-row {
-  height: 0.7rem;
+  height: auto;
 }
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"],
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] {
@@ -492,6 +492,8 @@ body {
 }
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class^="col-"] > p > .commentName,
 .wrap .inWrap > .appendChild > .commentWrap > .my-row > [class*=" col-"] > p > .commentName {
+  display: inline-block;
+  width: 21%;
   color: #1E98FF;
   vertical-align: top;
 }
