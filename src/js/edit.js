@@ -4,7 +4,7 @@ var slideout = new Slideout({
 	'menu': document.getElementById('menu'),
 	'padding': 256,
 	'tolerance': 100,
-	'touch': true
+	'touch': false
 });
 
 function Approval() {
